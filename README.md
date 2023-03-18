@@ -3,9 +3,9 @@
 ## Demo：
 
 ## Technology stack
-Server: Typescript + Express + Notion API + OpenAI API
-Deployment: Github Actions + Fly.io + Vercel
-UI: React + Next.js + Tailwindcss
+- Server: Typescript + Express + Notion API + OpenAI API
+- Deployment: Github Actions + Fly.io + Vercel
+- UI: React + Next.js + Tailwindcss
 
 ## Todo:
 - [x] openAI API integration
