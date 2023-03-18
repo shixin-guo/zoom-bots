@@ -1,8 +1,10 @@
 # my-bot
 
 ## Demo：
+<img width="1165" alt="image" src="https://user-images.githubusercontent.com/12186221/226104385-2e6b3c59-c6a3-40b9-9d31-d78abb7844c6.png">
 
-## Technology stack
+
+## Technology Stack
 - Server: Typescript + Express + Notion API + OpenAI API
 - Deployment: Github Actions + Fly.io + Vercel
 - UI: React + Next.js + Tailwindcss
@@ -13,15 +15,16 @@
 - [x] [Zoom chat] integration
 - [ ] integrate with [hubot](https://hubot.github.com/)
 - [ ] save to notion
-- [ ] rss feed
-- [ ] webhooks
+- [ ] RSS feed
+- [ ] Webhooks
 - [ ] generate weekly report read list
 - [ ] weather daily alert
 - [ ] stock and crypto price alert
-- [ ] Drink water reminder 
+- [ ] drink water reminder 
 - [ ] sedentary reminder
-- [ ] git commit integrate with https://github.com/zurawiki/gptcommit
-- [ ] auto review readme and find grammam error and optimize
+- [ ] git commit integration with https://github.com/zurawiki/gptcommit
+- [ ] auto check readme and find and optimize grammar errors
+
 
 ## Installation:
 
