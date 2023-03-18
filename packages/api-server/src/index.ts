@@ -128,7 +128,7 @@ app.post("/callback", async (req: Request, res: Response) => {
   const { chatContext, chatGptResponse, messages } = req.body;
   const content: ZoomBotMessageRequestContent = {
     head: {
-      text: messages[0].content,
+      text: messages[0].content.replace(/^\n+/, ""),
     },
     // body: [{ type: "message", text: responseFromChatGPT.text }],
     body: [{ type: "message", text: chatGptResponse.choices[0].message.content }], // todo
