@@ -8,9 +8,9 @@ Deployment: Github Actions + Fly.io + Vercel
 UI: React + Next.js + Tailwindcss
 
 ## Todo:
-- [x] openAi api integration
+- [x] openAI API integration
 - [ ] todo list
-- [x] [zoom chat] integration
+- [x] [Zoom chat] integration
 - [ ] integrate with [hubot](https://hubot.github.com/)
 - [ ] save to notion
 - [ ] rss feed
