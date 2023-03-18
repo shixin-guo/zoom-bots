@@ -8,9 +8,9 @@ Deployment: Github Actions + Fly.io + Vercel
 UI: React + Next.js + Tailwindcss
 
 ## Todo:
-- [] openAi api integration
+- [-] openAi api integration
 - [] todo list
-- [] [zoom chat] integration
+- [-] [zoom chat] integration
 - [] integrate with [hubot](https://hubot.github.com/)
 - [] save to notion
 - [] rss feed
@@ -20,7 +20,7 @@ UI: React + Next.js + Tailwindcss
 - [] stock and crypto price alert
 - [] Drink water reminder 
 - [] sedentary reminder
-- [] integrate with https://github.com/zurawiki/gptcommit
+- [] git commit integrate with https://github.com/zurawiki/gptcommit
 
 ## Installation:
 
