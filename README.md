@@ -1,8 +1,9 @@
 # my-bot
 
 ## Demo：
-<img width="1165" alt="image" src="https://user-images.githubusercontent.com/12186221/226104385-2e6b3c59-c6a3-40b9-9d31-d78abb7844c6.png">
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/12186221/226104385-2e6b3c59-c6a3-40b9-9d31-d78abb7844c6.png">
 
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/12186221/226105014-422157b4-f12a-4312-a163-1aaae959783b.png">
 
 ## Technology Stack
 - Server: Typescript + Express + Notion API + OpenAI API
