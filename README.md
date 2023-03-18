@@ -8,22 +8,24 @@ Deployment: Github Actions + Fly.io + Vercel
 UI: React + Next.js + Tailwindcss
 
 ## Todo:
-- [-] openAi api integration
-- [] todo list
-- [-] [zoom chat] integration
-- [] integrate with [hubot](https://hubot.github.com/)
-- [] save to notion
-- [] rss feed
-- [] webhooks
-- [] generate weekly report read list
-- [] weather daily alert
-- [] stock and crypto price alert
-- [] Drink water reminder 
-- [] sedentary reminder
-- [] git commit integrate with https://github.com/zurawiki/gptcommit
+- [x] openAi api integration
+- [ ] todo list
+- [x] [zoom chat] integration
+- [ ] integrate with [hubot](https://hubot.github.com/)
+- [ ] save to notion
+- [ ] rss feed
+- [ ] webhooks
+- [ ] generate weekly report read list
+- [ ] weather daily alert
+- [ ] stock and crypto price alert
+- [ ] Drink water reminder 
+- [ ] sedentary reminder
+- [ ] git commit integrate with https://github.com/zurawiki/gptcommit
 
 ## Installation:
 
+## Config:
+<img width="837" alt="image" src="https://user-images.githubusercontent.com/12186221/226102693-58aac075-f4eb-49bd-9851-7c5f8c5b7837.png">
 
 ## Usage:
 
