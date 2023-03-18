@@ -1,4 +1,11 @@
 import { Response } from "express";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function log(...args: any[]): void {
+  console.log(
+    ...args
+  );
+}
+
 async function within(fn: any, res: Response, duration: number): Promise<void> {
   const id = setTimeout(() => res.send({
     message: "There was an error with the upstream service!"
@@ -13,4 +20,4 @@ async function within(fn: any, res: Response, duration: number): Promise<void> {
   }
 }
 
-export { within };
+export { within, log };
