@@ -25,6 +25,11 @@
 
 ## Installation:
 
+```
+pnpm i 
+
+```
+
 ## Config:
 <img width="837" alt="image" src="https://user-images.githubusercontent.com/12186221/226102693-58aac075-f4eb-49bd-9851-7c5f8c5b7837.png">
 
