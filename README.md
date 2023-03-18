@@ -21,6 +21,7 @@
 - [ ] Drink water reminder 
 - [ ] sedentary reminder
 - [ ] git commit integrate with https://github.com/zurawiki/gptcommit
+- [ ] auto review readme and find grammam error and optimize
 
 ## Installation:
 
