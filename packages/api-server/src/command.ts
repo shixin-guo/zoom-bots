@@ -8,14 +8,16 @@ import { sendChat } from "./zoom-chat";
 
 const commandHandler = async (req:Request, res:Response): Promise<void> => {
   try {
-    // test
-    // const todoList = await todoHandler(["/todo", "list", "todo2"]);
-    // console.log(todoList);
-    // return;
-    // test
-    const { toJid, accountId, userJid, cmd = "hi" } = req.body.payload;
+    // const { toJid, accountId, userJid, cmd } = {
+    //   cmd: "/todo list",
+    //   toJid: "test",
+    //   accountId: "test",
+    //   userJid: "test",
+    // };
 
+    const { toJid, accountId, userJid, cmd = "hi" } = req.body.payload;
     log("payload.cmd:", cmd);
+
     const commandsContent: string[] = cmd.split(" ");
     const command = commandsContent[0].toLowerCase();
     if (command.startsWith("/todo")) {
