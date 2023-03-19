@@ -65,6 +65,20 @@ app.post('/subscribe', (req, res) => {
             chatContext,
             messages: payload.messages,
         })
+    }).catch((err) => {
+        console.log('err from ChatGpt = ', err);
+        callBack({
+            // todo add a type definition for this
+            chatGptResponse: {
+                choices: [
+                    {messages : {
+                        content: JSON.stringify(err),
+                    }
+                }]
+            },
+            chatContext,
+            messages: payload.messages,
+        })
     });
 
     res.status(200).send('Hello from hub!')
