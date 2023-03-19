@@ -13,7 +13,7 @@ if (!process.env.OPENAI_API_KEY) {
 }
 
 const app = express();
-const port = process.env.PORT || 6666;
+const port = process.env.PORT || 7777;
 
 app.use(bodyParser.json());
 
@@ -55,9 +55,9 @@ app.get("/zoomverify/verifyzoom.html", (req: Request, res: Response) => {
 });
 
 app.get("/test", async (req: Request, res: Response) => {
-  const responseFromChatGPT = await commandHandler(req, res);
+  const response = await commandHandler(req, res);
   res.status(200);
-  res.send(responseFromChatGPT);
+  res.send(response);
 });
 app.post("/deauthorize", async (req: Request, res: Response) => {
   if (req.headers.authorization === process.env.zoom_verification_token) {
@@ -131,4 +131,4 @@ app.post("/callback", async (req: Request, res: Response) => {
   res.send("test callback");
 });
 
-app.listen(port, () => log(`Chatbot is living in http://localhost:${port}!`));
+app.listen(port, () => log(`Chatbot is living in http://localhost:${port}`));
