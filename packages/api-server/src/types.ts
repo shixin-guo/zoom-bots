@@ -8,113 +8,70 @@ interface ZoomBotMessageRequestContentHeader {
     text: string
   }
 }
+interface AttachmentMessage {
+  type: "attachments",
+  img_url: string,
+  ext?: "jpg" | "png" | "gif" | "jpeg",
+  resource_url: string,
+  information: {
+    title: {
+      text: string,
+      style?: Record<string, string>
+    },
+    description: {
+      text: string,
+      style?: Record<string, string>
+    }
+  }
+}
+interface TextMessage {
+  type: "message",
+  text: string
+}
+interface SectionMessage {
+  type: "section",
+  sections: [
+    {
+      type: "message",
+      style: Record<string, any>,
+      text?: string,
+      link?: string // todo
+    }
+  ]
+
+}
+
+interface FieldsMessage {
+  type: "fields",
+  items: [
+    {
+      key: string,
+      value: string,
+      link?: string
+
+    }
+  ]
+}
+
 interface ZoomBotMessageRequestContentBody {
   type: "section" | "message",
   sidebar_color?: string,
   sections?: [
-    | {
-      type: "attachments",
-      img_url: string,
-      resource_url: string,
-      information: {
-        title: {
-          text: string
-        },
-        description: {
-          text: string
-        }
-      }
-    }
-    | {
-      type: "message",
-      text: string
-    }
+    AttachmentMessage
+    | TextMessage | SectionMessage | FieldsMessage
   ],
-  text?: string
+  text?: string,
+  footer?: string,
+  footer_icon?: string // todo
 }
-
-const body = {
-  content: {
-    head: {
-      type: "message",
-      text: "Catered Lunch Choices Today"
-    },
-    body: [
-      {
-        type: "message",
-        text: "Hello all, here are the lunch choices for today's company event:"
-      },
-      {
-        type: "fields",
-        items: [
-          {
-            key: "Pizza",
-            value: "Best Pizza Restaurant",
-            link: "https://yelp.com"
-          },
-          {
-            key: "Pasta",
-            value: "Best Pasta Restaurant",
-            link: "https://yelp.com"
-          },
-          {
-            key: "Burger",
-            value: "Best Burger Restaurant",
-            link: "https://yelp.com"
-          }
-        ]
-      }
-    ]
-  },
-  to_jid: "{{to_jid}}",
-  robot_jid: "{{account_id}}",
-  account_id: "{{account_id}}"
-};
-
-
-const attachments = {
-  content: {
-    head: {
-      type: "message",
-      text: "Lunch Preferences"
-    },
-    body: [
-      {
-        type: "attachments",
-        ext: "jpg",
-        resource_url: "https://d24cgw3uvb9a9h.cloudfront.net/static/93664/image/new/ZoomLogo.png",
-        information: {
-          title: {
-            style: {
-              color: "#323639",
-              itatic: "true",
-              bold: "false"
-            },
-            text: "hello"
-          },
-          description: {
-            style: {
-              color: "#2D8CFF",
-              bold: "false"
-            },
-            text: "Click to download the resource"
-          }
-        },
-        img_url: "https://d24cgw3uvb9a9h.cloudfront.net/static/93664/image/new/ZoomLogo.png"
-      }
-    ]
-  },
-  to_jid: "{{to_jid}}",
-  robot_jid: "{{account_id}}",
-  account_id: "{{account_id}}"
-};
 
 interface ZoomChatbotParams {
   robot_jid: string,
   to_jid: string,
   account_id: string,
   user_jid: string,
-  content: ZoomBotMessageRequestContent
+  content: ZoomBotMessageRequestContent,
+  is_markdown_support?: boolean
 }
 
 export {
@@ -122,4 +79,5 @@ export {
   ZoomBotMessageRequestContent,
   ZoomBotMessageRequestContentHeader,
   ZoomBotMessageRequestContentBody,
+  SectionMessage, // todo
 };

@@ -1,9 +1,7 @@
 import { config } from "dotenv";
 
 import { Client } from "@notionhq/client";
-import { CreatePageResponse, QueryDatabaseResponse, UpdatePageResponse } from "@notionhq/client/build/src/api-endpoints";
-
-import { log } from "../utils";
+import { CreatePageResponse, PageObjectResponse, UpdatePageResponse } from "@notionhq/client/build/src/api-endpoints";
 
 config({ path: ".env" });
 
@@ -20,10 +18,14 @@ const notion = new Client({
 
 
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
+let cachedTodoList: ({ name: any } | undefined)[] = [];
 
-
-const getTodoList = async (completed: boolean): Promise<QueryDatabaseResponse> => {
-  const result = await notion.databases.query({
+type TodoItemType = { id: string, name: string }
+const getTodoList = async (completed?: boolean): Promise<{
+  id: string,
+  name: string
+}[]> => {
+  const databases = await notion.databases.query({
     database_id: NOTION_DATABASE_ID,
     filter: {
       property: "Done",
@@ -32,15 +34,30 @@ const getTodoList = async (completed: boolean): Promise<QueryDatabaseResponse> =
       },
     },
   });
-  return result;
+  const list = (databases.results as PageObjectResponse[]).map((item) => {
+    if (item.properties) {
+      const { Name, Done } = item.properties as any;
+      if (Name && Done) {
+        return {
+          // id: item.id,
+          name: Name.title[0].plain_text,
+        };
+      }
+    }
+  });
+  cachedTodoList = list.filter((item) => item);
+  return list.filter((item) => item !== undefined) as TodoItemType[];
 };
 
-const updateTodoItem = async ({ id, done }: {
-  id: string,
+const updateTodoItem = async ({ index, done }: {
+  index: number,
   done: boolean
 }): Promise<UpdatePageResponse> => {
+  if (!cachedTodoList[index]?.id) {
+    throw new Error("Todo item not found");
+  }
   const todo = await notion.pages.update({
-    page_id: id,
+    page_id: cachedTodoList[index]!.id,
     properties: {
       Done: {
         checkbox: done,
@@ -61,37 +78,33 @@ const addTodoItem = async (text: string): Promise<CreatePageResponse> => {
   return result;
 };
 
-export const todoHandler = async (cmd: string): Promise<void> => {
-  const [_, action, ...rest] = cmd.split(" ");
+export const todoHandler = async (cmd: string[]): Promise<TodoItemType[]> => {
+  const [_command, action, ...rest] = cmd;
   const text = rest.join(" ");
   switch (action) {
-
-    case "list": {
-      const todoList = await getTodoList(false);
-      log("todoList", todoList);
-      break;
-    }
-
     case "done": {
-      const todoDone = await getTodoList(true);
-      log("todoDone", todoDone);
+      return await getTodoList(true);
       break;
     }
-
     case "add": {
-      const todoAdd = await addTodoItem(text);
-      log("todoAdd", todoAdd);
+      await addTodoItem(text);
+      return await getTodoList(false);
       break;
     }
-
     case "update": {
-      const todoUpdate = await updateTodoItem({ id: text, done: true });
-      log("todoUpdate", todoUpdate);
+      await updateTodoItem({ index: Number(text), done: true });
+      return await getTodoList(false);
       break;
     }
-
+    case "all": {
+      const completed = await getTodoList(true);
+      const unCompleted = await getTodoList(false);
+      return [...unCompleted, ...completed];
+      break;
+    }
     default: {
-      log("Unknown action");
+      return await getTodoList(false);
+      break;
     }
   }
 };
