@@ -122,10 +122,6 @@
         "error",
         "never"
       ],
-      "indent": [
-        "error",
-        2
-      ],
       "comma-spacing": [
         "error",
         {

@@ -2,19 +2,18 @@ import { config } from "dotenv";
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 
-// import './cron';
-// import GetWeatherData from "./extensions/weather";
-import { sendMessagesToApiHub } from "./chatgpt";
 import { sendChat } from "./zoom-chat";
 import { ZoomBotMessageRequestContent } from "./types";
+import { log } from "./utils";
+import { commandHandler } from "./command";
 
 config({ path: ".env" });
-// if (!process.env.OPENAI_API_KEY) {
-//   console.log("OPENAI_API_KEY not set, skipping chatgpt");
-// }
+if (!process.env.OPENAI_API_KEY) {
+  log("OPENAI_API_KEY not set, skipping chatgpt");
+}
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 6666;
 
 app.use(bodyParser.json());
 
@@ -56,7 +55,7 @@ app.get("/zoomverify/verifyzoom.html", (req: Request, res: Response) => {
 });
 
 app.get("/test", async (req: Request, res: Response) => {
-  const responseFromChatGPT = await sendMessagesToApiHub("hi");
+  const responseFromChatGPT = await commandHandler(req, res);
   res.status(200);
   res.send(responseFromChatGPT);
 });
@@ -85,10 +84,10 @@ app.post("/deauthorize", async (req: Request, res: Response) => {
       }),
     });
     if (!response) {
-      console.log("No response from Zoom.");
+      log("No response from Zoom.");
     }
     const data = await response.json()!;
-    console.log("/deauthorize data", data);
+    log("/deauthorize data", data);
   } else {
     res.status(401);
     res.send("Unauthorized request to Chatbot for Zoom.");
@@ -96,42 +95,32 @@ app.post("/deauthorize", async (req: Request, res: Response) => {
 });
 
 app.post("/webhook", async (req: Request, res: Response) => {
-  console.log("webhook", req.body, res);
+  log("webhook", req.body, res);
   res.status(200);
   res.send("test webhook");
 });
 
 app.post("/endpoint", async (req: Request, res: Response) => {
   if (req.headers.authorization === process.env.zoom_verification_token) {
-    const { toJid, accountId, userJid, cmd = "hi" } = req.body.payload;
-    console.log("payload.cmd:", cmd);
-    await sendMessagesToApiHub(cmd, {
-      robot_jid: process.env.zoom_bot_jid!,
-      to_jid: toJid,
-      account_id: accountId,
-      user_jid: userJid,
-    }).then((response) => {
-      console.log("response", response);
-    }).catch((error) => {
-      console.log("sendMessagesToApiHub error", error);
-    });
+    await commandHandler(req, res);
     res.status(200);
     res.send();
   } else {
     res.status(401);
-    res.send("Unauthorized request to  Chatbot for Zoom.");
+    res.send("Unauthorized request to Chatbot for Zoom.");
   }
 });
 
+// only for long time running tasks such as chatgpt!
 app.post("/callback", async (req: Request, res: Response) => {
-  console.log("callback", req.body.chatGptResponse.choices, req.body);
+  log("callback", req.body.chatGptResponse.choices, req.body);
   const { chatContext, chatGptResponse, messages } = req.body;
   const content: ZoomBotMessageRequestContent = {
     head: {
-      text: messages[0].content.replace(/^\n+/, ""),
+      text: messages[0].content,
     },
     // body: [{ type: "message", text: responseFromChatGPT.text }],
-    body: [{ type: "message", text: chatGptResponse.choices[0].message.content }], // todo
+    body: [{ type: "message", text: chatGptResponse.choices[0].message.content.replace(/^\n+/, "") }], // todo
   };
   await sendChat({
     content,
@@ -142,4 +131,4 @@ app.post("/callback", async (req: Request, res: Response) => {
   res.send("test callback");
 });
 
-app.listen(port, () => console.log(`Chatbot is living in http://localhost:${port}!`));
+app.listen(port, () => log(`Chatbot is living in http://localhost:${port}!`));

@@ -1,6 +1,11 @@
+import { config } from "dotenv";
 
 import { Client } from "@notionhq/client";
 import { CreatePageResponse, QueryDatabaseResponse, UpdatePageResponse } from "@notionhq/client/build/src/api-endpoints";
+
+import { log } from "../utils";
+
+config({ path: ".env" });
 
 if (!process.env.NOTION_API_KEY) {
   throw new Error("NOTION_API_KEY is not defined");
@@ -17,7 +22,7 @@ const notion = new Client({
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
 
 
-export const getTodoList = async (completed: boolean): Promise<QueryDatabaseResponse> => {
+const getTodoList = async (completed: boolean): Promise<QueryDatabaseResponse> => {
   const result = await notion.databases.query({
     database_id: NOTION_DATABASE_ID,
     filter: {
@@ -30,7 +35,7 @@ export const getTodoList = async (completed: boolean): Promise<QueryDatabaseResp
   return result;
 };
 
-export const updateTodoItem = async ({ id, done }: {
+const updateTodoItem = async ({ id, done }: {
   id: string,
   done: boolean
 }): Promise<UpdatePageResponse> => {
@@ -45,7 +50,7 @@ export const updateTodoItem = async ({ id, done }: {
   return todo;
 };
 
-export const addTodoItem = async (text: string): Promise<CreatePageResponse> => {
+const addTodoItem = async (text: string): Promise<CreatePageResponse> => {
   const result = await notion.pages.create({
     parent: { database_id: NOTION_DATABASE_ID },
     properties: {
@@ -54,4 +59,39 @@ export const addTodoItem = async (text: string): Promise<CreatePageResponse> => 
     },
   });
   return result;
+};
+
+export const todoHandler = async (cmd: string): Promise<void> => {
+  const [_, action, ...rest] = cmd.split(" ");
+  const text = rest.join(" ");
+  switch (action) {
+
+    case "list": {
+      const todoList = await getTodoList(false);
+      log("todoList", todoList);
+      break;
+    }
+
+    case "done": {
+      const todoDone = await getTodoList(true);
+      log("todoDone", todoDone);
+      break;
+    }
+
+    case "add": {
+      const todoAdd = await addTodoItem(text);
+      log("todoAdd", todoAdd);
+      break;
+    }
+
+    case "update": {
+      const todoUpdate = await updateTodoItem({ id: text, done: true });
+      log("todoUpdate", todoUpdate);
+      break;
+    }
+
+    default: {
+      log("Unknown action");
+    }
+  }
 };
