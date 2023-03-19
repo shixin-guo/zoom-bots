@@ -40,7 +40,7 @@ const commandHandler = async (req:Request, res:Response): Promise<void> => {
           type: "fields",
           items: todoList.map((item) => {
             return {
-              key: item,
+              key: item.name,
             };
           }),
         }],

@@ -18,9 +18,9 @@ const notion = new Client({
 
 
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
-let cachedTodoList: ({ name: any } | undefined)[] = [];
+let cachedTodoList: ({ name: any, id?: string } | undefined)[] = [];
 
-type TodoItemType = { id: string, name: string }
+type TodoItemType = { id: string, name: string, link?: string }
 const getTodoList = async (completed?: boolean): Promise<{
   id: string,
   name: string
@@ -53,11 +53,11 @@ const updateTodoItem = async ({ index, done }: {
   index: number,
   done: boolean
 }): Promise<UpdatePageResponse> => {
-  if (!cachedTodoList[index]?.id) {
+  if (typeof cachedTodoList[index]?.id !== "string") {
     throw new Error("Todo item not found");
   }
   const todo = await notion.pages.update({
-    page_id: cachedTodoList[index]!.id,
+    page_id: cachedTodoList[index]!.id || "",
     properties: {
       Done: {
         checkbox: done,
