@@ -20,8 +20,10 @@ async function sendChat(
       Authorization: "Bearer " + access_token,
     },
     body: JSON.stringify(body),
+  }).catch((e) => {
+    console.log("Error sending chat to Zoom", e);
   });
-  return await response.json();
+  return await response?.json() || "No response from Zoom.";
 }
 
 async function refreshChatbotToken(): Promise<void> {
