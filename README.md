@@ -2,7 +2,7 @@
 > Free, open source chatbot personal assistant with customizable scripts.
 
 ## Screenshots：
-- talk to bot:
+- talk with your bot:
  <img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226391961-b3e17cb4-1bd0-4beb-8e1d-9fbed10a4699.png">
  
 - use chatbot when you talking with friends:
