@@ -19,7 +19,7 @@ async function sendChat(
     },
     body: JSON.stringify(body),
   }).then(res => {
-    log("Success sending chat to Zoom", res);
+    log("Success sending chat to Zoom", res.statusText, res.status);
     return res;
   }).catch((e) => {
     log("Error sending chat to Zoom", e);

@@ -12,7 +12,7 @@ export const webhookHandler = async (body: {type: string}, cacheChatInfo: {
       head: {
         text: "_Daily Alert_",
         sub_head: {
-          text: "~Weather Tips and something~"
+          text: "*Weather Tips and something*"
         }
       },
       body: [
