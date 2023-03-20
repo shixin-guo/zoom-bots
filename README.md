@@ -1,7 +1,7 @@
 # my-bot
 
-## Demo：
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/12186221/226104385-2e6b3c59-c6a3-40b9-9d31-d78abb7844c6.png"><img width="719" alt="image" src="https://user-images.githubusercontent.com/12186221/226391519-fd8f1f7a-1740-45ab-83e3-99342ebd4397.png"><img width="737" alt="image" src="https://user-images.githubusercontent.com/12186221/226391643-e08b31d4-f0c1-4f18-aa1d-cfb1bf56f406.png">
+## Screenshots：
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/12186221/226391961-b3e17cb4-1bd0-4beb-8e1d-9fbed10a4699.png"><img width="400" alt="image" src="https://user-images.githubusercontent.com/12186221/226392100-f5a82761-a793-472b-baf9-0196714603b2.png"><img width="400" alt="image" src="https://user-images.githubusercontent.com/12186221/226392413-932462af-a019-4a40-94ac-266272dd7336.png">
 
 
 
@@ -27,7 +27,9 @@
 
 #### health:
 - [x] support cron job 
-- [x] weather daily alert <img width="427" alt="image" src="https://user-images.githubusercontent.com/12186221/226389861-36acb5ad-e018-4721-aa50-261e5dc95ce6.png">
+- [x] weather daily alert <img width="200" alt="image" src="https://user-images.githubusercontent.com/12186221/226392692-416383f6-4118-4631-8616-23e919b64127.png">
+
+- [x] weather daily alert 
 
 - [ ] stock and crypto price alert
 - [ ] drink water reminder 
