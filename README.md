@@ -28,7 +28,7 @@
 
 #### health:
 - [x] support cron job 
-- [x] weather daily alert <img width="200" alt="image" src="https://user-images.githubusercontent.com/12186221/226392692-416383f6-4118-4631-8616-23e919b64127.png">
+- [x] weather daily alert <img width="400" alt="image" src="https://user-images.githubusercontent.com/12186221/226392692-416383f6-4118-4631-8616-23e919b64127.png">
 
 - [x] weather daily alert 
 
