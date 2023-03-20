@@ -81,6 +81,10 @@ export const todoHandler = async (cmd: string[]): Promise<TodoItemType[]> => {
   const text = rest.join(" ");
   switch (action) {
     case "list": {
+      return await getTodoList(false);
+      break;
+    }
+    case "finished": {
       return await getTodoList(true);
       break;
     }
