@@ -1,10 +1,6 @@
-// import cron from 'node-cron';
-// import { sendChat } from './zoom-chat';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-// // https://crontab.guru/#*/1_*_*_*_*
-// cron.schedule('* * * * *', () => {
-//   sendChat('Running a job');
-// }, {
-//   scheduled: true,
-//   timezone: 'America/Sao_Paulo'
-// });
+export default function handler(req: VercelRequest, res: VercelResponse): void {
+  console.log(req.body, 111);
+  res.status(200).json({ success: true });
+}
