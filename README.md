@@ -2,7 +2,10 @@
 > Free, open source chatbot personal assistant with customizable scripts.
 
 ## Screenshots：
-<img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226391961-b3e17cb4-1bd0-4beb-8e1d-9fbed10a4699.png"><img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226392100-f5a82761-a793-472b-baf9-0196714603b2.png"><img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226392413-932462af-a019-4a40-94ac-266272dd7336.png">
+talk to bot:
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226391961-b3e17cb4-1bd0-4beb-8e1d-9fbed10a4699.png">
+send question in Group Channel:
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226392413-932462af-a019-4a40-94ac-266272dd7336.png">
 
 
 
@@ -40,7 +43,7 @@
 - [ ] git commit integration with https://github.com/zurawiki/gptcommit
 - [ ] integrate with [hubot](https://hubot.github.com/)
 - [ ] auto check readme and find and optimize grammar errors
-
+- [ ] support replay and context
 
 ## Installation:
 
