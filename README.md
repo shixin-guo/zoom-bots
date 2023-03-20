@@ -1,3 +1,5 @@
+<img width="1727" alt="image" src="https://user-images.githubusercontent.com/12186221/226397602-a210ac71-0628-479c-83e8-bfc35542cfa5.png">
+
 # my-bot
 > Free, open source chatbot personal assistant with customizable scripts.
 
