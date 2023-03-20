@@ -20,11 +20,8 @@ const notion = new Client({
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
 let cachedTodoList: ({ name: any, id?: string } | undefined)[] = [];
 
-type TodoItemType = { id: string, name: string, link?: string }
-const getTodoList = async (completed?: boolean): Promise<{
-  id: string,
-  name: string
-}[]> => {
+type TodoItemType = { id: string, name: string, link?: string, created_time: string };
+const getTodoList = async (completed?: boolean): Promise<TodoItemType[]> => {
   const databases = await notion.databases.query({
     database_id: NOTION_DATABASE_ID,
     filter: {
@@ -36,10 +33,11 @@ const getTodoList = async (completed?: boolean): Promise<{
   });
   const list = (databases.results as PageObjectResponse[]).map((item) => {
     if (item.properties) {
-      const { Name, Done } = item.properties as any;
+      const { Name, Done, created_time } = item.properties as any;
       if (Name && Done) {
         return {
-          // id: item.id,
+          id: item.id,
+          created_time: created_time.created_time, // todo
           name: Name.title[0].plain_text,
         };
       }
@@ -82,7 +80,7 @@ export const todoHandler = async (cmd: string[]): Promise<TodoItemType[]> => {
   const [_command, action, ...rest] = cmd;
   const text = rest.join(" ");
   switch (action) {
-    case "done": {
+    case "list": {
       return await getTodoList(true);
       break;
     }
@@ -91,7 +89,8 @@ export const todoHandler = async (cmd: string[]): Promise<TodoItemType[]> => {
       return await getTodoList(false);
       break;
     }
-    case "update": {
+    case "update":
+    case "done" : {
       await updateTodoItem({ index: Number(text), done: true });
       return await getTodoList(false);
       break;
