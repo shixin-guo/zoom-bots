@@ -12,7 +12,7 @@
   "crons": [
     { 
       "path": "/src/cron.ts", 
-      "schedule": "* * * * *"
+      "schedule": "40 16 * * *"
     }
   ]
 
