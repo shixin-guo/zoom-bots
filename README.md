@@ -5,7 +5,7 @@
 - talk to bot:
  <img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226391961-b3e17cb4-1bd0-4beb-8e1d-9fbed10a4699.png">
  
-- send question in Group Channel:
+- use chatbot when you talking with friends:
  <img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226392413-932462af-a019-4a40-94ac-266272dd7336.png">
 
 
