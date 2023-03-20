@@ -19,10 +19,13 @@
 
 #### work and read:
 - [x] openAI API integration
-- [X] todo list
+- [X] todo list 
+<img width="620" alt="image" src="https://user-images.githubusercontent.com/12186221/226394985-f65c3996-f012-49c6-995d-26a8c6e25a7a.png">
+<img width="620" alt="image" src="https://user-images.githubusercontent.com/12186221/226395281-94128448-664c-4333-9622-0212664d69ee.png">
+
 - [x] [Zoom chat] integration
 - [ ] RSS feed
-- [x] support save to notion
+- [x] support save to notion 
 - [x] webhooks
 - [ ] generate weekly report read list
 - [ ] telegram bot integration
@@ -31,10 +34,12 @@
 - [ ] read article and generate summary and save to notion
 
 #### health:
-- [x] support cron job 
-- [x] weather daily alert <img width="400" alt="image" src="https://user-images.githubusercontent.com/12186221/226392692-416383f6-4118-4631-8616-23e919b64127.png">
+- [x] support cron job  
+<img width="1249" alt="image" src="https://user-images.githubusercontent.com/12186221/226394527-b1a5faef-5249-4a68-afed-7eed30c442e6.png">
 
 - [x] weather daily alert 
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/12186221/226392692-416383f6-4118-4631-8616-23e919b64127.png">
+
 
 - [ ] stock and crypto price alert
 - [ ] drink water reminder 
