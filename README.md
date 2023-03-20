@@ -9,14 +9,14 @@
 
 ## Todo:
 - [x] openAI API integration
-- [ ] todo list
+- [X] todo list
 - [x] [Zoom chat] integration
 - [ ] integrate with [hubot](https://hubot.github.com/)
-- [ ] save to notion
+- [x] save to notion
 - [ ] rss feed
-- [ ] webhooks
+- [x] webhooks
 - [ ] generate weekly report read list
-- [ ] weather daily alert
+- [x] weather daily alert
 - [ ] stock and crypto price alert
 - [ ] Drink water reminder 
 - [ ] sedentary reminder
