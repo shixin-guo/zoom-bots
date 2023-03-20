@@ -8,12 +8,5 @@
   "routes": [{
     "src": "/(.*)",
     "dest": "/src/index.ts"
-  }],
-  "crons": [
-    { 
-      "path": "/src/cron.ts", 
-      "schedule": "40 16 * * *"
-    }
-  ]
-
+  }]
 }
