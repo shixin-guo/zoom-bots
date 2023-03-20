@@ -1,9 +1,9 @@
 # my-bot
 
 ## Demo：
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/12186221/226104385-2e6b3c59-c6a3-40b9-9d31-d78abb7844c6.png">
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/12186221/226104385-2e6b3c59-c6a3-40b9-9d31-d78abb7844c6.png"><img width="719" alt="image" src="https://user-images.githubusercontent.com/12186221/226391519-fd8f1f7a-1740-45ab-83e3-99342ebd4397.png"><img width="737" alt="image" src="https://user-images.githubusercontent.com/12186221/226391643-e08b31d4-f0c1-4f18-aa1d-cfb1bf56f406.png">
 
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/12186221/226105014-422157b4-f12a-4312-a163-1aaae959783b.png">
+
 
 ## Technology Stack
 - Server: Typescript + Express + Notion API + OpenAI API
@@ -27,7 +27,8 @@
 
 #### health:
 - [x] support cron job 
-- [x] weather daily alert
+- [x] weather daily alert <img width="427" alt="image" src="https://user-images.githubusercontent.com/12186221/226389861-36acb5ad-e018-4721-aa50-261e5dc95ce6.png">
+
 - [ ] stock and crypto price alert
 - [ ] drink water reminder 
 - [ ] sedentary reminder
@@ -76,7 +77,7 @@ deploy to vercel and fly.io
 
 
 ## Config:
-<img width="837" alt="image" src="https://user-images.githubusercontent.com/12186221/226102693-58aac075-f4eb-49bd-9851-7c5f8c5b7837.png">
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/12186221/226102693-58aac075-f4eb-49bd-9851-7c5f8c5b7837.png">
 
 ## Usage:
 
