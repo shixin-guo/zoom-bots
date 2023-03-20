@@ -6,7 +6,7 @@
 - Server: Typescript + Express + Notion API + OpenAI API
 - Deployment: Github Actions + Fly.io + Vercel
 - UI: React + Next.js + Tailwindcss
-
+- Cron: mergent
 ## Todo:
 - [x] openAI API integration
 - [X] todo list
