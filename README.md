@@ -23,6 +23,7 @@
 - [x] openAI API integration
 - [X] todo list 
 <img width="620" alt="image" src="https://user-images.githubusercontent.com/12186221/226394985-f65c3996-f012-49c6-995d-26a8c6e25a7a.png">
+sync to notion database:
 <img width="620" alt="image" src="https://user-images.githubusercontent.com/12186221/226395281-94128448-664c-4333-9622-0212664d69ee.png">
 
 - [x] [Zoom chat] integration
