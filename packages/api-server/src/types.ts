@@ -220,3 +220,212 @@ export {
 //     }
 //   ]
 // }
+
+export interface MessageWithHeader {
+  head?: {
+    text: string,
+    style?: {
+      color?: string,
+      bold?: boolean,
+      italic?: boolean,
+      [k: string]: unknown
+    },
+    [k: string]: unknown
+  },
+  [k: string]: unknown
+}
+
+
+export interface MessageWithSubHeader {
+  head?: {
+    text: string,
+    style?: {
+      color?: string,
+      bold?: boolean,
+      italic?: boolean,
+      [k: string]: unknown
+    },
+    sub_head?: {
+      text: string,
+      style?: {
+        color?: string,
+        bold?: boolean,
+        italic?: boolean,
+        [k: string]: unknown
+      },
+      [k: string]: unknown
+    },
+    [k: string]: unknown
+  },
+  [k: string]: unknown
+}
+
+export interface MessageWithText {
+  head?: {
+    text: string,
+    style?: {
+      color?: string,
+      bold?: boolean,
+      italic?: boolean,
+      [k: string]: unknown
+    },
+    sub_head?: {
+      text: string,
+      style?: {
+        color?: string,
+        bold?: boolean,
+        italic?: boolean,
+        [k: string]: unknown
+      },
+      [k: string]: unknown
+    },
+    [k: string]: unknown
+  },
+  [k: string]: unknown
+}
+
+
+
+export interface MySchema {
+  head?: {
+    text: string,
+    style?: {
+      color?: string,
+      bold?: boolean,
+      italic?: boolean,
+      [k: string]: unknown
+    },
+    sub_head?: {
+      text: string,
+      style?: {
+        color?: string,
+        bold?: boolean,
+        italic?: boolean,
+        [k: string]: unknown
+      },
+      [k: string]: unknown
+    },
+    [k: string]: unknown
+  },
+  body?: {
+    type: "select",
+    text: string,
+    selected_item?: {
+      text: string,
+      value: string,
+      [k: string]: unknown
+    },
+    /**
+     * Required if `static_source` is  **not** set.
+     */
+    select_items?: {
+      text: string,
+      value: string,
+      [k: string]: unknown
+    }[],
+    /**
+     * Required if `select_items` is  **not** set.
+     */
+    static_source?: "members" | "channels",
+    [k: string]: unknown
+  }[],
+  [k: string]: unknown
+}
+
+
+export interface MessageWithFormField {
+  head?: {
+    text: string,
+    style?: {
+      color?: string,
+      bold?: boolean,
+      italic?: boolean,
+      [k: string]: unknown
+    },
+    sub_head?: {
+      text: string,
+      style?: {
+        color?: string,
+        bold?: boolean,
+        italic?: boolean,
+        [k: string]: unknown
+      },
+      [k: string]: unknown
+    },
+    [k: string]: unknown
+  },
+  body?: {
+    type: "fields",
+    items: {
+      key: string,
+      value: string,
+      short?: boolean,
+      style?: {
+        color?: string,
+        bold?: boolean,
+        italic?: boolean,
+        [k: string]: unknown
+      },
+      [k: string]: unknown
+    }[],
+    [k: string]: unknown
+  }[],
+  [k: string]: unknown
+}
+
+
+
+export interface MessageWithAttachment {
+  head?: {
+    text: string,
+    style?: {
+      color?: string,
+      bold?: boolean,
+      italic?: boolean,
+      [k: string]: unknown
+    },
+    sub_head?: {
+      text: string,
+      style?: {
+        color?: string,
+        bold?: boolean,
+        italic?: boolean,
+        [k: string]: unknown
+      },
+      [k: string]: unknown
+    },
+    [k: string]: unknown
+  },
+  body?: {
+    type: "attachments",
+    resource_url: string,
+    img_url: string,
+    information: {
+      title: {
+        text: string,
+        style?: {
+          color?: string,
+          bold?: boolean,
+          italic?: boolean,
+          [k: string]: unknown
+        },
+        [k: string]: unknown
+      },
+      description?: {
+        text: string,
+        style?: {
+          color?: string,
+          bold?: boolean,
+          italic?: boolean,
+          [k: string]: unknown
+        },
+        [k: string]: unknown
+      },
+      [k: string]: unknown
+    },
+    ext?: "pdf" | "txt" | "doc" | "xlsx" | "zip" | "jpeg" | "png",
+    size?: number,
+    [k: string]: unknown
+  }[],
+  [k: string]: unknown
+}

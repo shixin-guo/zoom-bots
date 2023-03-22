@@ -3,8 +3,11 @@ import { Request, Response } from "express";
 import { log } from "./utils";
 import { sendMessagesToApiHub } from "./chatgpt";
 import { todoHandler } from "./extensions/todo";
+import { content as helpContent } from "./extensions/help";
 import { ZoomBotMessageRequestContent } from "./types";
-import { sendChat } from "./zoom-chat";
+import { cacheChatInfo, sendChat } from "./zoom-chat";
+import { webhookHandler } from "./cron";
+
 
 const commandHandler = async (req:Request, res: Response): Promise<void> => {
   try {
@@ -46,6 +49,20 @@ const commandHandler = async (req:Request, res: Response): Promise<void> => {
       };
       await sendChat({
         content,
+        is_markdown_support: true,
+        robot_jid: process.env.zoom_bot_jid!,
+        to_jid: toJid,
+        account_id: accountId,
+        user_jid: userJid,
+      });
+      return;
+    }
+    if (command.startsWith("weather")) {
+      await webhookHandler(req.body, cacheChatInfo);
+    }
+    if (command.startsWith("help")) {
+      await sendChat({
+        content: helpContent,
         is_markdown_support: true,
         robot_jid: process.env.zoom_bot_jid!,
         to_jid: toJid,

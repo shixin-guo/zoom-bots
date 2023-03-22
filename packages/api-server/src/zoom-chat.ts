@@ -1,9 +1,29 @@
+import { config } from "dotenv";
+
 import { ZoomChatbotParams } from "./types";
 import { log } from "./utils";
-
+config({ path: ".env" });
 
 let expires_in: Date | number = 0;
 let access_token = "";
+
+export const cacheChatInfo = {
+  robot_jid: process.env.zoom_bot_jid!,
+  to_jid: "",
+  account_id: "",
+  user_jid: "",
+};
+
+type chatInfo = typeof cacheChatInfo
+
+export const updateCacheChatInfo = (body: chatInfo): chatInfo => {
+  cacheChatInfo.to_jid = body.to_jid;
+  cacheChatInfo.account_id = body.account_id;
+  cacheChatInfo.user_jid = body.user_jid;
+  return cacheChatInfo;
+};
+
+// todo create a wrapper function that use cacheChatInfo
 
 async function sendChat(
   body: ZoomChatbotParams

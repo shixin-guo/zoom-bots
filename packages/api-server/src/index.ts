@@ -1,8 +1,9 @@
 import { config } from "dotenv";
+
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 
-import { sendChat } from "./zoom-chat";
+import { cacheChatInfo, sendChat, updateCacheChatInfo } from "./zoom-chat";
 import { ZoomBotMessageRequestContent } from "./types";
 import { log } from "./utils";
 import { commandHandler } from "./command";
@@ -15,12 +16,6 @@ if (!process.env.OPENAI_API_KEY) {
 
 const app = express();
 const port = process.env.PORT || 7777;
-export const cacheChatInfo = {
-  robot_jid: process.env.zoom_bot_jid!,
-  to_jid: "",
-  account_id: "",
-  user_jid: "",
-};
 
 app.use(bodyParser.json());
 
@@ -111,9 +106,12 @@ app.post("/webhook", async (req: Request, res: Response) => {
 app.post("/endpoint", async (req: Request, res: Response) => {
   if (req.headers.authorization === process.env.zoom_verification_token) {
     const { toJid, accountId, userJid } = req.body.payload;
-    cacheChatInfo.to_jid = toJid;
-    cacheChatInfo.account_id = accountId;
-    cacheChatInfo.user_jid = userJid;
+    updateCacheChatInfo({
+      robot_jid: process.env.zoom_bot_jid!,
+      to_jid: toJid,
+      account_id: accountId,
+      user_jid: userJid,
+    });
     log("cacheChatInfo", cacheChatInfo);
     await commandHandler(req, res);
     res.status(200);
