@@ -1,11 +1,6 @@
 import classnames from "classnames";
 
-interface ButtonProps {
-  className?: string,
-  type?: "button" | "submit" | "reset",
-  children?: React.ReactNode
-}
-export function Button({ className, ...props }: ButtonProps): JSX.Element {
+export function Button({ className, ...props }: any): JSX.Element {
   return (
     <button
       className={classnames(

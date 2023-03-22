@@ -1,16 +1,24 @@
-import type { AppProps } from "next/app";
-import React from "react";
-import { Analytics } from "@vercel/analytics/react";
+import type { AppProps } from 'next/app'
+import { Analytics } from '@vercel/analytics/react'
+import type { LayoutProps } from '@vercel/examples-ui/layout'
 
-import Layout from "../components/Layout";
-import "@vercel/examples-ui/globals.css";
-function App({ Component, pageProps }: AppProps): React.ReactElement {
+import { getLayout } from '@vercel/examples-ui'
+
+import '@vercel/examples-ui/globals.css'
+
+function App({ Component, pageProps }: AppProps) {
+  const Layout = getLayout<LayoutProps>(Component)
+
   return (
-    <Layout>
+    <Layout
+      title="ai-chatgpt"
+      path="solutions/ai-chatgpt"
+      description="ai-chatgpt"
+    >
       <Component {...pageProps} />
       <Analytics />
     </Layout>
-  );
+  )
 }
 
-export default App;
+export default App

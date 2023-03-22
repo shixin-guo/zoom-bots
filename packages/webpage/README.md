@@ -1,12 +1,12 @@
 # AI Chat GPT-3 example
 
-This example shows how to implement a simple chat bot using Next.js, API Routes, and [OpenAI API](https://beta.openai.com/docs/api-reference/completions/create).
+This example shows how to implement a simple chat bot using Next.js, API Routes, and [OpenAI ChatGPT API](https://beta.openai.com/docs/api-reference/completions/create).
 
 ### Components
 
 - Next.js
-- OpenAI API (REST endpoint)
-- API Routes (Edge runtime)
+- OpenAI API (ChatGPT) - streaming
+- API Routes (Edge runtime) - streaming
 
 ## How to Use
 
@@ -20,12 +20,10 @@ Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_mediu
 
 ### Clone and Deploy
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [pnpm](https://pnpm.io/installation) to bootstrap the example:
 
 ```bash
-npx create-next-app --example https://github.com/vercel/examples/tree/main/solutions/ai-chatgpt
-# or
-yarn create next-app --example https://github.com/vercel/examples/tree/main/solutions/ai-chatgpt
+pnpm create next-app --example https://github.com/vercel/examples/tree/main/solutions/ai-chatgpt
 ```
 
 #### Set up environment variables
@@ -41,13 +39,7 @@ then, update `OPENAI_API_KEY` with your [OpenAI](https://beta.openai.com/account
 Next, run Next.js in development mode:
 
 ```bash
-npm install
-npm run dev
-
-# or
-
-yarn
-yarn dev
+pnpm dev
 ```
 
 The app should be up and running at http://localhost:3000.

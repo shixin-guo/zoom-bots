@@ -1,20 +1,25 @@
-import { Layout, Page, Text } from "@vercel/examples-ui";
+import {  Text,Page } from '@vercel/examples-ui'
+import { Chat } from '../components/Chat'
 
-import { Chat } from "../components/Chat";
-
-function Home(): JSX.Element {
+function Home() {
   return (
-    <Page className="flex flex-col gap-12">
+    <div className="flex flex-col gap-12">
       <section className="flex flex-col gap-3">
-        {/* <Text variant="h2">ChatBot:</Text> */}
         <div className="lg:w-2/3">
           <Chat />
         </div>
       </section>
-    </Page>
-  );
+    </div>
+  )
+}
+function Layout (props: any) {
+  return (
+    <div>
+      {props.children}
+    </div>
+  )
 }
 
-Home.Layout = Layout;
+Home.Layout = Layout
 
-export default Home;
+export default Home
