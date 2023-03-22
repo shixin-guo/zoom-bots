@@ -1,18 +1,18 @@
 import classnames from "classnames";
 import Balancer from "react-wrap-balancer";
-import { ReactElement } from "react";
 
 // wrap Balancer to remove type errors :( - @TODO - fix this ugly hack
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const BalancerWrapper = (props: any): JSX.Element => <Balancer {...props} />;
 
-export type Message = {
-  who: "bot" | "user" | undefined,
-  message?: string
+type ChatGPTAgent = "user" | "system" | "assistant"
+
+export interface ChatGPTMessage {
+  role: ChatGPTAgent,
+  content: string
 }
 
 // loading placeholder animation for the chat line
-export const LoadingChatLine = (): ReactElement => (
+export const LoadingChatLine = ():JSX.Element => (
   <div className="flex min-w-full animate-pulse px-4 py-5 sm:px-6">
     <div className="flex flex-grow space-x-3">
       <div className="min-w-0 flex-1">
@@ -42,16 +42,16 @@ const convertNewLines = (text: string): JSX.Element[] =>
     </span>
   ));
 
-export function ChatLine({ who = "bot", message }: Message): JSX.Element {
-  if (!message) {
+export function ChatLine({ role = "assistant", content }: ChatGPTMessage): JSX.Element {
+  if (!content) {
     return <></>;
   }
-  const formattedMessage = convertNewLines(message);
+  const formatteMessage = convertNewLines(content);
 
   return (
     <div
       className={
-        who != "bot" ? "float-right clear-both" : "float-left clear-both"
+        role != "assistant" ? "float-right clear-both" : "float-left clear-both"
       }
     >
       <BalancerWrapper>
@@ -60,16 +60,16 @@ export function ChatLine({ who = "bot", message }: Message): JSX.Element {
             <div className="flex-1 gap-4">
               <p className="font-large text-xxl text-gray-900">
                 <a href="#" className="hover:underline">
-                  {who == "bot" ? "AI" : "You"}
+                  {role == "assistant" ? "AI" : "You"}
                 </a>
               </p>
               <p
                 className={classnames(
                   "text ",
-                  who == "bot" ? "font-semibold font- " : "text-gray-400"
+                  role == "assistant" ? "font-semibold font- " : "text-gray-400"
                 )}
               >
-                {formattedMessage}
+                {formatteMessage}
               </p>
             </div>
           </div>

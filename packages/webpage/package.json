@@ -1,7 +1,8 @@
 {
+  "name": "ai-chatgpt",
+  "repository": "https://github.com/vercel/examples.git",
   "license": "MIT",
   "private": true,
-  "name": "ai-bot-webpage",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,25 +10,24 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@vercel/analytics": "^0.1.6",
-    "@vercel/examples-ui": "^1.0.4",
+    "@vercel/analytics": "^0.1.11",
+    "@vercel/examples-ui": "^1.0.5",
     "classnames": "^2.3.2",
+    "eventsource-parser": "^0.1.0",
     "next": "latest",
     "react": "latest",
     "react-cookie": "^4.1.1",
     "react-dom": "latest",
-    "react-wrap-balancer": "^0.1.5",
-    "express": "^4.17.0",
-    "body-parser": "^1.20.2",
-    "api-server": "workspace:*"
+    "react-wrap-balancer": "^0.1.5"
   },
   "devDependencies": {
-    "@types/body-parser": "^1.19.0",
-    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.45",
     "@types/react": "latest",
-    "autoprefixer": "^10.4.7",
-    "postcss": "^8.4.14",
-    "tailwindcss": "^3.0.24",
-    "typescript": "^4.9.4"
+    "autoprefixer": "^10.4.14",
+    "eslint": "^8.36.0",
+    "eslint-config-next": "^12.3.4",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7",
+    "typescript": "^4.9.5"
   }
 }
