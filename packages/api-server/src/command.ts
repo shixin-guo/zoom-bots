@@ -59,6 +59,7 @@ const commandHandler = async (req:Request, res: Response): Promise<void> => {
     }
     if (command.startsWith("weather")) {
       await webhookHandler(req.body, cacheChatInfo);
+      return;
     }
     if (command.startsWith("help")) {
       await sendChat({
