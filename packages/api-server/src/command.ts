@@ -5,7 +5,7 @@ import { sendMessagesToApiHub } from "./chatgpt";
 import { todoHandler } from "./extensions/todo";
 import { content as helpContent } from "./extensions/help";
 import { ZoomBotMessageRequestContent } from "./types";
-import { cacheChatInfo, sendChat } from "./zoom-chat";
+import { sendChat } from "./zoom-chat";
 import { webhookHandler } from "./cron";
 
 
@@ -58,7 +58,7 @@ const commandHandler = async (req:Request, res: Response): Promise<void> => {
       return;
     }
     if (command.startsWith("weather")) {
-      await webhookHandler(req.body, cacheChatInfo);
+      await webhookHandler(req.body);
       return;
     }
     if (command.startsWith("help")) {

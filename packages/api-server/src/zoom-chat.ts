@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 
-import { ZoomChatbotParams } from "./types";
+import { ZoomBotMessageRequestContent, ZoomChatbotParams } from "./types";
 import { log } from "./utils";
 config({ path: ".env" });
 
@@ -68,4 +68,12 @@ async function refreshChatbotToken(): Promise<void> {
   expires_in = new Date(data.expires_in * 1000 + new Date().getTime());
 }
 
-export { sendChat, refreshChatbotToken };
+
+async function mySendMessage(content: ZoomBotMessageRequestContent): Promise<Response | void> {
+  return sendChat({
+    content,
+    is_markdown_support: true,
+    ...cacheChatInfo
+  });
+}
+export { sendChat, mySendMessage, refreshChatbotToken };

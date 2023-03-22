@@ -3,7 +3,7 @@ import { config } from "dotenv";
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 
-import { cacheChatInfo, sendChat, updateCacheChatInfo } from "./zoom-chat";
+import { sendChat, updateCacheChatInfo } from "./zoom-chat";
 import { ZoomBotMessageRequestContent } from "./types";
 import { log } from "./utils";
 import { commandHandler } from "./command";
@@ -98,7 +98,7 @@ app.post("/deauthorize", async (req: Request, res: Response) => {
 
 app.post("/webhook", async (req: Request, res: Response) => {
   log("webhook", req.body);
-  await webhookHandler(req.body, cacheChatInfo);
+  await webhookHandler(req.body);
   res.status(200);
   res.send("test webhook");
 });
@@ -112,7 +112,6 @@ app.post("/endpoint", async (req: Request, res: Response) => {
       account_id: accountId,
       user_jid: userJid,
     });
-    log("cacheChatInfo", cacheChatInfo);
     await commandHandler(req, res);
     res.status(200);
     res.send();
