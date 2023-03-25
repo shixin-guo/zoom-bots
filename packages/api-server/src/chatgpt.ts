@@ -8,12 +8,11 @@ export const sendMessagesToApiHub = async (
   // add some customer logic here
   let content = message;
   const [command, ...rest] = message.split(" ");
-  if (command.startsWith("tr ") || command.startsWith("tr: ")) {
+  if (command.toLowerCase().startsWith("tr: ") || command.toLowerCase().startsWith("tr ")) {
     const restContent = rest.join(" ");
     const exceptLanguage = isChinese(restContent) ? "English" : "Chinese";
-    const prompt = `I want you to act as an ${exceptLanguage} translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in ${exceptLanguage}.`;
-    content = prompt + " " + restContent;
-  } else if (command.startsWith("op ") || command.startsWith("op: ")) {
+    content = `I want you to act as an translator, spelling corrector and improver "${restContent}" to ${exceptLanguage}.`;
+  } else if (command.toLowerCase().startsWith("op: ") || command.toLowerCase().startsWith("op ")) {
     const restContent = rest.join(" ");
     const exceptLanguage = "English" ;
     const prompt = `I want you to act as an ${exceptLanguage} translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in ${exceptLanguage}.`;
