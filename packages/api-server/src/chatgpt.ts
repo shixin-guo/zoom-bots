@@ -13,13 +13,13 @@ export const sendMessagesToApiHub = async (
     const currentLanguage = isChinese(restContent) ? "Chinese" : "English";
     const exceptLanguage = isChinese(restContent) ? "English" : "Chinese";
     const prompt = `I want you to act as an ${currentLanguage} translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in ${exceptLanguage}.`;
-    content = prompt + restContent;
-  } else if (command.startsWith("op ")) {
+    content = prompt + " " + restContent;
+  } else if (command.startsWith("op ") || command.startsWith("op: ")) {
     const restContent = rest.join(" ");
     const currentLanguage = "English";
     const exceptLanguage = "English" ;
     const prompt = `I want you to act as an ${currentLanguage} translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in ${exceptLanguage}.`;
-    content = prompt + restContent;
+    content = prompt + " " + restContent;
   }
   try {
     const resBody = {
