@@ -1,8 +1,9 @@
+import { ZoomChatContext } from "./types";
 function isChinese(str: string): boolean {
   return /[\u4e00-\u9fa5]/.test(str);
 }
 export const sendMessagesToApiHub = async (
-  message: string, chatContext?: any
+  message: string, chatContext?: ZoomChatContext
 ): Promise<void> => {
 
   // add some customer logic here

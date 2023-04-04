@@ -1,12 +1,13 @@
 import { Response } from "express";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function log(...args: any[]): void {
+  // eslint-disable-next-line no-console
   console.log(
     ...args
   );
 }
 
-async function within(fn: any, res: Response, duration: number): Promise<void> {
+async function within(fn: () => object, res: Response, duration: number): Promise<void> {
   const id = setTimeout(() => res.send({
     message: "There was an error with the upstream service!"
   }), duration);
@@ -15,8 +16,8 @@ async function within(fn: any, res: Response, duration: number): Promise<void> {
     const data = await fn();
     clearTimeout(id);
     res.json(data);
-  } catch (e: any) {
-    res.status(500).json({ message: e.message });
+  } catch (e: unknown) {
+    res.status(500).json({ error: e });
   }
 }
 
