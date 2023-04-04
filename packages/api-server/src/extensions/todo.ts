@@ -18,7 +18,7 @@ const notion = new Client({
 
 
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
-let cachedTodoList: ({ name: any, id?: string } | undefined)[] = [];
+let cachedTodoList: ({ name: string, id?: string } | undefined)[] = [];
 
 type TodoItemType = { id: string, name: string, link?: string, created_time: string };
 const getTodoList = async (completed?: boolean): Promise<TodoItemType[]> => {

@@ -43,14 +43,11 @@ interface SectionMessage {
 
 interface FieldsMessage {
   type: "fields",
-  items: [
-    {
-      key: string,
-      value: string,
-      link?: string
-
-    }
-  ]
+  items: {
+    key: string,
+    value: string,
+    link?: string | undefined
+  }[]
 }
 
 interface ZoomBotMessageRequestContentBody {
@@ -65,16 +62,19 @@ interface ZoomBotMessageRequestContentBody {
   footer_icon?: string // todo
 }
 
-interface ZoomChatbotParams {
+type ZoomChatContext = {
   robot_jid: string,
   to_jid: string,
   account_id: string,
-  user_jid: string,
+  user_jid: string
+}
+type ZoomChatbotParams = ZoomChatContext & {
   content: ZoomBotMessageRequestContent,
   is_markdown_support?: boolean
 }
 
 export {
+  ZoomChatContext,
   ZoomChatbotParams,
   ZoomBotMessageRequestContent,
   ZoomBotMessageRequestContentHeader,

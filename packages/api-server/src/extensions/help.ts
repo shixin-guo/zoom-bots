@@ -36,7 +36,7 @@ const content: ZoomBotMessageRequestContent = {
         }
       ],
       footer: "View More in Notion: <https://www.notion.so/15c028b3d5964dfb8270c7b46ec0803f?v=0810c029401a43b19bde45f4653c1b06>"
-    } as any
+    }
   ],
 };
 
