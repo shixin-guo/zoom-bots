@@ -1,10 +1,13 @@
-import { CodeBlock } from '@/components/CodeBlock';
-import { LanguageSelect } from '@/components/LanguageSelect';
-import { ModelSelect } from '@/components/ModelSelect';
-import { TextBlock } from '@/components/TextBlock';
-import { OpenAIModel, TranslateBody } from '@/types/types';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
+import { CodeBlock } from '@/components/CodeBlock';
+import { LanguageSelect, languages } from '@/components/LanguageSelect';
+import { ModelSelect } from '@/components/ModelSelect';
+import { TextBlock } from '@/components/TextBlock';
+import { Upload } from '@/components/Upload';
+import { OpenAIModel, TranslateBody } from '@/types/types';
 
 export default function Home() {
   const [inputLanguage, setInputLanguage] = useState<string>('English');
@@ -89,6 +92,25 @@ export default function Home() {
     setHasTranslated(true);
     copyToClipboard(code);
   };
+  
+  const handleDownloadZip = async () => {
+    console.log('download zip');
+    const zip = new JSZip();
+    [outputLanguage,inputLanguage].map((lang) => {
+      console.log(lang);
+      const shortLanguageCode = languages.find(
+        (language) => language.value === lang,
+      )?.shortKey
+      const fileNamePrefix = 'file_';
+      console.log(shortLanguageCode);
+      const filename = `${fileNamePrefix}_${shortLanguageCode}.properties`;
+    
+      zip.file(filename, outputCode);
+    })
+    zip.generateAsync({ type: 'blob' }).then(function (blob) {
+      saveAs(blob, 'files.zip');
+    });
+  };
 
   const copyToClipboard = (text: string) => {
     const el = document.createElement('textarea');
@@ -99,14 +121,11 @@ export default function Home() {
     document.body.removeChild(el);
   };
 
-
-
   useEffect(() => {
     if (hasTranslated) {
       handleTranslate();
     }
   }, [outputLanguage]);
-
 
   return (
     <>
@@ -124,17 +143,29 @@ export default function Home() {
           <div className="text-4xl font-bold">I18N Translator</div>
         </div>
 
-
-
+          <Upload className='w-100 pt-10 pb-5' onSuccess={
+            async (files) => {
+              const input = await files[0].text();
+              setInputCode(input)
+            }
+          }/>
+       
         <div className="mt-2 flex items-center space-x-2">
           <ModelSelect model={model} onChange={(value) => setModel(value)} />
 
           <button
             className="w-[140px] cursor-pointer rounded-md bg-violet-500 px-4 py-2 font-bold hover:bg-violet-600 active:bg-violet-700"
-            onClick={() => handleTranslate()}
+            onClick={handleTranslate}
             disabled={loading}
           >
             {loading ? 'Translating...' : 'Translate'}
+          </button>
+          <button
+            className="w-[140px] cursor-pointer rounded-md bg-emerald-500 px-4 py-2 font-bold hover:bg-emerald-600 active:bg-emerald-700"
+            onClick={handleDownloadZip}
+            disabled={loading && outputCode.length === 0}
+          >
+            Download
           </button>
         </div>
 
@@ -185,8 +216,8 @@ export default function Home() {
 
             <LanguageSelect
               language={outputLanguage}
-              onChange={(value) => {
-                setOutputLanguage(value);
+              onChange={(lang) => {
+                setOutputLanguage(lang);
                 setOutputCode('');
               }}
             />

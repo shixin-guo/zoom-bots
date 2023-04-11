@@ -9,7 +9,10 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { inputLanguage, outputLanguage, inputCode, model } =
       (await req.json()) as TranslateBody;
-
+    console.log(inputLanguage,
+      outputLanguage,
+      inputCode,
+      model);
     const stream = await OpenAIStream(
       inputLanguage,
       outputLanguage,

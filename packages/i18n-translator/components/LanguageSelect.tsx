@@ -46,8 +46,8 @@ export const LanguageSelect: FC<Props> = ({ language, onChange }) => {
 // "zh-TW",
 
 
-const languages = [
-  { value: "English", label: "English(en-US)" },
-  { value: "German", label: "German(de-DE)" },
-  { value: "Chinese Simple", label: "Chinese Simple(zh-CN)" },
+export const languages = [
+  { value: "English", label: "English(en-US)", shortKey: "en-US" },
+  { value: "German", label: "German(de-DE)" , shortKey: "de-DE"},
+  { value: "Chinese", label: "Chinese(zh-CN)", shortKey: "zh-CN" },
 ];

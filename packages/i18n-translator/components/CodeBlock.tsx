@@ -3,7 +3,6 @@ import { go } from '@codemirror/legacy-modes/mode/go';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
 import CodeMirror from '@uiw/react-codemirror';
 import { FC, useEffect, useState } from 'react';
-
 interface Props {
   code: string;
   editable?: boolean;

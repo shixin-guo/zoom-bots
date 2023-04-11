@@ -21,11 +21,11 @@ const createPrompt = (
 
     input example English: test_my_access_wording=You can only access to {0} in your own data center region ”{1}”.  <a href="/account/setting" target="_blank" aria-label="update storage location setting">Update Setting</a>
     output example Chinese: test_my_access_wording=你只能在自己的数据中心区域“{1}”中访问{0}。  <a href="/account/setting" target="_blank" aria-label="update storage location setting">更新设置</a>
-   
+    
     ${inputLanguage}:
     ${inputCode}
 
-    ${outputLanguage} code (no \`\`\`):
+    please translate to ${outputLanguage}:
     `;
 };
 
