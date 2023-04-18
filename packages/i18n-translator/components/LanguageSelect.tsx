@@ -1,8 +1,8 @@
-import type { FC } from 'react';
+import type { FC } from "react";
 
 interface Props {
-  language: string;
-  onChange: (language: string) => void;
+  language: string,
+  onChange: (language: string) => void
 }
 
 export const LanguageSelect: FC<Props> = ({ language, onChange }) => {
@@ -48,6 +48,6 @@ export const LanguageSelect: FC<Props> = ({ language, onChange }) => {
 
 export const languages = [
   { value: "English", label: "English(en-US)", shortKey: "en-US" },
-  { value: "German", label: "German(de-DE)" , shortKey: "de-DE"},
+  { value: "German", label: "German(de-DE)", shortKey: "de-DE" },
   { value: "Chinese", label: "Chinese(zh-CN)", shortKey: "zh-CN" },
 ];

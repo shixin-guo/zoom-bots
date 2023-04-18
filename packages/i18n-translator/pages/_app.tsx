@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
-function App({ Component, pageProps }: AppProps<{}>) {
+function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <main className={inter.className}>
       <Component {...pageProps} />

@@ -110,7 +110,7 @@ importers:
       eventsource-parser: ^1.0.0
       file-saver: ^2.0.5
       jszip: ^3.10.1
-      langchain: ^0.0.52
+      langchain: ^0.0.57
       next: 13.2.4
       postcss: ^8.4.21
       prettier-plugin-tailwindcss: ^0.2.6
@@ -127,7 +127,7 @@ importers:
       eventsource-parser: 1.0.0
       file-saver: 2.0.5
       jszip: 3.10.1
-      langchain: 0.0.52
+      langchain: 0.0.57
       next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -176,7 +176,7 @@ importers:
       react-wrap-balancer: 0.1.5_react@18.2.0
     devDependencies:
       '@types/node': 17.0.45
-      '@types/react': 18.0.33
+      '@types/react': 18.0.37
       autoprefixer: 10.4.14_postcss@8.4.21
       eslint: 8.36.0
       eslint-config-next: 12.3.4_vgl77cfdswitgr47lm5swmv43m
@@ -768,7 +768,7 @@ packages:
   /@types/hoist-non-react-statics/3.3.1:
     resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
     dependencies:
-      '@types/react': 18.0.33
+      '@types/react': 18.0.37
       hoist-non-react-statics: 3.3.2
     dev: false
 
@@ -837,8 +837,8 @@ packages:
       csstype: 3.1.1
     dev: true
 
-  /@types/react/18.0.33:
-    resolution: {integrity: sha512-sHxzVxeanvQyQ1lr8NSHaj0kDzcNiGpILEVt69g9S31/7PfMvNCKLKcsHw4lYKjs3cGNJjXSP4mYzX43QlnjNA==}
+  /@types/react/18.0.37:
+    resolution: {integrity: sha512-4yaZZtkRN3ZIQD3KSEwkfcik8s0SWV+82dlJot1AbGYHCzJkWP3ENBY6wYeDRmKZ6HkrgoGAmR2HqdwYGp6OEw==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
@@ -1361,6 +1361,10 @@ packages:
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+
+  /binary-search/1.3.6:
+    resolution: {integrity: sha512-nbE1WxOTTrUWIfsfZ4aHGYu5DOuNkbxGokjV6Z2kxfJK3uaAb8zNK1muzOeipoLHZjInT4Br88BHpzevc681xA==}
+    dev: false
 
   /body-parser/1.20.1:
     resolution: {integrity: sha512-jWi7abTbYwajOytWCQc37VulmWiRae5RyTpaCyDcS5/lMdtwSz5lOpDE67srw/HYe35f1z3fDQw+3txg7gNtWw==}
@@ -3076,6 +3080,10 @@ packages:
     engines: {node: '>= 0.10'}
     dev: false
 
+  /is-any-array/2.0.0:
+    resolution: {integrity: sha512-WdPV58rT3aOWXvvyuBydnCq4S2BM1Yz8shKxlEpk/6x+GX202XRvXOycEFtNgnHVLoc46hpexPFx8Pz1/sMS0w==}
+    dev: false
+
   /is-arguments/1.1.1:
     resolution: {integrity: sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA==}
     engines: {node: '>= 0.4'}
@@ -3300,14 +3308,19 @@ packages:
       setimmediate: 1.0.5
     dev: false
 
-  /langchain/0.0.52:
-    resolution: {integrity: sha512-u111xUIv8E7H8o2bSUSmhm4hjyKsD2X1s1BBTqc+exoP8jU/UJQGSU5+u5JflBCcJvYyarsTfsO91vuA2vq6Sg==}
+  /langchain/0.0.57:
+    resolution: {integrity: sha512-Ik8SGMzl6woXkqmdWnNIqY7ds3+y1b6FLYDhCXpTT3fHHD+vsNgiapAAdJ/lkThnYQ0y0i3gtv1pHbjfsYS5qw==}
     engines: {node: '>=18'}
     peerDependencies:
+      '@aws-sdk/client-lambda': ^3.310.0
+      '@aws-sdk/client-s3': ^3.310.0
       '@getmetal/metal-sdk': '*'
       '@huggingface/inference': ^1.5.1
+      '@opensearch-project/opensearch': '*'
       '@pinecone-database/pinecone': '*'
       '@supabase/supabase-js': ^2.10.0
+      '@zilliz/milvus2-sdk-node': ^2.2.0
+      axios: ^0.26.0
       cheerio: ^1.0.0-rc.12
       chromadb: ^1.3.0
       cohere-ai: ^5.0.2
@@ -3316,20 +3329,33 @@ packages:
       hnswlib-node: ^1.4.2
       html-to-text: ^9.0.5
       mammoth: '*'
+      mongodb: ^5.2.0
       pdfjs-dist: ^3.4.120
+      playwright: ^1.32.1
       puppeteer: ^19.7.2
       redis: ^4.6.4
       replicate: ^0.9.0
       srt-parser-2: ^1.2.2
       typeorm: ^0.3.12
+      weaviate-ts-client: ^1.0.0
     peerDependenciesMeta:
+      '@aws-sdk/client-lambda':
+        optional: true
+      '@aws-sdk/client-s3':
+        optional: true
       '@getmetal/metal-sdk':
         optional: true
       '@huggingface/inference':
         optional: true
+      '@opensearch-project/opensearch':
+        optional: true
       '@pinecone-database/pinecone':
         optional: true
       '@supabase/supabase-js':
+        optional: true
+      '@zilliz/milvus2-sdk-node':
+        optional: true
+      axios:
         optional: true
       cheerio:
         optional: true
@@ -3347,7 +3373,11 @@ packages:
         optional: true
       mammoth:
         optional: true
+      mongodb:
+        optional: true
       pdfjs-dist:
+        optional: true
+      playwright:
         optional: true
       puppeteer:
         optional: true
@@ -3359,6 +3389,8 @@ packages:
         optional: true
       typeorm:
         optional: true
+      weaviate-ts-client:
+        optional: true
     dependencies:
       '@anthropic-ai/sdk': 0.4.3
       '@dqbd/tiktoken': 1.0.4
@@ -3367,6 +3399,7 @@ packages:
       expr-eval: 2.0.2
       flat: 5.0.2
       jsonpointer: 5.0.1
+      ml-distance: 4.0.0
       object-hash: 3.0.0
       openai: 3.2.1
       p-queue: 6.6.2
@@ -3503,6 +3536,37 @@ packages:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
+    dev: false
+
+  /ml-array-mean/1.1.6:
+    resolution: {integrity: sha512-MIdf7Zc8HznwIisyiJGRH9tRigg3Yf4FldW8DxKxpCCv/g5CafTw0RRu51nojVEOXuCQC7DRVVu5c7XXO/5joQ==}
+    dependencies:
+      ml-array-sum: 1.1.6
+    dev: false
+
+  /ml-array-sum/1.1.6:
+    resolution: {integrity: sha512-29mAh2GwH7ZmiRnup4UyibQZB9+ZLyMShvt4cH4eTK+cL2oEMIZFnSyB3SS8MlsTh6q/w/yh48KmqLxmovN4Dw==}
+    dependencies:
+      is-any-array: 2.0.0
+    dev: false
+
+  /ml-distance-euclidean/2.0.0:
+    resolution: {integrity: sha512-yC9/2o8QF0A3m/0IXqCTXCzz2pNEzvmcE/9HFKOZGnTjatvBbsn4lWYJkxENkA4Ug2fnYl7PXQxnPi21sgMy/Q==}
+    dev: false
+
+  /ml-distance/4.0.0:
+    resolution: {integrity: sha512-zj7+UGZpHk3uL7n79XTfGNUjIGnhLn8xVvrxYvBHvXFxo3jq1q+/UjP311hZxnLVhbxbXCjUniThX8gozjacYA==}
+    dependencies:
+      ml-array-mean: 1.1.6
+      ml-distance-euclidean: 2.0.0
+      ml-tree-similarity: 1.0.0
+    dev: false
+
+  /ml-tree-similarity/1.0.0:
+    resolution: {integrity: sha512-XJUyYqjSuUQkNQHMscr6tcjldsOoAekxADTplt40QKfwW6nd++1wHWV9AArl0Zvw/TIHgNaZZNvr8QGvE8wLRg==}
+    dependencies:
+      binary-search: 1.3.6
+      num-sort: 2.1.0
     dev: false
 
   /mri/1.2.0:
@@ -3685,6 +3749,11 @@ packages:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /num-sort/2.1.0:
+    resolution: {integrity: sha512-1MQz1Ed8z2yckoBeSfkQHHO9K1yDRxxtotKSJ9yvcTUUxSvfvzEq5GwBrjjHEpMlq/k5gvXdmJ1SbYxWtpNoVg==}
+    engines: {node: '>=8'}
+    dev: false
 
   /object-assign/4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}

@@ -1,33 +1,43 @@
-import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import { saveAs } from 'file-saver';
-import JSZip from 'jszip';
-import { CodeBlock } from '@/components/CodeBlock';
-import { LanguageSelect, languages } from '@/components/LanguageSelect';
-import { ModelSelect } from '@/components/ModelSelect';
-import { TextBlock } from '@/components/TextBlock';
-import { Upload } from '@/components/Upload';
-import { OpenAIModel, TranslateBody } from '@/types/types';
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 
-export default function Home() {
-  const [inputLanguage, setInputLanguage] = useState<string>('English');
-  const [outputLanguage, setOutputLanguage] = useState<string>('Chinese');
-  const [inputCode, setInputCode] = useState<string>('');
-  const [outputCode, setOutputCode] = useState<string>('');
-  const [model, setModel] = useState<OpenAIModel>('gpt-3.5-turbo');
+import { CodeBlock } from "@/components/CodeBlock";
+import { LanguageSelect, languages } from "@/components/LanguageSelect";
+import { ModelSelect } from "@/components/ModelSelect";
+import { TextBlock } from "@/components/TextBlock";
+import { Upload } from "@/components/Upload";
+import { MultipleSelect } from "@/components/MultipleSelect";
+import { OpenAIModel, TranslateBody } from "@/types/types";
+
+const copyToClipboard = (text: string):void => {
+  const el = document.createElement("textarea");
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
+};
+export default function Home(): JSX.Element {
+  const [inputLanguage, setInputLanguage] = useState<string>("English");
+  const [outputLanguage, setOutputLanguage] = useState<string>("Chinese");
+  const [inputCode, setInputCode] = useState<string>("");
+  const [outputCode, setOutputCode] = useState<string>("");
+  const [model, setModel] = useState<OpenAIModel>("gpt-3.5-turbo");
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTranslated, setHasTranslated] = useState<boolean>(false);
 
-  const handleTranslate = async () => {
-    const maxCodeLength = model === 'gpt-3.5-turbo' ? 6000 : 12000;
+  const handleTranslate = async (): Promise<void> => {
+    const maxCodeLength = model === "gpt-3.5-turbo" ? 6000 : 12000;
 
     if (inputLanguage === outputLanguage) {
-      alert('Please select different languages.');
+      alert("Please select different languages.");
       return;
     }
 
     if (!inputCode) {
-      alert('Please enter some code.');
+      alert("Please enter some code.");
       return;
     }
 
@@ -39,7 +49,7 @@ export default function Home() {
     }
 
     setLoading(true);
-    setOutputCode('');
+    setOutputCode("");
 
     const controller = new AbortController();
 
@@ -50,10 +60,10 @@ export default function Home() {
       model,
     };
 
-    const response = await fetch('/api/translate', {
-      method: 'POST',
+    const response = await fetch("/api/translate1", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       signal: controller.signal,
       body: JSON.stringify(body),
@@ -61,7 +71,7 @@ export default function Home() {
 
     if (!response.ok) {
       setLoading(false);
-      alert('Something went wrong.');
+      alert("Something went wrong.");
       return;
     }
 
@@ -69,22 +79,20 @@ export default function Home() {
 
     if (!data) {
       setLoading(false);
-      alert('Something went wrong.');
+      alert("Something went wrong.");
       return;
     }
 
     const reader = data.getReader();
     const decoder = new TextDecoder();
     let done = false;
-    let code = '';
+    let code = "";
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-
       code += chunkValue;
-
       setOutputCode((prevCode) => prevCode + chunkValue);
     }
 
@@ -92,34 +100,26 @@ export default function Home() {
     setHasTranslated(true);
     copyToClipboard(code);
   };
-  
-  const handleDownloadZip = async () => {
-    console.log('download zip');
+
+  const handleDownloadZip = async ():Promise<void> => {
+    console.log("download zip");
     const zip = new JSZip();
-    [outputLanguage,inputLanguage].map((lang) => {
+    [outputLanguage, inputLanguage].map((lang) => {
       console.log(lang);
       const shortLanguageCode = languages.find(
         (language) => language.value === lang,
-      )?.shortKey
-      const fileNamePrefix = 'file_';
+      )?.shortKey;
+      const fileNamePrefix = "file_";
       console.log(shortLanguageCode);
       const filename = `${fileNamePrefix}_${shortLanguageCode}.properties`;
-    
+
       zip.file(filename, outputCode);
-    })
-    zip.generateAsync({ type: 'blob' }).then(function (blob) {
-      saveAs(blob, 'files.zip');
+    });
+    zip.generateAsync({ type: "blob" }).then(function (blob) {
+      saveAs(blob, "files.zip");
     });
   };
 
-  const copyToClipboard = (text: string) => {
-    const el = document.createElement('textarea');
-    el.value = text;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-  };
 
   useEffect(() => {
     if (hasTranslated) {
@@ -143,13 +143,14 @@ export default function Home() {
           <div className="text-4xl font-bold">I18N Translator</div>
         </div>
 
-          <Upload className='w-100 pt-10 pb-5' onSuccess={
-            async (files) => {
-              const input = await files[0].text();
-              setInputCode(input)
-            }
-          }/>
-       
+        <Upload className='w-100 pt-10 pb-5' onSuccess={
+          async (files) => {
+            const input = await files[0].text();
+            setInputCode(input);
+          }
+        }/>
+        <div>
+        </div>
         <div className="mt-2 flex items-center space-x-2">
           <ModelSelect model={model} onChange={(value) => setModel(value)} />
 
@@ -158,7 +159,7 @@ export default function Home() {
             onClick={handleTranslate}
             disabled={loading}
           >
-            {loading ? 'Translating...' : 'Translate'}
+            {loading ? "Translating..." : "Translate"}
           </button>
           <button
             className="w-[140px] cursor-pointer rounded-md bg-emerald-500 px-4 py-2 font-bold hover:bg-emerald-600 active:bg-emerald-700"
@@ -171,10 +172,10 @@ export default function Home() {
 
         <div className="mt-2 text-center text-xs">
           {loading
-            ? 'Translating...'
+            ? "Translating..."
             : hasTranslated
-            ? 'Output copied to clipboard!'
-            : 'Enter some code and click "Translate"'}
+              ? "Output copied to clipboard!"
+              : 'Enter some code and click "Translate"'}
         </div>
 
         <div className="mt-6 flex w-full max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
@@ -186,12 +187,12 @@ export default function Home() {
               onChange={(value) => {
                 setInputLanguage(value);
                 setHasTranslated(false);
-                setInputCode('');
-                setOutputCode('');
+                setInputCode("");
+                setOutputCode("");
               }}
             />
 
-            {inputLanguage === 'Natural Language' ? (
+            {inputLanguage === "Natural Language" ? (
               <TextBlock
                 text={inputCode}
                 editable={!loading}
@@ -218,11 +219,11 @@ export default function Home() {
               language={outputLanguage}
               onChange={(lang) => {
                 setOutputLanguage(lang);
-                setOutputCode('');
+                setOutputCode("");
               }}
             />
 
-            {outputLanguage === 'Natural Language' ? (
+            {outputLanguage === "Natural Language" ? (
               <TextBlock text={outputCode} />
             ) : (
               <CodeBlock code={outputCode} />
