@@ -82,8 +82,6 @@ export {
   SectionMessage, // todo
 };
 
-
-
 // {
 //   type: "attachments",
 //   resource_url: "https://zoom.us",
@@ -96,8 +94,6 @@ export {
 //     }
 //   }
 // }
-
-
 
 // {
 //   head: {
@@ -137,7 +133,6 @@ export {
 
 // }
 
-
 // {
 //   head: {
 //     text: "_this header is italic_",
@@ -152,9 +147,6 @@ export {
 //     }
 //   ]
 // }
-
-
-
 
 // {
 //   head: {
@@ -185,8 +177,6 @@ export {
 //       footer: "<https://zoom.us>"
 //     }
 //   ] }
-
-
 
 // {
 //   head: {
@@ -234,7 +224,6 @@ export interface MessageWithHeader {
   },
   [k: string]: unknown
 }
-
 
 export interface MessageWithSubHeader {
   head?: {
@@ -284,8 +273,6 @@ export interface MessageWithText {
   [k: string]: unknown
 }
 
-
-
 export interface MySchema {
   head?: {
     text: string,
@@ -332,7 +319,6 @@ export interface MySchema {
   [k: string]: unknown
 }
 
-
 export interface MessageWithFormField {
   head?: {
     text: string,
@@ -372,8 +358,6 @@ export interface MessageWithFormField {
   }[],
   [k: string]: unknown
 }
-
-
 
 export interface MessageWithAttachment {
   head?: {

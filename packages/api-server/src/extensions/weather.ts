@@ -25,7 +25,6 @@ const GetWeatherDataTips = async (): Promise <string> => axios({
   });
 export default GetWeatherDataTips;
 
-
 // {
 //   coord: { lon: 117.2808, lat: 31.8639 },
 //   weather: [ { id: 500, main: 'Rain', description: 'light rain', icon: '10d' } ],

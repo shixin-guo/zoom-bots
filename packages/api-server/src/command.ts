@@ -8,7 +8,6 @@ import { ZoomBotMessageRequestContent } from "./types";
 import { sendChat } from "./zoom-chat";
 import { webhookHandler } from "./cron";
 
-
 const commandHandler = async (req:Request, res: Response): Promise<void> => {
   try {
     // const { toJid, accountId, userJid, cmd } = {
