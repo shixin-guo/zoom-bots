@@ -220,7 +220,7 @@ export default function Home(): JSX.Element {
         <div className="mt-2 text-center text-xs">
           {loading
             ? `Please wait... translating : ${selectedLangs.filter(l => {
-              return !translatedLangs.includes(l);
+              return !translatedLangs.includes(l) && l !== inputLanguage;
             }).join(", ")}`
             : hasTranslated
               ? `[  ${translatedLangs.join(", ")}  ] translated completed. and [ ${outputLanguage} ] copied to clipboard!`
@@ -271,9 +271,9 @@ export default function Home(): JSX.Element {
                   if (isSelectedAll) {
                     return prev;
                   }
-                  return prev.filter((key) => {
+                  return [...prev.filter((key) => {
                     return key !== outputLanguage;
-                  });
+                  }), lang];
                 });
                 setOutputCode(translatedContent.current[lang]);
               }}
