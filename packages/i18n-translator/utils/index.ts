@@ -36,7 +36,6 @@ export const OpenAIStream = async (
   model: string,
 ): Promise<ReadableStream<any>> => {
   const prompt = createPrompt(inputLanguage, outputLanguage, inputCode);
-  console.log(prompt);
   const system = { role: "system", content: prompt };
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {

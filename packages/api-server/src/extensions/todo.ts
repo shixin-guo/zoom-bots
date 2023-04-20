@@ -16,7 +16,6 @@ const notion = new Client({
   auth: process.env.NOTION_API_KEY,
 });
 
-
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
 let cachedTodoList: ({ name: string, id?: string } | undefined)[] = [];
 

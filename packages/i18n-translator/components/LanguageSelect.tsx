@@ -1,13 +1,34 @@
 import type { FC } from "react";
 
+export const languages = {
+  "en-US": { name: "English", lang: "English", shortKey: "en-US" },
+  "es-ES": { name: "Español", lang: "Spanish", shortKey: "es-ES" },
+  "de-DE": { name: "Deutsch", lang: "German", shortKey: "de-DE" },
+  "zh-CN": { name: "简体中文", lang: "Simplified Chinese", shortKey: "zh-CN" },
+  "zh-TW": { name: "繁體中文", lang: "Traditional Chinese", shortKey: "zh-TW" },
+  "fr-FR": { name: "Français", lang: "French", shortKey: "fr-FR" },
+  "pt-PT": { name: "Português", lang: "Portuguese", shortKey: "pt-PT" },
+  "jp-JP": { name: "日本語", lang: "Japanese", shortKey: "jp-JP" },
+  "ru-RU": { name: "Русский", lang: "Russian", shortKey: "ru-RU" },
+  "ko-KO": { name: "한국어", lang: "Korean", shortKey: "ko-KO" },
+  "it-IT": { name: "Italiano", lang: "Italian", shortKey: "it-IT" },
+  "vi-VN": { name: "Tiếng Việt", lang: "Vietnamese", shortKey: "vi-VN" },
+  "pl-PL": { name: "Polski", lang: "Polish", shortKey: "pl-PL" },
+  "tr-TR": { name: "Türkçe", lang: "Turkish", shortKey: "tr-TR" },
+  "id-ID": { name: "Bahasa Indonesia", lang: "Indonesian", shortKey: "id-ID" },
+  "nl-NL": { name: "Nederlands", lang: "Dutch", shortKey: "nl-NL" }
+};
+
+export type LanguageShortKey = keyof typeof languages;
 interface Props {
   language: string,
-  onChange: (language: string) => void
+  disabled?: boolean,
+  onChange: (language: LanguageShortKey) => void
 }
 
-export const LanguageSelect: FC<Props> = ({ language, onChange }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value);
+export const LanguageSelect: FC<Props> = ({ language, onChange, disabled }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    onChange(e.target.value as LanguageShortKey);
   };
 
   return (
@@ -15,39 +36,18 @@ export const LanguageSelect: FC<Props> = ({ language, onChange }) => {
       className="w-full rounded-md bg-[#1F2937] px-4 py-2 text-neutral-200"
       value={language}
       onChange={handleChange}
+      disabled={disabled}
     >
-      {languages
-        .sort((a, b) => a.label.localeCompare(b.label))
-        .map((language) => (
-          <option key={language.value} value={language.value}>
-            {language.label}
-          </option>
-        ))}
+      {Object.values(languages)
+        .sort((a, b) => a.shortKey.localeCompare(b.shortKey))
+        .map((language) => {
+          return (
+            <option key={language.shortKey} value={language.shortKey}>
+              {language.name + " (" + language.lang + ")" + " - " + language.shortKey}
+            </option>
+          );
+        })}
     </select>
   );
 };
 
-
-// "de-DE",
-// "en-US",
-// "es-ES",
-// "fr-FR",
-// "id-ID",
-// "it-IT",
-// "jp-JP",
-// "ko-KO",
-// "nl-NL",
-// "pl-PL",
-// "pt-PT",
-// "ru-RU",
-// "tr-TR",
-// "vi-VN",
-// "zh-CN",
-// "zh-TW",
-
-
-export const languages = [
-  { value: "English", label: "English(en-US)", shortKey: "en-US" },
-  { value: "German", label: "German(de-DE)", shortKey: "de-DE" },
-  { value: "Chinese", label: "Chinese(zh-CN)", shortKey: "zh-CN" },
-];

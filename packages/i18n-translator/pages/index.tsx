@@ -1,63 +1,97 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
+import * as Checkbox from "@radix-ui/react-checkbox";
+import * as Switch from "@radix-ui/react-switch";
+import { CheckIcon } from "@radix-ui/react-icons";
+
+import copyToClipboard from "@/utils/copyToClipboard";
 
 import { CodeBlock } from "@/components/CodeBlock";
-import { LanguageSelect, languages } from "@/components/LanguageSelect";
-import { ModelSelect } from "@/components/ModelSelect";
-import { TextBlock } from "@/components/TextBlock";
+import { LanguageSelect, LanguageShortKey, languages } from "@/components/LanguageSelect";
 import { Upload } from "@/components/Upload";
-import { MultipleSelect } from "@/components/MultipleSelect";
-import { OpenAIModel, TranslateBody } from "@/types/types";
 
-const copyToClipboard = (text: string):void => {
-  const el = document.createElement("textarea");
-  el.value = text;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand("copy");
-  document.body.removeChild(el);
+import { TranslateBody } from "@/types/types";
+import { getFileNameWithoutExtension } from "@/utils/fileUtils";
+
+const testCode = `
+recording.management.download_video = Download Video (MP4)
+recording.management.download_cc = Download CC Transcript (VTT)
+dashboard.user_add_conversations_to_the_playlist = {senderName} added {playListCount} conversation(s) to the playlist <span class="notification-link-name">{playlistName}</span>
+dashboard.new_conversations_auto_added_to_the_playlist = {playListCount} new conversation(s) auto-added to the playlist <span class="notification-link-name">{playlistName}</span>
+dashboard.notifications_will_appear_here = Notifications will appear here
+analytics.over_time_tip = The percentage of conversations where {0} is mentioned over time.
+analytics.mention_by_deal = Mentions by Deals Won or Lost
+analytics.deal_tip = The percentage of conversations where {0} is mentioned by Deals Won or Lost.
+analytics.transcript_title = {0} Mentions in {1}'s Conversations
+analytics.chart_title_1 = {0} Mentioned in {1}
+analytics.chart_sub_title = The percentage of conversations hosted by {0} where this indicator is mentioned.
+`;
+const todayDate = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
+interface handleTranslateProps {
+  originLang: LanguageShortKey,
+  exceptLang: LanguageShortKey,
+  content: string
+}
 export default function Home(): JSX.Element {
-  const [inputLanguage, setInputLanguage] = useState<string>("English");
-  const [outputLanguage, setOutputLanguage] = useState<string>("Chinese");
+  const [inputLanguage, setInputLanguage] = useState<LanguageShortKey>("en-US");
+  const [outputLanguage, setOutputLanguage] = useState<LanguageShortKey>("zh-CN");
+  const [enableMultiLang, setEnableMultiLang] = useState<boolean>(false);
+  const [selectedLangs, setSelectedLangs] = useState<LanguageShortKey[]>([inputLanguage, outputLanguage]);
+  const [translatedLangs, setTranslatedLangs] = useState<LanguageShortKey[]>([]);
   const [inputCode, setInputCode] = useState<string>("");
   const [outputCode, setOutputCode] = useState<string>("");
-  const [model, setModel] = useState<OpenAIModel>("gpt-3.5-turbo");
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTranslated, setHasTranslated] = useState<boolean>(false);
 
-  const handleTranslate = async (): Promise<void> => {
-    const maxCodeLength = model === "gpt-3.5-turbo" ? 6000 : 12000;
+  const uploadRef = useRef("");
 
-    if (inputLanguage === outputLanguage) {
+  const translatedContent = useRef<{
+    [key: string]: string
+  }>({});
+
+  const isSelectedAll = useMemo(() => {
+    return selectedLangs.length === Object.keys(languages).length;
+  }, [selectedLangs]);
+
+  const multipleLanguagesWithStatus = useMemo(() => {
+    return Object.values(languages).map((language) => {
+      return {
+        ...language,
+        shortKey: language.shortKey as LanguageShortKey,
+        checked: isSelectedAll || (
+          [inputLanguage, outputLanguage, ... selectedLangs].find(l => l === language.shortKey) ? true : false
+        ),
+        disabled: isSelectedAll || language.shortKey === inputLanguage || language.shortKey === outputLanguage,
+      };
+    });
+  }, [outputLanguage, inputLanguage, selectedLangs, isSelectedAll]);
+
+  const handleTranslate = async ({ originLang, exceptLang, content }: handleTranslateProps): Promise<void> => {
+    if (originLang === exceptLang) {
       alert("Please select different languages.");
       return;
     }
-
-    if (!inputCode) {
+    if (!content) {
       alert("Please enter some code.");
       return;
     }
 
-    if (inputCode.length > maxCodeLength) {
-      alert(
-        `Please enter code less than ${maxCodeLength} characters. You are currently at ${inputCode.length} characters.`,
-      );
-      return;
-    }
-
-    setLoading(true);
     setOutputCode("");
 
     const controller = new AbortController();
 
     const body: TranslateBody = {
-      inputLanguage,
-      outputLanguage,
-      inputCode,
-      model,
+      inputLanguage: originLang,
+      outputLanguage: exceptLang,
+      inputCode: content,
     };
 
     const response = await fetch("/api/translate1", {
@@ -70,7 +104,7 @@ export default function Home(): JSX.Element {
     });
 
     if (!response.ok) {
-      setLoading(false);
+      // setLoading(false);
       alert("Something went wrong.");
       return;
     }
@@ -78,7 +112,7 @@ export default function Home(): JSX.Element {
     const data = response.body;
 
     if (!data) {
-      setLoading(false);
+      // setLoading(false);
       alert("Something went wrong.");
       return;
     }
@@ -86,46 +120,57 @@ export default function Home(): JSX.Element {
     const reader = data.getReader();
     const decoder = new TextDecoder();
     let done = false;
-    let code = "";
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      code += chunkValue;
-      setOutputCode((prevCode) => prevCode + chunkValue);
+      if (exceptLang === outputLanguage) {
+        setOutputCode((prevCode) => prevCode + chunkValue);
+      }
+      if (!translatedContent.current[exceptLang]) {
+        translatedContent.current[exceptLang] = chunkValue;
+      } else {
+        translatedContent.current[exceptLang] += chunkValue;
+      }
     }
+    setTranslatedLangs((prevLangs) => [...prevLangs, exceptLang]);
+  };
 
-    setLoading(false);
-    setHasTranslated(true);
-    copyToClipboard(code);
+  const handleTranslateMultiLanguages = async(langs: LanguageShortKey[]): Promise<void> => {
+    translatedContent.current = {};
+    setLoading(true);
+    setTranslatedLangs([]);
+    Promise.all(langs.filter(l => l !== inputLanguage).map(async (lang) => {
+      await handleTranslate({
+        originLang: inputLanguage,
+        exceptLang: lang,
+        content: inputCode,
+      });
+    })).then(() => {
+      copyToClipboard(outputCode);
+
+    }).catch((err) => {
+      alert(err);
+    }).finally(() => {
+      setHasTranslated(true);
+      setLoading(false);
+    });
   };
 
   const handleDownloadZip = async ():Promise<void> => {
-    console.log("download zip");
     const zip = new JSZip();
-    [outputLanguage, inputLanguage].map((lang) => {
-      console.log(lang);
-      const shortLanguageCode = languages.find(
-        (language) => language.value === lang,
-      )?.shortKey;
-      const fileNamePrefix = "file_";
-      console.log(shortLanguageCode);
-      const filename = `${fileNamePrefix}_${shortLanguageCode}.properties`;
-
-      zip.file(filename, outputCode);
+    Object.keys(translatedContent.current).map((shortKey) => {
+      if (translatedContent.current[shortKey]) {
+        const fileNamePrefix = uploadRef.current || "i18n";
+        const filename = `${fileNamePrefix}_${shortKey}.properties`;
+        zip.file(filename, translatedContent.current[shortKey]);
+      }
     });
     zip.generateAsync({ type: "blob" }).then(function (blob) {
-      saveAs(blob, "files.zip");
+      saveAs(blob, `i18n-${todayDate()}.zip`);
     });
   };
-
-
-  useEffect(() => {
-    if (hasTranslated) {
-      handleTranslate();
-    }
-  }, [outputLanguage]);
 
   return (
     <>
@@ -141,95 +186,193 @@ export default function Home(): JSX.Element {
       <div className="flex h-full min-h-screen flex-col items-center bg-[#0E1117] px-4 pb-20 text-neutral-200 sm:px-10">
         <div className="mt-10 flex flex-col items-center justify-center sm:mt-20">
           <div className="text-4xl font-bold">I18N Translator</div>
+          <div className="text-sm mt-1 text-slate-400">model: gpt-3.5-turbo</div>
         </div>
 
-        <Upload className='w-100 pt-10 pb-5' onSuccess={
+        <Upload className='w-100 pt-6 pb-5' onSuccess={
           async (files) => {
             const input = await files[0].text();
             setInputCode(input);
+            uploadRef.current = getFileNameWithoutExtension(files[0].name);
           }
         }/>
-        <div>
-        </div>
-        <div className="mt-2 flex items-center space-x-2">
-          <ModelSelect model={model} onChange={(value) => setModel(value)} />
 
+        <div className="mt-2 flex items-center space-x-2">
           <button
-            className="w-[140px] cursor-pointer rounded-md bg-violet-500 px-4 py-2 font-bold hover:bg-violet-600 active:bg-violet-700"
-            onClick={handleTranslate}
+            className="w-[160px] cursor-pointer rounded-md
+            bg-rose-400 px-4 py-2 font-bold
+              hover:bg-rose-600 active:bg-rose-700"
+            onClick={() => setInputCode(testCode)}
             disabled={loading}
           >
-            {loading ? "Translating..." : "Translate"}
+            { "Load Test I18N"}
           </button>
           <button
-            className="w-[140px] cursor-pointer rounded-md bg-emerald-500 px-4 py-2 font-bold hover:bg-emerald-600 active:bg-emerald-700"
-            onClick={handleDownloadZip}
-            disabled={loading && outputCode.length === 0}
+            className="w-[160px] cursor-pointer rounded-md
+             bg-violet-500 px-4 py-2 font-bold
+              hover:bg-violet-600 active:bg-violet-700"
+            onClick={() => handleTranslateMultiLanguages(selectedLangs)}
+            disabled={loading}
           >
-            Download
+            {loading ? "Translating..." : "Start Translate"}
           </button>
         </div>
-
         <div className="mt-2 text-center text-xs">
           {loading
-            ? "Translating..."
+            ? `Please wait... translating : ${selectedLangs.filter(l => {
+              return !translatedLangs.includes(l);
+            }).join(", ")}`
             : hasTranslated
-              ? "Output copied to clipboard!"
-              : 'Enter some code and click "Translate"'}
+              ? `[  ${translatedLangs.join(", ")}  ] translated completed. and [ ${outputLanguage} ] copied to clipboard!`
+              : 'Enter some code and click "Start Translate"'}
         </div>
 
-        <div className="mt-6 flex w-full max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
+        <div className="flex w-full mb-4 max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
           <div className="h-100 flex flex-col justify-center space-y-2 sm:w-2/4">
             <div className="text-center text-xl font-bold">Input</div>
 
             <LanguageSelect
               language={inputLanguage}
-              onChange={(value) => {
-                setInputLanguage(value);
+              disabled={loading}
+              onChange={(lang) => {
+                setInputLanguage(lang);
                 setHasTranslated(false);
+                setSelectedLangs((prev) => {
+                  if (isSelectedAll) {
+                    return prev;
+                  }
+                  return prev.filter((key) => {
+                    return key !== inputLanguage;
+                  });
+                });
                 setInputCode("");
                 setOutputCode("");
               }}
             />
 
-            {inputLanguage === "Natural Language" ? (
-              <TextBlock
-                text={inputCode}
-                editable={!loading}
-                onChange={(value) => {
-                  setInputCode(value);
-                  setHasTranslated(false);
-                }}
-              />
-            ) : (
-              <CodeBlock
-                code={inputCode}
-                editable={!loading}
-                onChange={(value) => {
-                  setInputCode(value);
-                  setHasTranslated(false);
-                }}
-              />
-            )}
+            <CodeBlock
+              code={inputCode}
+              editable={!loading}
+              onChange={(value) => {
+                setInputCode(value);
+                setHasTranslated(false);
+              }}
+            />
           </div>
           <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">
-            <div className="text-center text-xl font-bold">Output</div>
+            <div className="text-center text-xl font-bold">Preview</div>
 
             <LanguageSelect
               language={outputLanguage}
+              disabled={loading}
               onChange={(lang) => {
                 setOutputLanguage(lang);
-                setOutputCode("");
+                setSelectedLangs((prev) => {
+                  if (isSelectedAll) {
+                    return prev;
+                  }
+                  return prev.filter((key) => {
+                    return key !== outputLanguage;
+                  });
+                });
+                setOutputCode(translatedContent.current[lang]);
               }}
             />
-
-            {outputLanguage === "Natural Language" ? (
-              <TextBlock text={outputCode} />
-            ) : (
-              <CodeBlock code={outputCode} />
-            )}
+            <CodeBlock code={outputCode} />
           </div>
         </div>
+        <>
+          <div className="flex items-center mt-2 mb-2" style={{ display: "flex", alignItems: "center" }}>
+            <label className="text-white text-[15px] leading-none" htmlFor="airplane-mode">
+            Translate to multiple languages:
+            </label>
+            <Switch.Root
+              className="ml-2 w-[42px] h-[25px] bg-blackA9 rounded-full
+              relative shadow-[0_2px_10px] shadow-blackA7
+              focus:shadow-[0_0_0_2px] focus:bg-black data-[state=checked]:bg-blue-500 outline-none cursor-default"
+              id="airplane-mode"
+              checked={enableMultiLang}
+              onCheckedChange={(checked: boolean) => {
+                setEnableMultiLang(checked);
+              }}
+            >
+              <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full
+              shadow-[0_2px_2px] shadow-blackA7 transition-transform
+              duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+            </Switch.Root>
+          </div>
+          {enableMultiLang && <>
+            <div className="w-[660px] flex flex-wrap justify-start items-center mb-5">
+              {Object.values(multipleLanguagesWithStatus).map((language) => {
+                return <div className="flex items-center justify-space-evenly mt-2 h-6" key={language.shortKey}>
+                  <Checkbox.Root
+                    key={language.shortKey}
+                    className="shadow-blackA7 hover:bg-violet3 flex h-[25px]
+                    w-[25px] appearance-none items-center justify-center
+                    rounded-[6px] bg-white outline-none
+                    data-[disabled]:cursor-not-allowed data-[disabled]:bg-[#9CA3AF]"
+                    id="c1"
+                    checked={language.checked}
+                    disabled={language.disabled}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedLangs((prev) => {
+                          return [...prev, language.shortKey];
+                        });
+                      } else {
+                        setSelectedLangs((prev) => prev.filter((key) => key !== language.shortKey));
+                      }
+                    }}
+                  >
+                    <Checkbox.Indicator className="text-[black]">
+                      <CheckIcon />
+                    </Checkbox.Indicator>
+                  </Checkbox.Root>
+                  <label className="pl-[8px] text-[16px] leading-none w-48" htmlFor="c1">
+                    {language.name}
+                    <span className="text-sm ">  ({language.shortKey})</span>
+                  </label>
+                </div>;
+              })}
+            </div>
+            <div className="flex flex-wrap justify-start items-center">
+              <Checkbox.Root
+                className="shadow-blackA7 hover:bg-violet3 flex h-[25px] w-[25px]
+                appearance-none items-center justify-center
+                rounded-[6px] bg-white outline-none "
+                defaultChecked={isSelectedAll}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setSelectedLangs(Object.keys(languages) as LanguageShortKey[]);
+                  } else {
+                    setSelectedLangs([inputLanguage, outputLanguage]);
+                  }
+                }}
+              >
+                <Checkbox.Indicator className="text-[black]">
+                  <CheckIcon />
+                </Checkbox.Indicator>
+              </Checkbox.Root>
+              <label className="pl-[8px] text-[16px] leading-none " htmlFor="c1">
+                Select All
+              </label>
+            </div>
+          </>}
+        </>
+        <button
+          className="mt-4 w-[480px] cursor-pointer rounded-md
+          bg-emerald-500 px-4 py-2 font-bold
+          hover:bg-emerald-600 active:bg-emerald-700
+          disabled:cursor-not-allowed disabled:bg-[#9CA3AF]"
+          onClick={handleDownloadZip}
+          disabled={loading || outputCode?.length === 0}
+        >
+          Download Translated Files
+        </button>
+        <ul>
+          <li></li>
+        </ul>
+        <p className="mt-1 text-slate-400">* download as an zip file and files named look like: demo_en-US.properties</p>
       </div>
     </>
   );

@@ -61,6 +61,7 @@
       "no-var": "error",
       "no-console": "warn",
       "quote-props": ["error", "as-needed"],
+      "no-multiple-empty-lines" : ["error", { "max": 1, "maxEOF": 1 }],
       "max-len": [
         "error",
         {

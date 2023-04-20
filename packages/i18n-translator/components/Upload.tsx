@@ -45,6 +45,7 @@ export const Upload:React.FC<Props> = ({ onSuccess, className }) => {
     ...(isFocused ? focusedStyle : {}),
     ...(isDragAccept ? acceptStyle : {}),
     ...(isDragReject ? rejectStyle : {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [
     isFocused,
     isDragAccept,
@@ -52,12 +53,10 @@ export const Upload:React.FC<Props> = ({ onSuccess, className }) => {
   ]);
   useEffect(() => {
     acceptedFiles.length > 0 && onSuccess?.(acceptedFiles);
-  }, [acceptedFiles]);
+  }, [acceptedFiles, onSuccess]);
   const files = acceptedFiles.map(file => (
     <li key={file.name}>
-
-      {file.name} - {file.size} bytes (type: {file.type})
-
+      {file.name} - {file.size} bytes
     </li>
   ));
 
@@ -65,9 +64,9 @@ export const Upload:React.FC<Props> = ({ onSuccess, className }) => {
     <div className={"container" + className}>
       <div {...getRootProps({ style } as any)}>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <p> Click to select and upload files(.properties) </p>
       </div>
-      <ul>{files}</ul>
+      <ul className="text-center mt-1">{files}</ul>
     </div>
   );
 };

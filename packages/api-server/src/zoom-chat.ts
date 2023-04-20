@@ -68,7 +68,6 @@ async function refreshChatbotToken(): Promise<void> {
   expires_in = new Date(data.expires_in * 1000 + new Date().getTime());
 }
 
-
 async function mySendMessage(content: ZoomBotMessageRequestContent): Promise<Response | void> {
   return sendChat({
     content,
