@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const ModelSelect: FC<Props> = ({ model, onChange }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>):void => {
     onChange(e.target.value as OpenAIModel);
   };
 

@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
 import { StreamLanguage } from "@codemirror/language";
 import { go } from "@codemirror/legacy-modes/mode/go";
 import { tokyoNight } from "@uiw/codemirror-theme-tokyo-night";

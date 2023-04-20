@@ -22,70 +22,6 @@ export default function Home(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTranslated, setHasTranslated] = useState<boolean>(false);
 
-  const handleTranslate = useCallback(async (): Promise<void> => {
-
-    if (!inputCode) {
-      alert("Please enter some code.");
-      return;
-    }
-
-    setLoading(true);
-    setOutputCode("");
-
-    const controller = new AbortController();
-
-    const body: TranslateBody = {
-
-      inputCode,
-    };
-
-    const response = await fetch("/api/translate1", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      signal: controller.signal,
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      setLoading(false);
-      alert("Something went wrong.");
-      return;
-    }
-
-    const data = response.body;
-
-    if (!data) {
-      setLoading(false);
-      alert("Something went wrong.");
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-    let code = "";
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      code += chunkValue;
-      setOutputCode((prevCode) => prevCode + chunkValue);
-    }
-
-    setLoading(false);
-    setHasTranslated(true);
-    copyToClipboard(code);
-  }, [inputCode ]);
-
-  useEffect(() => {
-    if (hasTranslated) {
-      handleTranslate();
-    }
-  }, [outputLanguage, handleTranslate, hasTranslated]);
-
   return (
     <>
       <Head>
@@ -105,7 +41,6 @@ export default function Home(): JSX.Element {
         <div className="mt-2 flex items-center space-x-2">
           <button
             className="w-[160px] cursor-pointer rounded-md bg-violet-500 px-4 py-2 font-bold hover:bg-violet-600 active:bg-violet-700"
-            onClick={handleTranslate}
             disabled={loading}
           >
             {loading ? "Translating..." : "Start Translate"}

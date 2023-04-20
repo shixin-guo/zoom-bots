@@ -7,18 +7,17 @@ export const config = {
 
 const handler = async (req: Request): Promise<Response> => {
   try {
-    const { inputLanguage, outputLanguage, inputCode, model } =
+    const { inputLanguage, outputLanguage, inputCode } =
       (await req.json()) as TranslateBody;
     const stream = await OpenAIStream(
       inputLanguage,
       outputLanguage,
       inputCode,
-      model
+      "gpt-3.5-turbo"
     );
 
     return new Response(stream);
   } catch (error) {
-    console.error(error);
     return new Response("Error", { status: 500 });
   }
 };
