@@ -111,6 +111,8 @@ importers:
       endent: ^2.1.0
       eslint: 8.37.0
       eslint-config-next: 13.2.4
+      eslint-import-resolver-typescript: ^3.5.3
+      eslint-plugin-import: ^2.27.5
       eventsource-parser: ^1.0.0
       file-saver: ^2.0.5
       jszip: ^3.10.1
@@ -149,6 +151,8 @@ importers:
       autoprefixer: 10.4.14_postcss@8.4.21
       eslint: 8.37.0
       eslint-config-next: 13.2.4_vwh6htx42aidho2qgfca5u5rwm
+      eslint-import-resolver-typescript: 3.5.3_rbts4wm34tb3x7owcp777e4f4y
+      eslint-plugin-import: 2.27.5_eslint@8.37.0
       postcss: 8.4.21
       prettier: 2.8.7
       prettier-plugin-tailwindcss: 0.2.7_prettier@2.8.7

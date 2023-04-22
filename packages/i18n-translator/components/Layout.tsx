@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Github } from "@/components/icons";
+// import { Github } from "@/components/icons";
 
 interface LayoutProps {
   children: React.ReactNode
@@ -15,7 +15,7 @@ const Layout = ({
           🏠 Home
         </Link>
         <Link href="/convert" className="mr-5">
-          🚢 Convert JSON and Properties
+          🚢 Convert
         </Link>
         <Link href="/md" className="mr-5">
           🚧 Markdown Translator
@@ -23,11 +23,7 @@ const Layout = ({
         <Link href="/csv" className="mr-5">
           🚧 CSV Loader
         </Link>
-        <Link href="https://github.com/shixin-guo/my-bot/" className="mr-5 float-right" passHref>
-          <Github/>
-        </Link>
       </nav>
-
       {children}
     </div>
   );
