@@ -1,4 +1,4 @@
-import Head from "next/head";
+// import { GetStaticPropsContext } from "next";
 import { useMemo, useRef, useState } from "react";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
@@ -7,11 +7,10 @@ import * as Switch from "@radix-ui/react-switch";
 import { CheckIcon } from "@radix-ui/react-icons";
 
 import copyToClipboard from "@/utils/copyToClipboard";
-
 import { CodeBlock } from "@/components/CodeBlock";
+import Layout from "@/components/Layout";
 import { LanguageSelect, LanguageShortKey, languages } from "@/components/LanguageSelect";
 import { Upload } from "@/components/Upload";
-
 import { TranslateBody } from "@/types/types";
 import { getFileNameWithoutExtension } from "@/utils/fileUtils";
 
@@ -40,6 +39,21 @@ interface handleTranslateProps {
   exceptLang: LanguageShortKey,
   content: string
 }
+// interface StaticProps {
+//   props: {
+//     categories: string
+//   }
+// }
+// export async function getStaticProps({
+//   locale,
+//   locales,
+// }: GetStaticPropsContext):Promise<StaticProps> {
+//   const config = { locale, locales };
+//   return {
+//     props: { categories: "index" },
+//   };
+// }
+
 export default function Home(): JSX.Element {
   const [inputLanguage, setInputLanguage] = useState<LanguageShortKey>("en-US");
   const [outputLanguage, setOutputLanguage] = useState<LanguageShortKey>("zh-CN");
@@ -174,22 +188,15 @@ export default function Home(): JSX.Element {
 
   return (
     <>
-      <Head>
-        <title>I18N Translator</title>
-        <meta
-          name="description"
-          content="Use AI to translate I18N from one language to another."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className="flex h-full min-h-screen flex-col items-center bg-[#0E1117] px-4 pb-20 text-neutral-200 sm:px-10">
+      <div className="flex h-full min-h-screen flex-col items-center
+      bg-[url('https://tailwindui.com/img/beams-home@95.jpg')]
+       px-4 pb-20 sm:px-10 font-sans">
         <div className="mt-10 flex flex-col items-center justify-center sm:mt-20">
           <div className="text-4xl font-bold">I18N Translator</div>
           <div className="text-sm mt-1 text-slate-400">model: gpt-3.5-turbo</div>
         </div>
 
-        <Upload className='w-100 pt-6 pb-5' onSuccess={
+        <Upload className='w-100 pt-6 pb-5 rounded-lg' onSuccess={
           async (files) => {
             const input = await files[0].text();
             setInputCode(input);
@@ -200,17 +207,8 @@ export default function Home(): JSX.Element {
         <div className="mt-2 flex items-center space-x-2">
           <button
             className="w-[160px] cursor-pointer rounded-md
-            bg-rose-400 px-4 py-2 font-bold
-              hover:bg-rose-600 active:bg-rose-700"
-            onClick={() => setInputCode(testCode)}
-            disabled={loading}
-          >
-            { "Load Test I18N"}
-          </button>
-          <button
-            className="w-[160px] cursor-pointer rounded-md
-             bg-violet-500 px-4 py-2 font-bold
-              hover:bg-violet-600 active:bg-violet-700"
+             bg-blue-500 px-4 py-2 font-bold
+              hover:bg-blue-600 active:bg-blue-700 text-slate-50"
             onClick={() => handleTranslateMultiLanguages(selectedLangs)}
             disabled={loading}
           >
@@ -226,78 +224,22 @@ export default function Home(): JSX.Element {
               ? `[  ${translatedLangs.join(", ")}  ] translated completed. and [ ${outputLanguage} ] copied to clipboard!`
               : 'Enter some code and click "Start Translate"'}
         </div>
-
-        <div className="flex w-full mb-4 max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
-          <div className="h-100 flex flex-col justify-center space-y-2 sm:w-2/4">
-            <div className="text-center text-xl font-bold">Input</div>
-
-            <LanguageSelect
-              language={inputLanguage}
-              disabled={loading}
-              onChange={(lang) => {
-                setInputLanguage(lang);
-                setHasTranslated(false);
-                setSelectedLangs((prev) => {
-                  if (isSelectedAll) {
-                    return prev;
-                  }
-                  return prev.filter((key) => {
-                    return key !== inputLanguage;
-                  });
-                });
-                setInputCode("");
-                setOutputCode("");
-              }}
-            />
-
-            <CodeBlock
-              code={inputCode}
-              editable={!loading}
-              onChange={(value) => {
-                setInputCode(value);
-                setHasTranslated(false);
-              }}
-            />
-          </div>
-          <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">
-            <div className="text-center text-xl font-bold">Preview</div>
-
-            <LanguageSelect
-              language={outputLanguage}
-              disabled={loading}
-              onChange={(lang) => {
-                setOutputLanguage(lang);
-                setSelectedLangs((prev) => {
-                  if (isSelectedAll) {
-                    return prev;
-                  }
-                  return [...prev.filter((key) => {
-                    return key !== outputLanguage;
-                  }), lang];
-                });
-                setOutputCode(translatedContent.current[lang]);
-              }}
-            />
-            <CodeBlock code={outputCode} />
-          </div>
-        </div>
         <>
           <div className="flex items-center mt-2 mb-2" style={{ display: "flex", alignItems: "center" }}>
-            <label className="text-white text-[15px] leading-none" htmlFor="airplane-mode">
+            <label className="text-[15px] leading-none" htmlFor="airplane-mode">
             Translate to multiple languages:
             </label>
             <Switch.Root
-              className="ml-2 w-[42px] h-[25px] bg-blackA9 rounded-full
-              relative shadow-[0_2px_10px] shadow-blackA7
-              focus:shadow-[0_0_0_2px] focus:bg-black data-[state=checked]:bg-blue-500 outline-none cursor-default"
-              id="airplane-mode"
+              className="ml-2 w-[42px] h-[25px] bg-slate-200 rounded-full
+              relative shadow-[0_2px_10px]
+              data-[state=checked]:bg-blue-500 outline-none cursor-default"
               checked={enableMultiLang}
               onCheckedChange={(checked: boolean) => {
                 setEnableMultiLang(checked);
               }}
             >
               <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full
-              shadow-[0_2px_2px] shadow-blackA7 transition-transform
+               transition-transform
               duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
             </Switch.Root>
           </div>
@@ -308,6 +250,7 @@ export default function Home(): JSX.Element {
                   <Checkbox.Root
                     key={language.shortKey}
                     className="shadow-blackA7 hover:bg-violet3 flex h-[25px]
+                    border-[1px] border-slate-400
                     w-[25px] appearance-none items-center justify-center
                     rounded-[6px] bg-white outline-none
                     data-[disabled]:cursor-not-allowed data-[disabled]:bg-[#9CA3AF]"
@@ -339,7 +282,7 @@ export default function Home(): JSX.Element {
               <Checkbox.Root
                 className="shadow-blackA7 hover:bg-violet3 flex h-[25px] w-[25px]
                 appearance-none items-center justify-center
-                rounded-[6px] bg-white outline-none "
+                rounded-[6px] bg-white outline-none border-[1px] border-slate-400"
                 defaultChecked={isSelectedAll}
                 onCheckedChange={(checked) => {
                   if (checked) {
@@ -357,17 +300,78 @@ export default function Home(): JSX.Element {
                 Select All
               </label>
             </div>
+            <div className="text-sm mt-1 text-slate-400">
+               * pls should click "Start Translate" button again 👆 after change selected languages.
+            </div>
           </>}
         </>
+
+        <div className="flex w-full mb-4 max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
+          <div className="h-full flex flex-col justify-center space-y-2 sm:w-2/4">
+            <div className="text-center text-xl font-bold">Input</div>
+
+            <LanguageSelect
+              language={inputLanguage}
+              disabled={loading}
+              onChange={(lang) => {
+                setInputLanguage(lang);
+                setHasTranslated(false);
+                setSelectedLangs((prev) => {
+                  if (isSelectedAll) {
+                    return prev;
+                  }
+                  return prev.filter((key) => {
+                    return key !== inputLanguage;
+                  });
+                });
+                setInputCode("");
+                setOutputCode("");
+              }}
+            />
+
+            <CodeBlock
+              code={inputCode}
+              editable={!loading}
+              onChange={(value) => {
+                setInputCode(value);
+                setHasTranslated(false);
+              }}
+              onClickTestCode={() => setInputCode(testCode)}
+            />
+          </div>
+          <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">
+            <div className="text-center text-xl font-bold">Preview</div>
+
+            <LanguageSelect
+              language={outputLanguage}
+              disabled={loading}
+              onChange={(lang) => {
+                setOutputLanguage(lang);
+                setSelectedLangs((prev) => {
+                  if (isSelectedAll) {
+                    return prev;
+                  }
+                  return [...prev.filter((key) => {
+                    return key !== outputLanguage;
+                  }), lang];
+                });
+                setOutputCode(translatedContent.current[lang]);
+              }}
+            />
+            <CodeBlock code={outputCode} />
+          </div>
+        </div>
+
         <button
           className="mt-4 w-[480px] cursor-pointer rounded-md
           bg-emerald-500 px-4 py-2 font-bold
           hover:bg-emerald-600 active:bg-emerald-700
+          text-slate-50
           disabled:cursor-not-allowed disabled:bg-[#9CA3AF]"
           onClick={handleDownloadZip}
           disabled={loading || outputCode?.length === 0}
         >
-          Download Translated Files
+         ⬇️  Download Translated Files
         </button>
         <ul>
           <li></li>
@@ -377,3 +381,5 @@ export default function Home(): JSX.Element {
     </>
   );
 }
+
+Home.Layout = Layout;

@@ -20,7 +20,6 @@ export const Upload:React.FC<Props> = ({ onSuccess, className }) => {
     alignItems: "center",
     padding: "20px",
     borderWidth: 2,
-    borderRadius: 2,
     borderStyle: "dashed",
     backgroundColor: "#fafafa",
     color: "#bdbdbd",
@@ -62,9 +61,9 @@ export const Upload:React.FC<Props> = ({ onSuccess, className }) => {
 
   return (
     <div className={"container" + className}>
-      <div {...getRootProps({ style } as any)}>
+      <div {...getRootProps({ style } as any)} className="rounded-lg">
         <input {...getInputProps()} />
-        <p> Click to select and upload files(.properties) </p>
+        <p> ⬆️ Click to select and upload files(.properties) </p>
       </div>
       <ul className="text-center mt-1">{files}</ul>
     </div>
