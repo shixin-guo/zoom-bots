@@ -1,5 +1,4 @@
-import { GetStaticPropsContext } from "next";
-import Head from "next/head";
+// import { GetStaticPropsContext } from "next";
 import { useMemo, useRef, useState } from "react";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
@@ -40,21 +39,20 @@ interface handleTranslateProps {
   exceptLang: LanguageShortKey,
   content: string
 }
-interface StaticProps {
-  props: {
-    categories: string
-  }
-}
-export async function getStaticProps({
-  locale,
-  locales,
-}: GetStaticPropsContext):Promise<StaticProps> {
-  const config = { locale, locales };
-  console.log(config);
-  return {
-    props: { categories: "index" },
-  };
-}
+// interface StaticProps {
+//   props: {
+//     categories: string
+//   }
+// }
+// export async function getStaticProps({
+//   locale,
+//   locales,
+// }: GetStaticPropsContext):Promise<StaticProps> {
+//   const config = { locale, locales };
+//   return {
+//     props: { categories: "index" },
+//   };
+// }
 
 export default function Home(): JSX.Element {
   const [inputLanguage, setInputLanguage] = useState<LanguageShortKey>("en-US");
@@ -209,15 +207,6 @@ export default function Home(): JSX.Element {
         <div className="mt-2 flex items-center space-x-2">
           <button
             className="w-[160px] cursor-pointer rounded-md
-            bg-rose-400 px-4 py-2 font-bold
-              hover:bg-rose-600 active:bg-rose-700 text-slate-50"
-            onClick={() => setInputCode(testCode)}
-            disabled={loading}
-          >
-            { "Load Test I18N"}
-          </button>
-          <button
-            className="w-[160px] cursor-pointer rounded-md
              bg-blue-500 px-4 py-2 font-bold
               hover:bg-blue-600 active:bg-blue-700 text-slate-50"
             onClick={() => handleTranslateMultiLanguages(selectedLangs)}
@@ -235,61 +224,6 @@ export default function Home(): JSX.Element {
               ? `[  ${translatedLangs.join(", ")}  ] translated completed. and [ ${outputLanguage} ] copied to clipboard!`
               : 'Enter some code and click "Start Translate"'}
         </div>
-
-        <div className="flex w-full mb-4 max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
-          <div className="h-full flex flex-col justify-center space-y-2 sm:w-2/4">
-            <div className="text-center text-xl font-bold">Input</div>
-
-            <LanguageSelect
-              language={inputLanguage}
-              disabled={loading}
-              onChange={(lang) => {
-                setInputLanguage(lang);
-                setHasTranslated(false);
-                setSelectedLangs((prev) => {
-                  if (isSelectedAll) {
-                    return prev;
-                  }
-                  return prev.filter((key) => {
-                    return key !== inputLanguage;
-                  });
-                });
-                setInputCode("");
-                setOutputCode("");
-              }}
-            />
-
-            <CodeBlock
-              code={inputCode}
-              editable={!loading}
-              onChange={(value) => {
-                setInputCode(value);
-                setHasTranslated(false);
-              }}
-            />
-          </div>
-          <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">
-            <div className="text-center text-xl font-bold">Preview</div>
-
-            <LanguageSelect
-              language={outputLanguage}
-              disabled={loading}
-              onChange={(lang) => {
-                setOutputLanguage(lang);
-                setSelectedLangs((prev) => {
-                  if (isSelectedAll) {
-                    return prev;
-                  }
-                  return [...prev.filter((key) => {
-                    return key !== outputLanguage;
-                  }), lang];
-                });
-                setOutputCode(translatedContent.current[lang]);
-              }}
-            />
-            <CodeBlock code={outputCode} />
-          </div>
-        </div>
         <>
           <div className="flex items-center mt-2 mb-2" style={{ display: "flex", alignItems: "center" }}>
             <label className="text-[15px] leading-none" htmlFor="airplane-mode">
@@ -297,9 +231,8 @@ export default function Home(): JSX.Element {
             </label>
             <Switch.Root
               className="ml-2 w-[42px] h-[25px] bg-slate-200 rounded-full
-              relative shadow-[0_2px_10px] shadow-slate-600
-              focus:shadow-[0_0_0_2px] focus:bg-slate-600 data-[state=checked]:bg-blue-500 outline-none cursor-default"
-              id="airplane-mode"
+              relative shadow-[0_2px_10px]
+              data-[state=checked]:bg-blue-500 outline-none cursor-default"
               checked={enableMultiLang}
               onCheckedChange={(checked: boolean) => {
                 setEnableMultiLang(checked);
@@ -309,12 +242,7 @@ export default function Home(): JSX.Element {
                transition-transform
               duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
             </Switch.Root>
-
           </div>
-          <div className="text-sm mt-1 text-slate-400">
-          * pls should click "Start Translate" button again 👆 after change selected languages.
-          </div>
-
           {enableMultiLang && <>
             <div className="w-[660px] flex flex-wrap justify-start items-center mb-5">
               {Object.values(multipleLanguagesWithStatus).map((language) => {
@@ -372,8 +300,68 @@ export default function Home(): JSX.Element {
                 Select All
               </label>
             </div>
+            <div className="text-sm mt-1 text-slate-400">
+               * pls should click "Start Translate" button again 👆 after change selected languages.
+            </div>
           </>}
         </>
+
+        <div className="flex w-full mb-4 max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
+          <div className="h-full flex flex-col justify-center space-y-2 sm:w-2/4">
+            <div className="text-center text-xl font-bold">Input</div>
+
+            <LanguageSelect
+              language={inputLanguage}
+              disabled={loading}
+              onChange={(lang) => {
+                setInputLanguage(lang);
+                setHasTranslated(false);
+                setSelectedLangs((prev) => {
+                  if (isSelectedAll) {
+                    return prev;
+                  }
+                  return prev.filter((key) => {
+                    return key !== inputLanguage;
+                  });
+                });
+                setInputCode("");
+                setOutputCode("");
+              }}
+            />
+
+            <CodeBlock
+              code={inputCode}
+              editable={!loading}
+              onChange={(value) => {
+                setInputCode(value);
+                setHasTranslated(false);
+              }}
+              onClickTestCode={() => setInputCode(testCode)}
+            />
+          </div>
+          <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">
+            <div className="text-center text-xl font-bold">Preview</div>
+
+            <LanguageSelect
+              language={outputLanguage}
+              disabled={loading}
+              onChange={(lang) => {
+                setOutputLanguage(lang);
+                setSelectedLangs((prev) => {
+                  if (isSelectedAll) {
+                    return prev;
+                  }
+                  return [...prev.filter((key) => {
+                    return key !== outputLanguage;
+                  }), lang];
+                });
+                setOutputCode(translatedContent.current[lang]);
+              }}
+            />
+            <CodeBlock code={outputCode} />
+          </div>
+        </div>
+
         <button
           className="mt-4 w-[480px] cursor-pointer rounded-md
           bg-emerald-500 px-4 py-2 font-bold
