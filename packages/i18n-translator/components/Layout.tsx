@@ -18,10 +18,10 @@ const Layout = ({
           🚢 Convert
         </Link>
         <Link href="/md" className="mr-5">
-          🚧 Markdown Translator
+          📝 Markdown Translator
         </Link>
         <Link href="/csv" className="mr-5">
-          🚧 CSV Loader
+          🚧 CSV Loader (in progress)
         </Link>
       </nav>
       {children}
