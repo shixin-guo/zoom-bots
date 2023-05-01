@@ -108,7 +108,7 @@ export default function Home(): JSX.Element {
       inputCode: content,
     };
 
-    const response = await fetch("/api/translate1", {
+    const response = await fetch("/api/tsProperties", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
