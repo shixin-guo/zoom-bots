@@ -1,19 +1,24 @@
 import GetWeatherDataAlert from "./extensions/weather";
-import { mySendMessage } from "./zoom-chat";
-export const webhookHandler = async (body: {type: string}):Promise<void> => {
+import { cacheChatInfo, sendChat } from "./zoom-chat";
+
+export const webhookHandler = async ():Promise<void> => {
   const weatherTips = await GetWeatherDataAlert();
-  await mySendMessage({
-    head: {
-      text: "_Daily Alert_",
-      sub_head: {
-        text: "*Weather Tips and something*"
-      }
+  await sendChat({
+    content: {
+      head: {
+        text: "_Daily Alert_",
+        sub_head: {
+          text: "*Weather Tips and something*"
+        }
+      },
+      body: [
+        {
+          type: "message",
+          text: `>${weatherTips}`
+        }
+      ]
     },
-    body: [
-      {
-        type: "message",
-        text: `>${weatherTips}`
-      }
-    ]
-  },);
+    is_markdown_support: true,
+    ...cacheChatInfo
+  });
 };

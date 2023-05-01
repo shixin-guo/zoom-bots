@@ -98,7 +98,7 @@ app.post("/deauthorize", async (req: Request, res: Response) => {
 
 app.post("/webhook", async (req: Request, res: Response) => {
   log("webhook", req.body);
-  await webhookHandler(req.body);
+  await webhookHandler();
   res.status(200);
   res.send("test webhook");
 });
