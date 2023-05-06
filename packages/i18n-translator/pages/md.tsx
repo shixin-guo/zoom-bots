@@ -55,6 +55,14 @@ export default function Markdown(): JSX.Element {
       signal: controller.signal,
       body: JSON.stringify(body),
     });
+    // const response = await fetch("/api/optimizeMarkdown", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   signal: controller.signal,
+    //   body: JSON.stringify(body),
+    // });
 
     if (!response.ok) {
       // setLoading(false);

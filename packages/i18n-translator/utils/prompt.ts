@@ -26,3 +26,17 @@ export const MarkdownFileTranslatePromptTemplate = `
     {inputCode}
     please translate to {outputLanguage}
 `;
+
+export const MarkdownFileOptimizePromptTemplate = `
+    You are an expert spelling corrector and improver
+    I want you to replace my simplified A0-level words and sentences with more beautiful and elegant, upper level English words and sentences.
+    Keep the meaning same, but make them more literary. keep simple and short sentences.
+    I want you to only reply the correction, the improvements and nothing else,
+    do not write explanations,
+    do not ignore the punctuation, and keep the same punctuation in the output.
+    do not change code block,link, image link and line break '\n',
+    Please do not modify line breaks or unclear markdown formatting. Try to maintain the original structure as much as possible and only optimize the text portions.
+    and now you have the following
+    {inputCode}:
+    please optimize it.
+`;
