@@ -191,10 +191,6 @@ export default function Home(): JSX.Element {
       <div className="flex h-full min-h-screen flex-col items-center
       bg-[url('https://tailwindui.com/img/beams-home@95.jpg')]
        px-4 pb-20 sm:px-10 font-sans">
-        <div className="mt-10 flex flex-col items-center justify-center sm:mt-20">
-          <div className="text-4xl font-bold">I18N Translator</div>
-          <div className="text-sm mt-1 text-slate-400">model: gpt-3.5-turbo</div>
-        </div>
 
         <Upload className='w-100 pt-6 pb-5 rounded-lg' onSuccess={
           async (files) => {
@@ -308,7 +304,7 @@ export default function Home(): JSX.Element {
 
         <div className="flex w-full mb-4 max-w-[1200px] flex-col justify-between sm:flex-row sm:space-x-4">
           <div className="h-full flex flex-col justify-center space-y-2 sm:w-2/4">
-            <div className="text-center text-xl font-bold">Input</div>
+            <div className="text-center text-xl font-bold">Original</div>
 
             <LanguageSelect
               language={inputLanguage}
@@ -340,7 +336,7 @@ export default function Home(): JSX.Element {
             />
           </div>
           <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">
-            <div className="text-center text-xl font-bold">Preview</div>
+            <div className="text-center text-xl font-bold">Translation</div>
 
             <LanguageSelect
               language={outputLanguage}

@@ -12,7 +12,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <>
       <Head>
-        <title>I18N Translator</title>
+        <title>Translator</title>
         <meta
           name="description"
           content="Use AI to translate I18N from one language to another."

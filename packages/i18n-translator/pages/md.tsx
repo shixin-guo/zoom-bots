@@ -110,10 +110,6 @@ export default function Markdown(): JSX.Element {
       <div className="flex h-full min-h-screen flex-col items-center
       bg-[url('https://tailwindui.com/img/beams-home@95.jpg')]
        px-4 pb-20 sm:px-10 font-sans">
-        <div className="mt-10 flex flex-col items-center justify-center sm:mt-20">
-          <div className="text-4xl font-bold"> {`${inputLang} --> ${outputType}`}</div>
-        </div>
-
         <div className="mt-4 flex items-center space-x-2">
 
           <button
