@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 
-import { ZoomBotMessageRequestContent, ZoomChatbotParams } from "./types";
+import { ZoomChatbotParams } from "./types";
 import { log } from "./utils";
 config({ path: ".env" });
 
@@ -14,12 +14,12 @@ export const cacheChatInfo = {
   user_jid: "",
 };
 
-type chatInfo = typeof cacheChatInfo
+export type ChatInfoType = typeof cacheChatInfo
 
-export const updateCacheChatInfo = (body: chatInfo): chatInfo => {
-  cacheChatInfo.to_jid = body.to_jid;
-  cacheChatInfo.account_id = body.account_id;
-  cacheChatInfo.user_jid = body.user_jid;
+export const updateCacheChatInfo = ({ to_jid, account_id, user_jid }: ChatInfoType): ChatInfoType => {
+  cacheChatInfo.to_jid = to_jid;
+  cacheChatInfo.account_id = account_id;
+  cacheChatInfo.user_jid = user_jid;
   return cacheChatInfo;
 };
 
@@ -68,11 +68,4 @@ async function refreshChatbotToken(): Promise<void> {
   expires_in = new Date(data.expires_in * 1000 + new Date().getTime());
 }
 
-async function mySendMessage(content: ZoomBotMessageRequestContent): Promise<Response | void> {
-  return sendChat({
-    content,
-    is_markdown_support: true,
-    ...cacheChatInfo
-  });
-}
-export { sendChat, mySendMessage, refreshChatbotToken };
+export { sendChat, refreshChatbotToken };

@@ -1,3 +1,4 @@
+import { oneLine } from "common-tags";
 export const PropertiesI18nTranslatePromptTemplate = `
     You are an expert translator in all languages. Translate the wording from {inputLanguage} to {outputLanguage}.
     do not write explanations, and do not replace any placeholder and any HTML tag with anything.
@@ -13,16 +14,33 @@ export const PropertiesI18nTranslatePromptTemplate = `
     please translate to {outputLanguage}
 `;
 
-export const MarkdownFileTranslatePromptTemplate = `
-    You are an expert translator in markdown file. Translate the wording from {inputLanguage} to {outputLanguage}.
+export const MarkdownFileTranslatePromptTemplate = oneLine`
+    You are an expert translator for Markdown documents.
+    
+    And now you have the following:
+    
+    - do not write explanations,
+    - do not replace any placeholder and any HTML tag with anything.
+    - do not ignore the punctuation, and keep the same punctuation in the output.
+    - do not change code block,link, image link and line break '\n',
+    - keep same in the output.
+    - should translate the content in the table.but do not translate key or name in the table and keep the same table format in the output.
+    
+    now document content is delimited by <> and </>: 
+    <>{inputCode}</>
+
+    Translate the documents from {inputLanguage} to {outputLanguage}.
+`;
+export const MarkdownFileOptimizePromptTemplate = `
+    You are an expert spelling corrector and improver
+    I want you to replace my simplified A0-level words and sentences with more beautiful and elegant, upper level English words and sentences.
+    Keep the meaning same, but make them more literary. keep simple and short sentences.
+    I want you to only reply the correction, the improvements and nothing else,
     do not write explanations,
-    do not replace any placeholder and any HTML tag with anything.
     do not ignore the punctuation, and keep the same punctuation in the output.
     do not change code block,link, image link and line break '\n',
-    keep same in the output.
-    should translate the content in the table.but do not translate key or name in the table and keep the same table format in the output.
+    Please do not modify line breaks or unclear markdown formatting. Try to maintain the original structure as much as possible and only optimize the text portions.
     and now you have the following
-    {inputLanguage}:
-    {inputCode}
-    please translate to {outputLanguage}
+    {inputCode}:
+    please optimize it.
 `;
