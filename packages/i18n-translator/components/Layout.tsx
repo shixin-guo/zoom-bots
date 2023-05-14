@@ -20,13 +20,13 @@ const Layout = ({
         </div>
         <div className="">
           <Link href="/" className="mr-5">
-          🏠 Properties
+          🏠 Wordings Properties
+          </Link>
+          <Link href="/md" className="mr-5">
+          📝 Markdown File
           </Link>
           <Link href="/convert" className="mr-5">
           🚢 Convert
-          </Link>
-          <Link href="/md" className="mr-5">
-          📝 Markdown
           </Link>
           {/* <Link href="/csv" className="mr-5">
             🚧 CSV Loader (in progress)
