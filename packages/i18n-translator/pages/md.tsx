@@ -119,7 +119,7 @@ export default function Markdown(): JSX.Element {
             onClick={() => convertHandler()}
             disabled={loading}
           >
-            {"Start Convert"}
+            {"Start Translate"}
           </button>
         </div>
         <div className="mt-4 -mb-8 flex items-center space-x-2 z-50">
