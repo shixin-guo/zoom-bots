@@ -1,7 +1,7 @@
 import { OpenAI } from "langchain/llms/openai";
 import { LLMChain } from "langchain/chains";
 import { CallbackManager } from "langchain/callbacks";
-import { MarkdownTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 import {
   PromptTemplate,
@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 import { ChainValues } from "langchain/dist/schema";
 
 import { TranslateBody } from "@/types/types";
-import { MarkdownFileOptimizePromptTemplate } from "@/utils/prompt";
+import { OptimizeMarkdownPrompt } from "@/utils/prompt";
 
 export const config = {
   runtime: "edge",
@@ -19,7 +19,7 @@ export const config = {
 
 const handler = async (req: Request): Promise<Response> => {
   try {
-    const { inputLanguage, outputLanguage, inputCode } =
+    const { inputCode } =
       (await req.json()) as TranslateBody;
     const encoder = new TextEncoder();
     const stream = new TransformStream();
@@ -41,16 +41,14 @@ const handler = async (req: Request): Promise<Response> => {
       }),
       temperature: 0.1
     });
-    const splitter = new MarkdownTextSplitter({
-      chunkSize: 400,
+    const splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 600,
       chunkOverlap: 0,
     });
     const splitChunks = await splitter.createDocuments([inputCode]);
     const prompt = new PromptTemplate({
-      template: MarkdownFileOptimizePromptTemplate,
+      template: OptimizeMarkdownPrompt,
       inputVariables: [
-        "inputLanguage",
-        "outputLanguage",
         "inputCode",
       ]
     });
@@ -58,7 +56,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const callChain = async ({ pageContent }: typeof splitChunks[0]): Promise<ChainValues> => {
       return new Promise((resolve, reject) => {
-        chain.call({ inputLanguage, outputLanguage, inputCode: pageContent }).then(result => {
+        chain.call({ inputCode: pageContent }).then(result => {
           resolve(result);
         }).catch(error => {
           reject(error);

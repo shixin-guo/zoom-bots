@@ -9,7 +9,10 @@ enum Languages {
   CN = "汉语",
   EN = "English",
 }
-
+const API4Markdown = {
+  TRANSLATE: "/api/tsMarkdown",
+  OPTIMIZE: "/api/optimizeMarkdown",
+};
 interface handleTranslateProps {
   originLang: Languages,
   exceptLang: Languages,
@@ -27,7 +30,13 @@ export default function Markdown(): JSX.Element {
   const reverseInputAndOutput = ():void => {
     setInputLang(inputLang === Languages.CN ? Languages.EN : Languages.CN);
   };
-  const handleTranslate = async ({ originLang, exceptLang, content }: handleTranslateProps): Promise<void> => {
+  const handleTranslate = async (
+    {
+      originLang,
+      exceptLang,
+      content }: handleTranslateProps,
+    isOptimize: boolean
+  ): Promise<void> => {
     if (originLang === exceptLang) {
       alert("Please select different languages.");
       return;
@@ -47,14 +56,17 @@ export default function Markdown(): JSX.Element {
       inputCode: content,
     };
 
-    const response = await fetch("/api/tsMarkdown", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      signal: controller.signal,
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(
+      isOptimize ? API4Markdown.OPTIMIZE : API4Markdown.TRANSLATE,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        signal: controller.signal,
+        body: JSON.stringify(body),
+      }
+    );
     // const response = await fetch("/api/optimizeMarkdown", {
     //   method: "POST",
     //   headers: {
@@ -89,7 +101,9 @@ export default function Markdown(): JSX.Element {
       setOutputCode((prevCode) => prevCode + chunkValue);
     }
   };
-  const convertHandler = async(): Promise<void> => {
+  const translateHandler = async({
+    isOptimize = false
+  }): Promise<void> => {
     if (!inputCode) {
       alert("Please enter some code.");
       return;
@@ -99,7 +113,7 @@ export default function Markdown(): JSX.Element {
       originLang: inputLang,
       exceptLang: outputType,
       content: inputCode,
-    });
+    }, isOptimize);
 
     copyToClipboard(outputCode);
     setLoading(false);
@@ -111,16 +125,25 @@ export default function Markdown(): JSX.Element {
       bg-[url('https://tailwindui.com/img/beams-home@95.jpg')]
        px-4 pb-20 sm:px-10 font-sans">
         <div className="mt-4 flex items-center space-x-2">
-
+          <button
+            className="w-[160px] cursor-pointer rounded-md
+             bg-green-500 px-4 py-2 font-bold
+              hover:bg-green-600 active:bg-green-700 text-slate-50"
+            onClick={() => translateHandler({ isOptimize: true })}
+            disabled={loading}
+          >
+            {"Spelling Check"}
+          </button>
           <button
             className="w-[160px] cursor-pointer rounded-md
              bg-blue-500 px-4 py-2 font-bold
               hover:bg-blue-600 active:bg-blue-700 text-slate-50"
-            onClick={() => convertHandler()}
+            onClick={() => translateHandler({ isOptimize: false })}
             disabled={loading}
           >
             {"Start Translate"}
           </button>
+
         </div>
         <div className="mt-4 -mb-8 flex items-center space-x-2 z-50">
           <button

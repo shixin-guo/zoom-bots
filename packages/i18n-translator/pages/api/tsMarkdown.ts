@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 import { ChainValues } from "langchain/dist/schema";
 
 import { TranslateBody } from "@/types/types";
-import { MarkdownFileTranslatePromptTemplate } from "@/utils/prompt";
+import { TranslateMarkdownPrompt } from "@/utils/prompt";
 
 export const config = {
   runtime: "edge",
@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
     const splitChunks = await splitter.createDocuments([inputCode]);
     const prompt = new PromptTemplate({
-      template: MarkdownFileTranslatePromptTemplate,
+      template: TranslateMarkdownPrompt,
       inputVariables: [
         "inputLanguage",
         "outputLanguage",

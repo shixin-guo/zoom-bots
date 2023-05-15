@@ -10,7 +10,7 @@ import {
 import { NextResponse } from "next/server";
 
 import { TranslateBody } from "@/types/types";
-import { PropertiesI18nTranslatePromptTemplate } from "@/utils/prompt";
+import { TranslatePropertiesPrompt } from "@/utils/prompt";
 export const config = {
   runtime: "edge",
 };
@@ -50,7 +50,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
     const splitChunks = await splitter.createDocuments([inputCode]);
     const prompt = new PromptTemplate({
-      template: PropertiesI18nTranslatePromptTemplate,
+      template: TranslatePropertiesPrompt,
       inputVariables: ["inputLanguage",
         "outputLanguage",
         "inputCode",]
