@@ -56,6 +56,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const callChain = async ({ pageContent }: typeof splitChunks[0]): Promise<ChainValues> => {
       return new Promise((resolve, reject) => {
+        debugger
         chain.call({ inputCode: pageContent }).then(result => {
           resolve(result);
         }).catch(error => {
@@ -65,7 +66,7 @@ const handler = async (req: Request): Promise<Response> => {
     };
     const translateData = async ():Promise<void> => {
       for (let i = 0; i < splitChunks.length; i++) {
-        await callChain(splitChunks[i]);
+        await callChain(splitChunks[4]);
         if (i === splitChunks.length - 1) {
           await writer.ready;
           await writer.close();
