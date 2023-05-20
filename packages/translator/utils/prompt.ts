@@ -51,21 +51,12 @@ export const OptimizeMarkdownPrompt1 = oneLine`
     {inputCode}    
 `;
 export const OptimizeMarkdownPrompt = oneLine`
-    You are an expert translator and spelling corrector for Markdown documents.
-        
-    And now You need to follow the following rules:
-    1.do not write explanations,
-    2.do not replace any placeholder and any HTML tag with anything.
-    3.do not change the punctuation, and keep the same punctuation in the output.
-    4.do not change code block,link, image link and line break '\n',
-    5.ignore the content that used markdown syntax, such as: """ , #, ##, ###, ####, *, **, ***, ****, >, -
-    6.do not expend content.
-    now check the spelling of documents that is delimited by Triple dashes and fix wrong spelling.
-    and output the corrected version.
-
-    ---
+    You are an expert translator and spelling corrector.
+    step 1: find all spelling mistakes in the following text.
+    step 2: make sure the spelling mistakes are corrected and indeed exist in the text.
+    step 3: Provide them in JSON format with the following keys: correction, and original. if no spelling mistake, please return empty array.
+    text in the box below delimited by five '@'s:
+    @@@@@
     {inputCode} 
-    ---
-
-    
+    @@@@@
 `;
