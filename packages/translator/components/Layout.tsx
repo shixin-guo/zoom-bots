@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Logo } from "@/components/icons";
-
+import { User } from "@/components/User";
 interface LayoutProps {
   children: React.ReactNode
 }
@@ -18,7 +18,7 @@ const Layout = ({
         <div className="">
           <Logo width={"36px"} height={"36px"} className="inline"/> Translator
         </div>
-        <div className="">
+        <div className="flex items-center">
           <Link href="/" className="mr-5">
           🏠 Wordings Properties
           </Link>
@@ -31,6 +31,8 @@ const Layout = ({
           {/* <Link href="/csv" className="mr-5">
             🚧 CSV Loader (in progress)
           </Link> */}
+          <User/>
+
         </div>
       </nav>
       {children}

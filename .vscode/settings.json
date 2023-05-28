@@ -15,6 +15,7 @@
         "parens",
         "shixin",
         "singleline",
+        "supabase",
         "verifyzoom",
         "zoomverify"
     ]

@@ -30,9 +30,8 @@
   
     "import/resolver": {
       "typescript": {
-        "alwaysTryTypes": true // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-        // use a glob pattern
-        // "project": "packages/*/tsconfig.json"
+        "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        "project": "packages/*/tsconfig.json"
       }
     },
     "react": {
@@ -192,13 +191,13 @@
           }
         }
       ],
-      "@typescript-eslint/explicit-function-return-type": [
-        "error",
-        {
-          "allowExpressions": true,
-          "allowTypedFunctionExpressions": true
-        }
-      ],
+      // "@typescript-eslint/explicit-function-return-type": [
+      //   "error",
+      //   {
+      //     "allowExpressions": true,
+      //     "allowTypedFunctionExpressions": true
+      //   }
+      // ],
       "@typescript-eslint/indent": [
         "error",
         2,

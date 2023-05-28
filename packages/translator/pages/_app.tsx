@@ -1,4 +1,6 @@
 import type { AppProps } from "next/app";
+
+import { SessionProvider as AuthProvider } from "next-auth/react";
 import "@/styles/globals.css";
 
 import { FC } from "react";
@@ -10,7 +12,7 @@ const Noop: FC = ({ children }: any) => <>{children}</>;
 function App({ Component, pageProps }: AppProps): JSX.Element {
   const Layout = (Component as any).Layout || Noop;
   return (
-    <>
+    <AuthProvider session={pageProps.session}>
       <Head>
         <title>Translator</title>
         <meta
@@ -26,7 +28,8 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
           <Component {...pageProps} />
         </Layout>
       </main>
-    </>
+    </AuthProvider>
+
   );
 }
 
