@@ -1,18 +1,18 @@
-import { NextApiHandler } from "next";
-import { useSession } from "next-auth/react";
+// import { NextApiHandler } from "next";
+// import { useSession } from "next-auth/react";
 
-const secretHandler: NextApiHandler = async (req, res) => {
-  const session = await useSession({ req });
-  if (session) {
-    res.end(
-      `Welcome to the mega secret VIP club, ${
-        session.user.email ?? session.user.name
-      }`
-    );
-  } else {
-    res.statusCode = 403;
-    res.end("Hold on, you are not allowed in here!");
-  }
-};
+// const secretHandler: NextApiHandler = async (req, res) => {
+//   const session = await useSession({ req });
+//   if (session) {
+//     res.end(
+//       `Welcome to the mega secret VIP club, ${
+//         session.user.email ?? session.user.name
+//       }`
+//     );
+//   } else {
+//     res.statusCode = 403;
+//     res.end("Hold on, you are not allowed in here!");
+//   }
+// };
 
-export default secretHandler;
+// export default secretHandler;
