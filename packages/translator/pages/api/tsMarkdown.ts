@@ -1,10 +1,10 @@
-import { OpenAI } from "langchain/llms/openai";
-import { LLMChain } from "langchain/chains";
 import { CallbackManager } from "langchain/callbacks";
+import { LLMChain } from "langchain/chains";
+import { OpenAI } from "langchain/llms/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 import {
-  PromptTemplate,
+  PromptTemplate
 } from "langchain/prompts";
 import { NextResponse } from "next/server";
 
@@ -32,10 +32,10 @@ const handler = async (req: Request): Promise<Response> => {
           await writer.ready;
           await writer.write(encoder.encode(`${curToken}`));
         },
-        handleLLMEnd: async() => {
+        handleLLMEnd: async () => {
           // console.log('====================handleLLMEnd====================');
         },
-        handleLLMError: async(error: any) => {
+        handleLLMError: async (error: any) => {
           console.log("handleLLMError", error);
         },
       }),
@@ -65,7 +65,7 @@ const handler = async (req: Request): Promise<Response> => {
         });
       });
     };
-    const translateData = async ():Promise<void> => {
+    const translateData = async (): Promise<void> => {
       for (let i = 0; i < splitChunks.length; i++) {
         await callChain(splitChunks[i]);
         if (i === splitChunks.length - 1) {
