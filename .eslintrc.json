@@ -1,6 +1,7 @@
 {
   "extends": [
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:prettier/recommended"
   ],
   "env": {
     "node": true,
@@ -55,14 +56,17 @@
       "plugin:import/typescript"
     ],
     "plugins": [
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "prettier"
     ],
     "rules": {
-      "import/no-unresolved": "warn",
+  
+      "prettier/prettier": "warn",
+      "import/no-unresolved": "off",
       "prefer-const": "error",
       "no-trailing-spaces": "error",
       "no-var": "error",
-      "no-console": "warn",
+      "no-console": "off",
       "quote-props": ["error", "as-needed"],
       "no-multiple-empty-lines" : ["error", { "max": 1, "maxEOF": 1 }],
       "max-len": [
@@ -79,13 +83,13 @@
       //   "error",
       //   "always"
       // ],
-      "quotes": [
-        "error",
-        "double",
-        {
-          "avoidEscape": true
-        }
-      ],
+      // "quotes": [
+      //   "error",
+      //   "double",
+      //   {
+      //     "avoidEscape": true
+      //   }
+      // ],
       "keyword-spacing": [
         "error",
         {
@@ -98,10 +102,6 @@
         {
           "allowAllPropertiesOnSameLine": true
         }
-      ],
-      "function-paren-newline": [
-        "error",
-        "consistent"
       ],
       "object-curly-spacing": [
         "error",
@@ -156,7 +156,7 @@
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/no-unused-vars": [
-        "warn",
+        "off",
         {
           "argsIgnorePattern": "^_"
         }
@@ -180,18 +180,18 @@
         }
       ],
       "@typescript-eslint/prefer-interface": "off",
-      "@typescript-eslint/member-delimiter-style": [
-        "error",
-        {
-          "multiline": {
-            "delimiter": "comma",
-            "requireLast": false
-          },
-          "singleline": {
-            "delimiter": "comma"
-          }
-        }
-      ],
+      // "@typescript-eslint/member-delimiter-style": [
+      //   "error",
+      //   {
+      //     "multiline": {
+      //       "delimiter": "comma",
+      //       "requireLast": false
+      //     },
+      //     "singleline": {
+      //       "delimiter": "comma"
+      //     }
+      //   }
+      // ],
       // "@typescript-eslint/explicit-function-return-type": [
       //   "error",
       //   {
@@ -199,13 +199,6 @@
       //     "allowTypedFunctionExpressions": true
       //   }
       // ],
-      "@typescript-eslint/indent": [
-        "error",
-        2,
-        {
-          "SwitchCase": 1
-        }
-      ],
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-use-before-define": [
         "error",
@@ -214,7 +207,7 @@
         }
       ],
       "@typescript-eslint/no-explicit-any": [
-        "warn",
+        "off",
         {
           "ignoreRestArgs": true
         }

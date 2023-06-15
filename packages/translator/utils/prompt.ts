@@ -1,4 +1,4 @@
-import { oneLine } from "common-tags";
+import { oneLine } from 'common-tags';
 export const TranslatePropertiesPrompt = oneLine`
     You are an expert translator in all languages. 
     Translate the wordings from {inputLanguage} to {outputLanguage}.

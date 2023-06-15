@@ -35,4 +35,3 @@ As an open source project in a rapidly developing field, we are extremely open t
 
 Check out [our contributing guidelines](CONTRIBUTING.md) for instructions on how to contribute.
 `;
-
