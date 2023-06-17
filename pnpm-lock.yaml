@@ -118,6 +118,7 @@ importers:
       '@types/common-tags': ^1.8.1
       '@types/cors': ^2.8.13
       '@types/file-saver': ^2.0.5
+      '@types/js-yaml': ^4.0.5
       '@types/node': 18.15.11
       '@types/nodemailer': ^6.4.8
       '@types/react': 18.0.31
@@ -137,6 +138,7 @@ importers:
       eventsource-parser: ^1.0.0
       file-saver: ^2.0.5
       handlebars: ^4.7.7
+      js-yaml: ^4.1.0
       jszip: ^3.10.1
       langchain: ^0.0.66
       lucide-react: ^0.221.0
@@ -184,6 +186,7 @@ importers:
       eventsource-parser: 1.0.0
       file-saver: 2.0.5
       handlebars: 4.7.7
+      js-yaml: 4.1.0
       jszip: 3.10.1
       langchain: 0.0.66_r3gkvssv2zdfxym6k2bu33pzk4
       lucide-react: 0.221.0_react@18.2.0
@@ -199,6 +202,7 @@ importers:
     devDependencies:
       '@types/cors': 2.8.13
       '@types/file-saver': 2.0.5
+      '@types/js-yaml': 4.0.5
       '@types/node': 18.15.11
       '@types/nodemailer': 6.4.8
       '@types/react': 18.0.31
@@ -1871,6 +1875,10 @@ packages:
 
   /@types/file-saver/2.0.5:
     resolution: {integrity: sha512-zv9kNf3keYegP5oThGLaPk8E081DFDuwfqjtiTzm6PoxChdJ1raSuADf2YGCVIyrSynLrgc8JWv296s7Q7pQSQ==}
+    dev: true
+
+  /@types/js-yaml/4.0.5:
+    resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
     dev: true
 
   /@types/json-schema/7.0.11:

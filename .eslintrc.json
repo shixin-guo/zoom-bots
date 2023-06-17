@@ -66,7 +66,7 @@
       "prefer-const": "error",
       "no-trailing-spaces": "error",
       "no-var": "error",
-      "no-console": "off",
+      "no-console": "warn",
       "quote-props": ["error", "as-needed"],
       "no-multiple-empty-lines" : ["error", { "max": 1, "maxEOF": 1 }],
       "max-len": [
@@ -156,12 +156,12 @@
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/no-unused-vars": [
-        "off",
+        "warn",
         {
           "argsIgnorePattern": "^_"
         }
       ],
-      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-var-requires": "warn",
       // `eslint-plugin-import`
       // https://github.com/benmosher/eslint-plugin-import
       "import/order": [
@@ -199,7 +199,7 @@
       //     "allowTypedFunctionExpressions": true
       //   }
       // ],
-      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-empty-function": "warn",
       "@typescript-eslint/no-use-before-define": [
         "error",
         {
@@ -207,7 +207,7 @@
         }
       ],
       "@typescript-eslint/no-explicit-any": [
-        "off",
+        "warn",
         {
           "ignoreRestArgs": true
         }

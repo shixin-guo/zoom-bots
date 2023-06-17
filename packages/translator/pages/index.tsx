@@ -17,7 +17,7 @@ import {
 } from '@/components/LanguageSelect';
 import { Upload } from '@/components/Upload';
 import { TranslateBody } from '@/types/types';
-import { getFileNameWithoutExtension } from '@/utils/fileUtils';
+import { getFileNameAndType } from '@/utils/fileUtils';
 
 const testCode = `
 download_video = Download Video (MP4)
@@ -121,7 +121,10 @@ export default function Home(): JSX.Element {
   const toggleMask2 = useCallback((visible: boolean) => {
     setMaskVisible2((prevVisible) => visible ?? !prevVisible);
   }, []);
-  const uploadRef = useRef('');
+  const uploadRef = useRef({
+    name: '',
+    type: '',
+  });
 
   const translatedContent = useRef<{
     [key: string]: string;
@@ -251,7 +254,7 @@ export default function Home(): JSX.Element {
     const zip = new JSZip();
     Object.keys(translatedContent.current).map((shortKey) => {
       if (translatedContent.current[shortKey]) {
-        const fileNamePrefix = uploadRef.current || 'i18n';
+        const fileNamePrefix = uploadRef.current.name || 'i18n';
         const filename = `${fileNamePrefix}_${shortKey}.properties`;
         zip.file(filename, translatedContent.current[shortKey]);
       }
@@ -317,11 +320,10 @@ export default function Home(): JSX.Element {
                   <Upload
                     className="w-100 rounded-lg pb-5 pt-6"
                     onSuccess={async (files) => {
+                      console.log(files);
                       const input = await files[0].text();
                       setInputCode(input);
-                      uploadRef.current = getFileNameWithoutExtension(
-                        files[0].name,
-                      );
+                      uploadRef.current = getFileNameAndType(files[0].name);
                     }}
                   />
                 </div>
@@ -337,7 +339,6 @@ export default function Home(): JSX.Element {
                 onClickCreateEmptyFile={() => {
                   setInputCode('');
                   toggleMask(false);
-                  toggleMask2(false);
                 }}
               />
             </div>
