@@ -18,6 +18,7 @@ import {
 import { Upload } from '@/components/Upload';
 import { TranslateBody } from '@/types/types';
 import { getFileNameAndType } from '@/utils/fileUtils';
+import * as ConvertUtils from '@/utils/convert';
 
 const testCode = `
 download_video = Download Video (MP4)
@@ -300,6 +301,12 @@ export default function Home(): JSX.Element {
     [outputLanguage, isSelectedAll],
   );
 
+  const handleUploadedFile = async (files: File[]) => {
+    const input = await files[0].text();
+    setInputCode(input);
+    uploadRef.current = getFileNameAndType(files[0].name);
+    toggleMask(false);
+  };
   return (
     <>
       <div className="flex h-full min-h-screen flex-col items-center border-t border-gray-200 bg-[url('https://tailwindui.com/img/beams-home@95.jpg')] px-4 pb-20 font-sans sm:px-10">
@@ -319,12 +326,7 @@ export default function Home(): JSX.Element {
                 <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-200 bg-opacity-50">
                   <Upload
                     className="w-100 rounded-lg pb-5 pt-6"
-                    onSuccess={async (files) => {
-                      console.log(files);
-                      const input = await files[0].text();
-                      setInputCode(input);
-                      uploadRef.current = getFileNameAndType(files[0].name);
-                    }}
+                    onSuccess={handleUploadedFile}
                   />
                 </div>
               )}

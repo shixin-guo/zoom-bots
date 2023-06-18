@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import copyToClipboard from '@/utils/copyToClipboard';
 import { CodeBlock } from '@/components/CodeBlock';
 import Layout from '@/components/Layout';
-import { MarkdownTemplate as testCode } from '@/test/mockData';
+import { MarkdownTemplate as testCode } from '@/test/mock';
 enum Languages {
   CN = '汉语',
   EN = 'English',

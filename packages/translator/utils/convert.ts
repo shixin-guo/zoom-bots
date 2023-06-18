@@ -4,12 +4,15 @@ enum FileType {
   JSON = 'json',
   PROPERTIES = 'properties',
   YAML = 'yaml',
+  YML = 'yml',
+  TS = 'ts',
+  JS = 'js',
 }
-export function jsonToProperties(json: any): string {
+function json2Properties(json: any): string {
   let result = '';
   for (const key in json) {
     if (typeof json[key] === 'object') {
-      const subKeys = jsonToProperties(json[key]).split('\n');
+      const subKeys = json2Properties(json[key]).split('\n');
       subKeys.forEach((subKey) => {
         if (subKey.trim()) {
           result += key + '.' + subKey + '\n';
@@ -22,7 +25,7 @@ export function jsonToProperties(json: any): string {
   return result;
 }
 
-export function propertiesToJson(properties: string): any {
+function properties2Json(properties: string): any {
   const result: any = {};
   const lines = properties.split('\n');
   lines.forEach((line) => {
@@ -51,10 +54,22 @@ export function propertiesToJson(properties: string): any {
   });
   return result;
 }
-export function yamlToJson(yamlContent: string) {
-  return yaml.load(yamlContent);
+function yaml2Properties(yamlContent: string) {
+  console.log(yamlContent);
+  const YamlObject = yaml.load(yamlContent);
+  console.log(YamlObject);
+  return json2Properties(YamlObject);
 }
 
-export function jsonToYAML(json: string) {
-  return yaml.dump(JSON.parse(json));
+function properties2YAML(properties: string) {
+  const tempJson = properties2Json(properties);
+  return yaml.dump(tempJson);
 }
+// todo how to optimize TS type export
+export {
+  FileType,
+  json2Properties,
+  properties2Json,
+  yaml2Properties,
+  properties2YAML,
+};
