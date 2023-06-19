@@ -9,23 +9,24 @@ enum FileType {
   JS = 'js',
 }
 function json2Properties(json: any): string {
+  const ObjectJson = json;
   let result = '';
-  for (const key in json) {
-    if (typeof json[key] === 'object') {
-      const subKeys = json2Properties(json[key]).split('\n');
+  for (const key in ObjectJson) {
+    if (typeof ObjectJson[key] === 'object') {
+      const subKeys = json2Properties(ObjectJson[key]).split('\n');
       subKeys.forEach((subKey) => {
         if (subKey.trim()) {
           result += key + '.' + subKey + '\n';
         }
       });
     } else {
-      result += key + '=' + json[key] + '\n';
+      result += key + '=' + ObjectJson[key] + '\n';
     }
   }
   return result;
 }
 
-function properties2Json(properties: string): any {
+function properties2Json(properties: string): JSON {
   const result: any = {};
   const lines = properties.split('\n');
   lines.forEach((line) => {
@@ -55,9 +56,7 @@ function properties2Json(properties: string): any {
   return result;
 }
 function yaml2Properties(yamlContent: string) {
-  console.log(yamlContent);
   const YamlObject = yaml.load(yamlContent);
-  console.log(YamlObject);
   return json2Properties(YamlObject);
 }
 
