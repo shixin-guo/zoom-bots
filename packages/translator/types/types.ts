@@ -10,3 +10,4 @@ export interface TranslateBody {
 export interface TranslateResponse {
   code: string;
 }
+

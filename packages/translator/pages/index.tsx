@@ -1,6 +1,6 @@
-import { getSession } from 'next-auth/react';
+// import { getSession } from 'next-auth/react';
 // import { GetStaticPropsContext } from "next";
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import * as Checkbox from '@radix-ui/react-checkbox';
@@ -8,6 +8,7 @@ import * as Switch from '@radix-ui/react-switch';
 import { CheckIcon } from '@radix-ui/react-icons';
 
 import copyToClipboard from '@/utils/copyToClipboard';
+import { todayDate } from '@/utils/date';
 import { CodeBlock } from '@/components/CodeBlock';
 import Layout from '@/components/Layout';
 import {
@@ -16,6 +17,13 @@ import {
   languages,
 } from '@/components/LanguageSelect';
 import { Upload } from '@/components/Upload';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
 import { TranslateBody } from '@/types/types';
 import { getFileNameAndType } from '@/utils/fileUtils';
 import * as ConvertUtils from '@/utils/convert';
@@ -33,13 +41,7 @@ transcript_title = {0} Mentions in {1}'s Conversations
 chart_title = {0} Mentioned in {1}
 chart_sub_title = The percentage of conversations hosted by {0} where this indicator is mentioned.
 `;
-const todayDate = (): string => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
+
 interface handleTranslateProps {
   originLang: LanguageShortKey;
   exceptLang: LanguageShortKey;
@@ -70,7 +72,7 @@ const StartButton: React.FC<{
               bg-blue-500 px-4 py-2 font-bold
                 text-slate-50 hover:bg-blue-600 active:bg-blue-700"
       onClick={onClick}
-      disabled={loading}
+      disabled={disabled}
     >
       {loading ? 'Translating...' : 'Start Translate'}
     </button>
@@ -80,21 +82,29 @@ const StartButton: React.FC<{
 const DownloadButton: React.FC<{
   onClick: () => void;
   disabled?: boolean;
-  loading?: boolean;
-}> = ({ onClick, disabled, loading }) => {
+  translatedLangs: LanguageShortKey[];
+}> = ({ onClick, disabled, translatedLangs }) => {
   return (
-    <button
-      className="float-right cursor-pointer
-                      rounded-md
-                      bg-emerald-500 px-2 py-2
-                      text-slate-50 hover:bg-emerald-600
-                      active:bg-emerald-700
-                      disabled:cursor-not-allowed disabled:bg-gray-300"
-      onClick={onClick}
-      disabled={disabled}
-    >
-      Download Translated Files
-    </button>
+    <TooltipProvider>
+      <Tooltip>
+        {/* todo why react server render wrong when don't have asChild */}
+        <TooltipTrigger asChild>
+          <button
+            className="float-right cursor-pointer rounded-md bg-emerald-500 px-2 py-2 text-slate-50 hover:bg-emerald-600 active:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+            onClick={onClick}
+            disabled={disabled}
+          >
+            Download Translated Files
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <span>
+            {translatedLangs.length > 0 &&
+              `[ ${translatedLangs.join(', ')} ] translated completed.`}
+          </span>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 export default function Home(): JSX.Element {
@@ -112,7 +122,7 @@ export default function Home(): JSX.Element {
   const [inputCode, setInputCode] = useState<string>('');
   const [outputCode, setOutputCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [hasTranslated, setHasTranslated] = useState<boolean>(false);
+  const [finished, setFinished] = useState<boolean>(false);
   const [isMaskVisible, setMaskVisible] = useState(true);
   const [isMaskVisible2, setMaskVisible2] = useState(true);
 
@@ -122,12 +132,13 @@ export default function Home(): JSX.Element {
   const toggleMask2 = useCallback((visible: boolean) => {
     setMaskVisible2((prevVisible) => visible ?? !prevVisible);
   }, []);
+
   const uploadRef = useRef({
     name: '',
     type: '',
   });
 
-  const translatedContent = useRef<{
+  const translatedContentRef = useRef<{
     [key: string]: string;
   }>({});
 
@@ -213,29 +224,88 @@ export default function Home(): JSX.Element {
       if (exceptLang === outputLanguage) {
         setOutputCode((prevCode) => prevCode + chunkValue);
       }
-      if (!translatedContent.current[exceptLang]) {
-        translatedContent.current[exceptLang] = chunkValue;
+      if (!translatedContentRef.current[exceptLang]) {
+        translatedContentRef.current[exceptLang] = chunkValue;
       } else {
-        translatedContent.current[exceptLang] += chunkValue;
+        translatedContentRef.current[exceptLang] += chunkValue;
       }
     }
     setTranslatedLangs((prevLangs) => [...prevLangs, exceptLang]);
   };
+  const convertCode2Properties = (
+    code: string,
+    type: ConvertUtils.FileType,
+  ): string => {
+    let properties = '';
+    switch (type) {
+      case ConvertUtils.FileType.YAML:
+      case ConvertUtils.FileType.YML:
+        properties = ConvertUtils.yaml2Properties(code);
+        break;
+      case ConvertUtils.FileType.JSON:
+        properties = ConvertUtils.json2Properties(JSON.parse(code));
+        break;
+      // case 'md' |"mdx":
+      // todo
+
+      default:
+        properties = code;
+    }
+    return properties;
+  };
+  const convertProperties2Code = (
+    properties: string,
+    type: ConvertUtils.FileType,
+  ): string => {
+    let code = '';
+    switch (type) {
+      case ConvertUtils.FileType.YAML:
+      case ConvertUtils.FileType.YML:
+        code = ConvertUtils.properties2YAML(properties);
+        break;
+      case ConvertUtils.FileType.JSON:
+        // todo
+        code = JSON.stringify(
+          ConvertUtils.properties2Json(properties),
+          null,
+          2,
+        );
+        break;
+      // case 'md' |"mdx":
+      // todo
+
+      default:
+        code = properties;
+    }
+    return code;
+  };
 
   const handleTranslateMultiLanguages = async (
-    langs: LanguageShortKey[],
+    selectedLangs: LanguageShortKey[],
   ): Promise<void> => {
-    translatedContent.current = {};
+    translatedContentRef.current = {};
     setLoading(true);
     setTranslatedLangs([]);
+
     Promise.all(
-      langs
+      selectedLangs
         .filter((l) => l !== inputLanguage)
-        .map(async (lang) => {
+        .map(async (selectedLang) => {
+          if (
+            !Object.values(ConvertUtils.FileType).includes(
+              uploadRef.current.type as ConvertUtils.FileType,
+            )
+          ) {
+            alert('Please upload a valid file.');
+            return;
+          }
           await handleTranslate({
             originLang: inputLanguage,
-            exceptLang: lang,
-            content: inputCode,
+            exceptLang: selectedLang,
+            content: convertCode2Properties(
+              inputCode,
+              uploadRef.current.type as ConvertUtils.FileType,
+            ),
           });
         }),
     )
@@ -246,18 +316,18 @@ export default function Home(): JSX.Element {
         alert(err);
       })
       .finally(() => {
-        setHasTranslated(true);
+        setFinished(true);
         setLoading(false);
       });
   };
 
   const handleDownloadZip = async (): Promise<void> => {
     const zip = new JSZip();
-    Object.keys(translatedContent.current).map((shortKey) => {
-      if (translatedContent.current[shortKey]) {
+    Object.keys(translatedContentRef.current).map((shortKey) => {
+      if (translatedContentRef.current[shortKey]) {
         const fileNamePrefix = uploadRef.current.name || 'i18n';
         const filename = `${fileNamePrefix}_${shortKey}.properties`;
-        zip.file(filename, translatedContent.current[shortKey]);
+        zip.file(filename, translatedContentRef.current[shortKey]);
       }
     });
     zip.generateAsync({ type: 'blob' }).then(function (blob) {
@@ -267,7 +337,6 @@ export default function Home(): JSX.Element {
   const handleInputLanguageChange = useCallback(
     (lang: LanguageShortKey) => {
       setInputLanguage(lang);
-      setHasTranslated(false);
       setSelectedLangs((prev) => {
         if (isSelectedAll) {
           return prev;
@@ -296,7 +365,7 @@ export default function Home(): JSX.Element {
           lang,
         ];
       });
-      setOutputCode(translatedContent.current[lang]);
+      setOutputCode(translatedContentRef.current[lang]);
     },
     [outputLanguage, isSelectedAll],
   );
@@ -307,6 +376,22 @@ export default function Home(): JSX.Element {
     uploadRef.current = getFileNameAndType(files[0].name);
     toggleMask(false);
   };
+
+  useEffect(() => {
+    if (finished) {
+      Object.keys(translatedContentRef.current).map((shortKey) => {
+        if (translatedContentRef.current[shortKey]) {
+          translatedContentRef.current[shortKey] = convertProperties2Code(
+            translatedContentRef.current[shortKey],
+            uploadRef.current.type as ConvertUtils.FileType,
+          );
+        }
+      });
+      setOutputCode(translatedContentRef.current[outputLanguage]);
+      toggleMask2(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [finished, toggleMask2]);
   return (
     <>
       <div className="flex h-full min-h-screen flex-col items-center border-t border-gray-200 bg-[url('https://tailwindui.com/img/beams-home@95.jpg')] px-4 pb-20 font-sans sm:px-10">
@@ -335,7 +420,6 @@ export default function Home(): JSX.Element {
                 editable={!loading}
                 onChange={(value) => {
                   setInputCode(value);
-                  setHasTranslated(false);
                 }}
                 onClickTestCode={() => setInputCode(testCode)}
                 onClickCreateEmptyFile={() => {
@@ -350,16 +434,11 @@ export default function Home(): JSX.Element {
               <span className="text-[20px] text-base font-bold leading-7">
                 Translation
               </span>
-              {outputCode?.length === 0 ? (
-                <StartButton
-                  onClick={() => handleTranslateMultiLanguages(selectedLangs)}
-                  loading={loading}
-                />
-              ) : (
+              {finished && (
                 <DownloadButton
                   onClick={handleDownloadZip}
-                  loading={loading}
                   disabled={loading || outputCode?.length === 0}
+                  translatedLangs={translatedLangs}
                 />
               )}
             </div>
@@ -375,28 +454,14 @@ export default function Home(): JSX.Element {
               {isMaskVisible2 && (
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-200 bg-opacity-50">
                   <div className="mt-2 flex items-center space-x-2 ">
-                    <StartButton
-                      onClick={() =>
-                        handleTranslateMultiLanguages(selectedLangs)
-                      }
-                      loading={loading}
-                    />
-                  </div>
-                  <div className="mt-2 text-center text-xs">
-                    {loading
-                      ? `Please wait... translating : ${selectedLangs
-                          .filter((l) => {
-                            return (
-                              !translatedLangs.includes(l) &&
-                              l !== inputLanguage
-                            );
-                          })
-                          .join(', ')}`
-                      : hasTranslated
-                      ? `[  ${translatedLangs.join(
-                          ', ',
-                        )}  ] translated completed. and [ ${outputLanguage} ] copied to clipboard!`
-                      : 'Enter some code and click "Start Translate"'}
+                    {
+                      <StartButton
+                        onClick={() =>
+                          handleTranslateMultiLanguages(selectedLangs)
+                        }
+                        loading={loading}
+                      />
+                    }
                   </div>
                   <>
                     <div

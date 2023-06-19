@@ -15,4 +15,3 @@ export function getFileNameAndType(filename: string): {
   const type = filename.slice(dotIndex + 1);
   return { name, type };
 }
-
