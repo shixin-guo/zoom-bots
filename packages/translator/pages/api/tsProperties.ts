@@ -27,6 +27,7 @@ const handler = async (req: Request): Promise<Response> => {
       callbackManager: CallbackManager.fromHandlers({
         handleLLMNewToken: async (curToken: string) => {
           await writer.ready;
+          // add a test case and comment
           if (curToken !== '\n' || previousToken !== '\n') {
             await writer.write(encoder.encode(`${curToken}`));
           }

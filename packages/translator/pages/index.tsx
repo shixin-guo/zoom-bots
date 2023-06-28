@@ -47,20 +47,7 @@ interface handleTranslateProps {
   exceptLang: LanguageShortKey;
   content: string;
 }
-// interface StaticProps {
-//   props: {
-//     categories: string
-//   }
-// }
-// export async function getStaticProps({
-//   locale,
-//   locales,
-// }: GetStaticPropsContext):Promise<StaticProps> {
-//   const config = { locale, locales };
-//   return {
-//     props: { categories: "index" },
-//   };
-// }
+
 const StartButton: React.FC<{
   onClick: () => void;
   disabled?: boolean;
