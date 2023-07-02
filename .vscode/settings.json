@@ -9,6 +9,7 @@
         "extensionless",
         "GPTAPI",
         "langchain",
+        "llms",
         "notionhq",
         "OPENAI",
         "paren",
