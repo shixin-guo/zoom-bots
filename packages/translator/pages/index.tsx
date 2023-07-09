@@ -1,21 +1,19 @@
-// import { getSession } from 'next-auth/react';
-// import { GetStaticPropsContext } from "next";
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
-import * as Checkbox from '@radix-ui/react-checkbox';
-import * as Switch from '@radix-ui/react-switch';
-import { CheckIcon } from '@radix-ui/react-icons';
+
+import { Cross1Icon } from '@radix-ui/react-icons';
+
+import { Checkbox } from '@/components/ui/checkbox';
+
+import { Switch } from '@/components/ui/switch';
 
 import copyToClipboard from '@/utils/copyToClipboard';
 import { todayDate } from '@/utils/date';
 import { CodeBlock } from '@/components/CodeBlock';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
-import {
-  LanguageSelect,
-  LanguageShortKey,
-  languages,
-} from '@/components/LanguageSelect';
+import { LanguageShortKey, languages } from '@/components/LanguageSelect';
 import { Upload } from '@/components/Upload';
 import {
   Tooltip,
@@ -24,9 +22,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-import { TranslateBody } from '@/types/types';
 import { getFileNameAndType } from '@/utils/fileUtils';
 import * as ConvertUtils from '@/utils/convert';
+import { Button } from '@/components/ui/button';
 
 const testCode = `
 download_video = Download Video (MP4)
@@ -42,27 +40,15 @@ chart_title = {0} Mentioned in {1}
 chart_sub_title = The percentage of conversations hosted by {0} where this indicator is mentioned.
 `;
 
-interface handleTranslateProps {
-  originLang: LanguageShortKey;
-  exceptLang: LanguageShortKey;
-  content: string;
-}
-
 const StartButton: React.FC<{
   onClick: () => void;
   disabled?: boolean;
   loading?: boolean;
 }> = ({ onClick, disabled, loading }) => {
   return (
-    <button
-      className="w-[160px] cursor-pointer rounded-md
-              bg-blue-500 px-4 py-2 font-bold
-                text-slate-50 hover:bg-blue-600 active:bg-blue-700"
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {loading ? 'Translating...' : 'Start Translate'}
-    </button>
+    <Button onClick={onClick} disabled={disabled} className="my-2">
+      {loading ? 'Translating...' : 'Start'}
+    </Button>
   );
 };
 
@@ -81,7 +67,7 @@ const DownloadButton: React.FC<{
             onClick={onClick}
             disabled={disabled}
           >
-            Download Translated Files
+            Export
           </button>
         </TooltipTrigger>
         <TooltipContent>
@@ -94,11 +80,10 @@ const DownloadButton: React.FC<{
     </TooltipProvider>
   );
 };
+
 export default function Home(): JSX.Element {
-  const [inputLanguage, setInputLanguage] = useState<LanguageShortKey>('en-US');
-  const [outputLanguage, setOutputLanguage] =
-    useState<LanguageShortKey>('zh-CN');
-  const [enableMultiLang, setEnableMultiLang] = useState<boolean>(false);
+  const [inputLanguage] = useState<LanguageShortKey>('en-US');
+  const [outputLanguage] = useState<LanguageShortKey>('zh-CN');
   const [selectedLangs, setSelectedLangs] = useState<LanguageShortKey[]>([
     inputLanguage,
     outputLanguage,
@@ -128,7 +113,7 @@ export default function Home(): JSX.Element {
   const translatedContentRef = useRef<{
     [key: string]: string;
   }>({});
-
+  const tempInput = useRef('');
   const isSelectedAll = useMemo(() => {
     return selectedLangs.length === Object.keys(languages).length;
   }, [selectedLangs]);
@@ -154,14 +139,14 @@ export default function Home(): JSX.Element {
   }, [outputLanguage, inputLanguage, selectedLangs, isSelectedAll]);
 
   const handleTranslate = async ({
-    originLang,
     exceptLang,
     content,
-  }: handleTranslateProps): Promise<void> => {
-    if (originLang === exceptLang) {
-      alert('Please select different languages.');
-      return;
-    }
+  }: {
+    exceptLang: LanguageShortKey;
+    content: {
+      [key: string]: string;
+    };
+  }): Promise<void> => {
     if (!content) {
       alert('Please enter some code.');
       return;
@@ -171,19 +156,16 @@ export default function Home(): JSX.Element {
 
     const controller = new AbortController();
 
-    const body: TranslateBody = {
-      inputLanguage: originLang,
-      outputLanguage: exceptLang,
-      inputCode: content,
-    };
-
-    const response = await fetch('/api/tsProperties', {
+    const response = await fetch('/api/tsPropertiesProd', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       signal: controller.signal,
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        outputLanguage: exceptLang,
+        inputCode: content,
+      }),
     });
 
     if (!response.ok) {
@@ -193,7 +175,6 @@ export default function Home(): JSX.Element {
     }
 
     const data = response.body;
-
     if (!data) {
       // setLoading(false);
       alert('Something went wrong.');
@@ -219,54 +200,6 @@ export default function Home(): JSX.Element {
     }
     setTranslatedLangs((prevLangs) => [...prevLangs, exceptLang]);
   };
-  const convertCode2Properties = (
-    code: string,
-    type: ConvertUtils.FileType,
-  ): string => {
-    let properties = '';
-    switch (type) {
-      case ConvertUtils.FileType.YAML:
-      case ConvertUtils.FileType.YML:
-        properties = ConvertUtils.yaml2Properties(code);
-        break;
-      case ConvertUtils.FileType.JSON:
-        properties = ConvertUtils.json2Properties(JSON.parse(code));
-        break;
-      // case 'md' |"mdx":
-      // todo
-
-      default:
-        properties = code;
-    }
-    return properties;
-  };
-  const convertProperties2Code = (
-    properties: string,
-    type: ConvertUtils.FileType,
-  ): string => {
-    let code = '';
-    switch (type) {
-      case ConvertUtils.FileType.YAML:
-      case ConvertUtils.FileType.YML:
-        code = ConvertUtils.properties2YAML(properties);
-        break;
-      case ConvertUtils.FileType.JSON:
-        // todo
-        code = JSON.stringify(
-          ConvertUtils.properties2Json(properties),
-          null,
-          2,
-        );
-        break;
-      // case 'md' |"mdx":
-      // todo
-
-      default:
-        code = properties;
-    }
-    return code;
-  };
-
   const handleTranslateMultiLanguages = async (
     selectedLangs: LanguageShortKey[],
   ): Promise<void> => {
@@ -279,20 +212,23 @@ export default function Home(): JSX.Element {
         .filter((l) => l !== inputLanguage)
         .map(async (selectedLang) => {
           if (
-            !Object.values(ConvertUtils.FileType).includes(
-              uploadRef.current.type as ConvertUtils.FileType,
+            !Object.values(ConvertUtils.SupportedFileType).includes(
+              uploadRef.current.type as ConvertUtils.SupportedFileType,
             )
           ) {
             alert('Please upload a valid file.');
             return;
           }
+          const inputCodeProps = ConvertUtils.code2Props(
+            inputCode,
+            uploadRef.current.type as ConvertUtils.SupportedFileType,
+          );
+          tempInput.current = inputCodeProps;
+          const inputCodePropsValue =
+            ConvertUtils.getPropsValue(inputCodeProps);
           await handleTranslate({
-            originLang: inputLanguage,
             exceptLang: selectedLang,
-            content: convertCode2Properties(
-              inputCode,
-              uploadRef.current.type as ConvertUtils.FileType,
-            ),
+            content: inputCodePropsValue,
           });
         }),
     )
@@ -321,41 +257,41 @@ export default function Home(): JSX.Element {
       saveAs(blob, `i18n-${todayDate()}.zip`);
     });
   };
-  const handleInputLanguageChange = useCallback(
-    (lang: LanguageShortKey) => {
-      setInputLanguage(lang);
-      setSelectedLangs((prev) => {
-        if (isSelectedAll) {
-          return prev;
-        }
-        return prev.filter((key) => {
-          return key !== inputLanguage;
-        });
-      });
-      setInputCode('');
-      setOutputCode('');
-    },
-    [inputLanguage, isSelectedAll],
-  );
+  // const handleInputLanguageChange = useCallback(
+  //   (lang: LanguageShortKey) => {
+  //     setInputLanguage(lang);
+  //     setSelectedLangs((prev) => {
+  //       if (isSelectedAll) {
+  //         return prev;
+  //       }
+  //       return prev.filter((key) => {
+  //         return key !== inputLanguage;
+  //       });
+  //     });
+  //     setInputCode('');
+  //     setOutputCode('');
+  //   },
+  //   [inputLanguage, isSelectedAll],
+  // );
 
-  const handleOutputLanguageChange = useCallback(
-    (lang: LanguageShortKey) => {
-      setOutputLanguage(lang);
-      setSelectedLangs((prev) => {
-        if (isSelectedAll) {
-          return prev;
-        }
-        return [
-          ...prev.filter((key) => {
-            return key !== outputLanguage;
-          }),
-          lang,
-        ];
-      });
-      setOutputCode(translatedContentRef.current[lang]);
-    },
-    [outputLanguage, isSelectedAll],
-  );
+  // const handleOutputLanguageChange = useCallback(
+  //   (lang: LanguageShortKey) => {
+  //     setOutputLanguage(lang);
+  //     setSelectedLangs((prev) => {
+  //       if (isSelectedAll) {
+  //         return prev;
+  //       }
+  //       return [
+  //         ...prev.filter((key) => {
+  //           return key !== outputLanguage;
+  //         }),
+  //         lang,
+  //       ];
+  //     });
+  //     setOutputCode(translatedContentRef.current[lang]);
+  //   },
+  //   [outputLanguage, isSelectedAll],
+  // );
 
   const handleUploadedFile = async (files: File[]) => {
     const input = await files[0].text();
@@ -368,13 +304,15 @@ export default function Home(): JSX.Element {
     if (finished) {
       Object.keys(translatedContentRef.current).map((shortKey) => {
         if (translatedContentRef.current[shortKey]) {
-          translatedContentRef.current[shortKey] = convertProperties2Code(
-            translatedContentRef.current[shortKey],
-            uploadRef.current.type as ConvertUtils.FileType,
+          translatedContentRef.current[shortKey] = ConvertUtils.Props2Code(
+            ConvertUtils.json2Props(
+              ConvertUtils.matchRealKeys(tempInput.current, outputCode),
+            ),
+            uploadRef.current.type as ConvertUtils.SupportedFileType,
           );
         }
+        setOutputCode(translatedContentRef.current[outputLanguage]);
       });
-      setOutputCode(translatedContentRef.current[outputLanguage]);
       toggleMask2(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -387,34 +325,45 @@ export default function Home(): JSX.Element {
             <div className="flex h-16 items-center text-[20px] text-base font-bold leading-7">
               Original
             </div>
-
-            <LanguageSelect
-              language={inputLanguage}
-              disabled={loading}
-              onChange={handleInputLanguageChange}
-            />
-            <div className="relative">
-              {isMaskVisible && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-200 bg-opacity-50">
-                  <Upload
-                    className="w-100 rounded-lg pb-5 pt-6"
-                    onSuccess={handleUploadedFile}
+            <Tabs defaultValue="code">
+              <div className="flex items-center justify-between pb-3">
+                <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
+                  <TabsTrigger
+                    value="code"
+                    className="text-muted-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground relative rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                  >
+                    Code
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              <TabsContent value="code">
+                <div className="relative">
+                  {isMaskVisible && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-200 bg-opacity-50">
+                      <Upload onSuccess={handleUploadedFile} />
+                    </div>
+                  )}
+                  <CodeBlock
+                    code={inputCode}
+                    editable={!loading}
+                    onChange={(value) => {
+                      setInputCode(value);
+                    }}
+                    onClickTestCode={() => {
+                      setInputCode(testCode);
+                      uploadRef.current = {
+                        name: 'I18N',
+                        type: ConvertUtils.SupportedFileType.PROPERTIES,
+                      };
+                    }}
+                    onClickCreateEmptyFile={() => {
+                      setInputCode('');
+                      toggleMask(false);
+                    }}
                   />
                 </div>
-              )}
-              <CodeBlock
-                code={inputCode}
-                editable={!loading}
-                onChange={(value) => {
-                  setInputCode(value);
-                }}
-                onClickTestCode={() => setInputCode(testCode)}
-                onClickCreateEmptyFile={() => {
-                  setInputCode('');
-                  toggleMask(false);
-                }}
-              />
-            </div>
+              </TabsContent>
+            </Tabs>
           </div>
           <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">
             <div className="flex h-16 items-center justify-between">
@@ -422,139 +371,139 @@ export default function Home(): JSX.Element {
                 Translation
               </span>
               {finished && (
-                <DownloadButton
-                  onClick={handleDownloadZip}
-                  disabled={loading || outputCode?.length === 0}
-                  translatedLangs={translatedLangs}
-                />
+                <>
+                  <StartButton
+                    onClick={() => handleTranslateMultiLanguages(selectedLangs)}
+                    loading={loading}
+                  />
+                  <DownloadButton
+                    onClick={handleDownloadZip}
+                    disabled={loading || outputCode?.length === 0}
+                    translatedLangs={translatedLangs}
+                  />
+                </>
               )}
             </div>
 
             {/* <p className="mt-1 text-slate-400">* download as an zip file and files named look like: demo_en-US.properties</p> */}
-            <LanguageSelect
+            {/* <LanguageSelect
               language={outputLanguage}
               disabled={loading}
               onChange={handleOutputLanguageChange}
-            />
+            /> */}
 
-            <div className="relative">
-              {isMaskVisible2 && (
-                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-200 bg-opacity-50">
-                  <div className="mt-2 flex items-center space-x-2 ">
-                    {
-                      <StartButton
-                        onClick={() =>
-                          handleTranslateMultiLanguages(selectedLangs)
-                        }
-                        loading={loading}
-                      />
-                    }
-                  </div>
-                  <>
-                    <div
-                      className="mb-2 mt-2 flex items-center"
-                      style={{ display: 'flex', alignItems: 'center' }}
-                    >
-                      <label
-                        className="text-[15px] leading-none"
-                        htmlFor="airplane-mode"
-                      >
-                        Translate to multiple languages:
-                      </label>
-                      <Switch.Root
-                        className="relative ml-2 h-[25px] w-[42px] cursor-default rounded-full bg-slate-200 shadow-[0_2px_10px] outline-none data-[state=checked]:bg-blue-500"
-                        checked={enableMultiLang}
-                        onCheckedChange={(checked: boolean) => {
-                          setEnableMultiLang(checked);
-                        }}
-                      >
-                        <Switch.Thumb className="block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-white transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                      </Switch.Root>
-                    </div>
-                    {enableMultiLang && (
+            <Tabs defaultValue="preview">
+              <div className="flex items-center justify-between pb-3">
+                <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
+                  <TabsTrigger
+                    value="preview"
+                    className="text-muted-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground relative rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                  >
+                    Chinese
+                    <Cross1Icon className="ml-2" />
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="code"
+                    className="text-muted-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground relative rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                  >
+                    French
+                    <Cross1Icon className="ml-2" />
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              <TabsContent value="preview">
+                <div className="relative">
+                  {isMaskVisible2 && (
+                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-200 bg-opacity-50">
                       <>
-                        <div className="mb-5 flex flex-wrap items-center justify-center">
-                          {Object.values(multipleLanguagesWithStatus).map(
-                            (language) => {
-                              return (
-                                <div
-                                  className="justify-space-evenly mt-2 flex h-6 items-center"
-                                  key={language.shortKey}
-                                >
-                                  <Checkbox.Root
+                        <>
+                          <div className="mb-5 flex flex-wrap items-center justify-center">
+                            {Object.values(multipleLanguagesWithStatus).map(
+                              (language) => {
+                                return (
+                                  <div
+                                    className="justify-space-evenly mt-2 flex h-6 items-center"
                                     key={language.shortKey}
-                                    className="shadow-blackA7 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[6px] border-[1px] border-slate-400 bg-white outline-none data-[disabled]:cursor-not-allowed data-[disabled]:bg-[#9CA3AF]"
-                                    id="c1"
-                                    checked={language.checked}
-                                    disabled={language.disabled}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) {
-                                        setSelectedLangs((prev) => {
-                                          return [...prev, language.shortKey];
-                                        });
-                                      } else {
-                                        setSelectedLangs((prev) =>
-                                          prev.filter(
-                                            (key) => key !== language.shortKey,
-                                          ),
-                                        );
-                                      }
-                                    }}
                                   >
-                                    <Checkbox.Indicator className="text-[black]">
-                                      <CheckIcon />
-                                    </Checkbox.Indicator>
-                                  </Checkbox.Root>
-                                  <label
-                                    className="w-48 pl-[8px] text-[16px] leading-none"
-                                    htmlFor="c1"
-                                  >
-                                    {language.name}
-                                    <span className="text-sm ">
-                                      {' '}
-                                      ({language.shortKey})
-                                    </span>
-                                  </label>
-                                </div>
-                              );
-                            },
-                          )}
-                        </div>
-                        <div className="flex flex-wrap items-center justify-start">
-                          <Checkbox.Root
-                            className="shadow-blackA7 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[6px] border-[1px] border-slate-400 bg-white outline-none"
-                            defaultChecked={isSelectedAll}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                setSelectedLangs(
-                                  Object.keys(languages) as LanguageShortKey[],
+                                    <Checkbox
+                                      key={language.shortKey}
+                                      id="c1"
+                                      checked={language.checked}
+                                      disabled={language.disabled}
+                                      onCheckedChange={(checked) => {
+                                        if (checked) {
+                                          setSelectedLangs((prev) => {
+                                            return [...prev, language.shortKey];
+                                          });
+                                        } else {
+                                          setSelectedLangs((prev) =>
+                                            prev.filter(
+                                              (key) =>
+                                                key !== language.shortKey,
+                                            ),
+                                          );
+                                        }
+                                      }}
+                                    />
+                                    <label
+                                      className="w-48 pl-[8px] text-[16px] leading-none"
+                                      htmlFor="c1"
+                                    >
+                                      {language.name}
+                                      <span className="text-sm ">
+                                        {' '}
+                                        ({language.shortKey})
+                                      </span>
+                                    </label>
+                                  </div>
                                 );
-                              } else {
-                                setSelectedLangs([
-                                  inputLanguage,
-                                  outputLanguage,
-                                ]);
-                              }
-                            }}
-                          >
-                            <Checkbox.Indicator className="text-[black]">
-                              <CheckIcon />
-                            </Checkbox.Indicator>
-                          </Checkbox.Root>
-                          <label
-                            className="pl-[8px] text-[16px] leading-none "
-                            htmlFor="c1"
-                          >
-                            Select All
-                          </label>
-                        </div>
+                              },
+                            )}
+                          </div>
+                          <div className="flex flex-wrap items-center justify-start">
+                            <Switch
+                              defaultChecked={isSelectedAll}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedLangs(
+                                    Object.keys(
+                                      languages,
+                                    ) as LanguageShortKey[],
+                                  );
+                                } else {
+                                  setSelectedLangs([
+                                    inputLanguage,
+                                    outputLanguage,
+                                  ]);
+                                }
+                              }}
+                            />
+
+                            <label
+                              className="pl-[8px] text-[16px] leading-none "
+                              htmlFor="c1"
+                            >
+                              Select All
+                            </label>
+                          </div>
+                        </>
                       </>
-                    )}
-                  </>
+                      <div className="mt-2 flex items-center space-x-2 ">
+                        {
+                          <StartButton
+                            onClick={() =>
+                              handleTranslateMultiLanguages(selectedLangs)
+                            }
+                            loading={loading}
+                          />
+                        }
+                      </div>
+                    </div>
+                  )}
+                  <CodeBlock code={outputCode} />
                 </div>
-              )}
-              <CodeBlock code={outputCode} />
-            </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>

@@ -19,6 +19,26 @@ export const TranslatePropertiesPrompt = oneLine`
     {inputCode}
     please translate to {outputLanguage}
 `;
+// todo
+// if (originLang === exceptLang) {
+//     alert('Please select different languages.');
+//     return;
+//   }
+export const OnlyTranslateContentPrompt = `
+    You are an expert translator in all languages. 
+    I will give a JSON (key: value) to you, you should detect the languages of value and then translate them to {outputLanguage}.
+
+    input JSON is here: {inputCode}
+    please translate to {outputLanguage}, and output json should keep the same JSON structure.
+   
+
+    And now You need to follow the following rules:
+    - only output json
+    - do not write explanations
+    - do not replace any placeholder and any HTML tag with anything.
+    - {{0}}, {{1}}  [1] {{**}} are some params in this phase, that stand for someone's name or something, so do not ignore them. and need to put them in the correct order.
+    - do not ignore the punctuation, and keep the same punctuation in the output.
+`;
 
 export const TranslateMarkdownPrompt = oneLine`
     You are an expert translator for Markdown documents.

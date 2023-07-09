@@ -75,6 +75,9 @@ export default NextAuth({
     error: '/',
     verifyRequest: '/',
   },
+  session: {
+    strategy: 'jwt',
+  },
   providers: [
     // EmailProvider({
     //   maxAge: 10 * 60,
@@ -89,6 +92,18 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
   ],
+  callbacks: {
+    async session({ session }) {
+      // console.log('🚀 ~ file: [...nextauth].ts:97 ~ session ~ user:', user);
+      // Send properties to the client, like an access_token and user id from a provider.
+      // console.log('session', session, 'token', token, 'user', user);
+      return session;
+    },
+
+    async jwt({ token }) {
+      return token;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   // events: { createUser: sendWelcomeEmail },

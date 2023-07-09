@@ -10,7 +10,7 @@ const baseStyle = {
   flexDirection: 'column',
   alignItems: 'center',
   padding: '20px',
-  borderWidth: 2,
+  borderWidth: 1,
   borderStyle: 'dashed',
   backgroundColor: '#fafafa',
   color: '#bdbdbd',
@@ -30,7 +30,7 @@ const acceptStyle = {
 const rejectStyle = {
   borderColor: '#ff1744',
 };
-export const Upload: React.FC<Props> = ({ onSuccess, className }) => {
+export const Upload: React.FC<Props> = ({ onSuccess, className = '' }) => {
   const {
     getRootProps,
     getInputProps,
@@ -60,10 +60,13 @@ export const Upload: React.FC<Props> = ({ onSuccess, className }) => {
 
   return (
     <div className={'container' + className}>
-      <div {...getRootProps({ style } as any)} className="rounded-lg">
+      <div {...getRootProps({ style })} className="rounded-lg">
         <input {...getInputProps()} />
-        <p> ⬆️ Click to select and upload files(.properties) </p>
+        <p> Import(.properties, .json, .yaml) </p>
       </div>
+      <p className="gray text-muted-foreground mt-1 text-center">
+        * or drop file here
+      </p>
       <ul className="mt-1 text-center">{files}</ul>
     </div>
   );

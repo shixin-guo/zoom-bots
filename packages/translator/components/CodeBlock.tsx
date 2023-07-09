@@ -18,7 +18,7 @@ export const CodeBlock: FC<Props> = ({
   editable = false,
   onClickCreateEmptyFile = null,
   onClickTestCode = null,
-  onChange = () => {},
+  onChange = () => null,
 }) => {
   const [copyText, setCopyText] = useState<string>('Copy');
 
@@ -62,7 +62,7 @@ export const CodeBlock: FC<Props> = ({
         editable={editable}
         value={code}
         minHeight="500px"
-        className=" rounded-lg border-2 border-dotted border-slate-400"
+        className="rounded-md border"
         extensions={[StreamLanguage.define(go)]}
         theme={'light'}
         onChange={(value) => onChange(value)}

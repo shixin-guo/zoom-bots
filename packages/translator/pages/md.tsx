@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 import copyToClipboard from '@/utils/copyToClipboard';
 import { CodeBlock } from '@/components/CodeBlock';
 import Layout from '@/components/Layout';
-import { MarkdownTemplate as testCode } from '@/test/mock';
 enum Languages {
   CN = '汉语',
   EN = 'English',
@@ -160,7 +159,6 @@ export default function Markdown(): JSX.Element {
               onChange={(value) => {
                 setInputCode(value);
               }}
-              onClickTestCode={() => setInputCode(testCode)}
             />
           </div>
           <div className="mt-8 flex h-full flex-col justify-center space-y-2 sm:mt-0 sm:w-2/4">

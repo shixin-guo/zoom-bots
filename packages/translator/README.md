@@ -1,6 +1,7 @@
 
 # prisma
 npx prisma generate
+<!-- prisma generate --data-proxy -->
 npx prisma migrate dev
 npx prisma db push
 npx prisma studio

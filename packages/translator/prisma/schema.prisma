@@ -49,6 +49,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   listedHomes   Home[]
+  usage         Int?
 }
 
 model VerificationToken {

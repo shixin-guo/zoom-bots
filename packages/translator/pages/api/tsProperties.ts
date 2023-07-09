@@ -36,7 +36,7 @@ const handler = async (req: Request): Promise<Response> => {
         handleLLMEnd: async () => {
           // console.log('====================handleLLMEnd====================');
         },
-        handleLLMError: async (error: any) => {
+        handleLLMError: async (error) => {
           console.log('handleLLMError', error);
         },
       }),
