@@ -283,43 +283,6 @@ export default function Home(): JSX.Element {
         setLoading(false);
       });
   };
-  // todo
-  // const handleInputLanguageChange = useCallback(
-  //   (lang: LanguageShortKey) => {
-  //     setInputLanguage(lang);
-  //     setSelectedLangs((prev) => {
-  //       if (isSelectedAll) {
-  //         return prev;
-  //       }
-  //       return prev.filter((key) => {
-  //         return key !== inputLanguage;
-  //       });
-  //     });
-  //     setInputCode('');
-  //     setOutputCode('');
-  //   },
-  //   [inputLanguage, isSelectedAll],
-  // );
-  // todo
-  // const handleOutputLanguageChange = useCallback(
-  //   (lang: LanguageShortKey) => {
-  //     setOutputLanguage(lang);
-  //     setSelectedLangs((prev) => {
-  //       if (isSelectedAll) {
-  //         return prev;
-  //       }
-  //       return [
-  //         ...prev.filter((key) => {
-  //           return key !== outputLanguage;
-  //         }),
-  //         lang,
-  //       ];
-  //     });
-  //     setOutputCode(translatedContentRef.current[lang]);
-  //   },
-  //   [outputLanguage, isSelectedAll],
-  // );
-
   return (
     <>
       <div className="flex h-full min-h-screen flex-col items-center border-t border-gray-200 bg-[url('https://tailwindui.com/img/beams-home@95.jpg')] px-4 pb-20 font-sans sm:px-10">
