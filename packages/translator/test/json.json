@@ -1,23 +1,16 @@
 {
     "menu": {
-      "home": "Home",
-      "about": "About",
-      "external": "External",
-      "language": "Languages"
+      "home": "Home"
+    
     },
-    "components": {
-      "Foo": "from JSX",
-      "ImportType": "import type should be removed without side-effect"
-    },
+ 
     "pages": {
       "home": {
         "title": "Home",
         "count": "count is: {value}",
         "virtual": "msg from virtual module: {msg}",
-        "inter": "this will be styled with a font-face"
-      },
-      "about": {
-        "title": "About"
+        "inter": "'shixin' is testing {xxx}"
       }
+    
     }
   }

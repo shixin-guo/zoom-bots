@@ -41,6 +41,7 @@
     "endent": "^2.1.0",
     "eventsource-parser": "^1.0.0",
     "file-saver": "^2.0.5",
+    "franc-min": "^6.1.0",
     "handlebars": "^4.7.7",
     "js-yaml": "^4.1.0",
     "jszip": "^3.10.1",

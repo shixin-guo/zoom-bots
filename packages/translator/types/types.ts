@@ -8,6 +8,13 @@ export interface TranslateBody {
   };
   model?: OpenAIModel;
 }
+export interface TranslateMarkdownBody {
+  inputLanguage?: string;
+  outputLanguage: string;
+  inputCode: string;
+  model?: OpenAIModel;
+  enableOptimize?: boolean;
+}
 
 export interface TranslateResponse {
   code: string;

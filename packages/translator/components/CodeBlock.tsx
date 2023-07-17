@@ -10,14 +10,11 @@ interface Props {
   editable?: boolean;
   onClickTestCode?: () => void;
   onChange?: (value: string) => void;
-  onClickCreateEmptyFile?: () => void;
 }
 
 export const CodeBlock: FC<Props> = ({
   code,
   editable = false,
-  onClickCreateEmptyFile = null,
-  onClickTestCode = null,
   onChange = () => null,
 }) => {
   const [copyText, setCopyText] = useState<string>('Copy');
@@ -32,32 +29,17 @@ export const CodeBlock: FC<Props> = ({
 
   return (
     <div className="relative">
-      <button
-        className="absolute right-1 top-1 z-10 rounded bg-slate-500 p-1 text-xs text-white hover:bg-slate-700 active:bg-slate-900"
-        onClick={() => {
-          navigator.clipboard.writeText(code);
-          setCopyText('Copied!');
-        }}
-      >
-        {copyText}
-      </button>
-      {onClickTestCode && (
+      {!!code && (
         <button
-          className="absolute right-12 top-1 z-10 rounded bg-slate-500 p-1 text-xs text-white hover:bg-slate-700 active:bg-slate-900"
-          onClick={onClickTestCode}
+          className="absolute right-1 top-1 z-10 rounded bg-slate-500 p-1 text-xs leading-3 text-white hover:bg-slate-700 active:bg-slate-900"
+          onClick={() => {
+            navigator.clipboard.writeText(code);
+            setCopyText('Copied!');
+          }}
         >
-          Load Test Data
+          {copyText}
         </button>
       )}
-      {onClickCreateEmptyFile && (
-        <button
-          className="absolute right-36 top-1 z-10 rounded bg-slate-500 p-1 text-xs text-white hover:bg-slate-700 active:bg-slate-900"
-          onClick={onClickCreateEmptyFile}
-        >
-          Create
-        </button>
-      )}
-
       <CodeMirror
         editable={editable}
         value={code}

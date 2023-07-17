@@ -1,13 +1,22 @@
 import yaml from 'js-yaml';
 
-export enum SupportedFileType {
+export enum SupportedFileSuffix {
   JSON = 'json',
   PROPERTIES = 'properties',
   YAML = 'yaml',
   YML = 'yml',
   TS = 'ts',
   JS = 'js',
+  MARKDOWN = 'md',
+  MARKDOWN_X = 'mdx',
 }
+
+export const isMarkdownFile = (type: string) => {
+  return (
+    type === SupportedFileSuffix.MARKDOWN ||
+    type === SupportedFileSuffix.MARKDOWN_X
+  );
+};
 export function json2Props(json: any): string {
   const ObjectJson = json;
   let result = '';
@@ -68,32 +77,36 @@ export function props2YAML(Props: string) {
   const tempJson = props2Json(Props);
   return yaml.dump(tempJson);
 }
-export const code2Props = (code: string, type: SupportedFileType): string => {
+export const code2Props = (code: string, type: SupportedFileSuffix): string => {
   let Props = '';
   switch (type) {
-    case SupportedFileType.YAML:
-    case SupportedFileType.YML:
+    case SupportedFileSuffix.YAML:
+    case SupportedFileSuffix.YML:
       Props = yaml2Props(code);
       break;
-    case SupportedFileType.JSON:
+    case SupportedFileSuffix.JSON:
       Props = json2Props(JSON.parse(code));
       break;
-    // case 'md' |"mdx":
-    // todo
+    case SupportedFileSuffix.MARKDOWN || SupportedFileSuffix.MARKDOWN_X:
+      Props = code;
+      break;
 
     default:
       Props = code;
   }
   return Props;
 };
-export const Props2Code = (Props: string, type: SupportedFileType): string => {
+export const props2Code = (
+  Props: string,
+  type: SupportedFileSuffix,
+): string => {
   let code = '';
   switch (type) {
-    case SupportedFileType.YAML:
-    case SupportedFileType.YML:
+    case SupportedFileSuffix.YAML:
+    case SupportedFileSuffix.YML:
       code = props2YAML(Props);
       break;
-    case SupportedFileType.JSON:
+    case SupportedFileSuffix.JSON:
       // todo
       code = JSON.stringify(props2Json(Props), null, 2);
       break;

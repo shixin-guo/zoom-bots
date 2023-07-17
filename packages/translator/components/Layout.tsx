@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 import { Logo } from '@/components/icons';
 import { User } from '@/components/User';
 interface LayoutProps {
@@ -18,9 +16,6 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
           <Logo width={'36px'} height={'36px'} className="inline" /> LangBridge
         </div>
         <div className="flex items-center">
-          <Link href="/md" className="mr-5">
-            Markdown
-          </Link>
           <User />
         </div>
       </nav>

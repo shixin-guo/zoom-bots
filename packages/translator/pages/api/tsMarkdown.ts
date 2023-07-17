@@ -4,27 +4,35 @@ import { OpenAI } from 'langchain/llms/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
 import { PromptTemplate } from 'langchain/prompts';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { ChainValues } from 'langchain/dist/schema';
 
-import { TranslateBody } from '@/types/types';
-import { TranslateMarkdownPrompt } from '@/utils/prompt';
+import { getToken } from 'next-auth/jwt';
+
+import { TranslateMarkdownBody } from '@/types/types';
+import updateTokenUsage from '@/utils/tokenUsage';
+
+import {
+  OptimizeMarkdownPrompt,
+  TranslateMarkdownPrompt,
+} from '@/utils/prompt';
 
 export const config = {
   runtime: 'edge',
 };
 
-const handler = async (req: Request): Promise<Response> => {
+const handler = async (req: NextRequest): Promise<Response> => {
   try {
-    const { inputLanguage, outputLanguage, inputCode } =
-      (await req.json()) as TranslateBody;
+    const { inputLanguage, outputLanguage, inputCode, enableOptimize } =
+      (await req.json()) as TranslateMarkdownBody;
     const encoder = new TextEncoder();
     const stream = new TransformStream();
     const writer = stream.writable.getWriter();
     const model = new OpenAI({
       streaming: true,
       maxTokens: 1000,
+      openAIApiKey: process.env.OPENAI_API_KEY,
       callbackManager: CallbackManager.fromHandlers({
         handleLLMNewToken: async (curToken: string) => {
           await writer.ready;
@@ -44,15 +52,28 @@ const handler = async (req: Request): Promise<Response> => {
       chunkOverlap: 0,
     });
     const splitChunks = await splitter.createDocuments([inputCode]);
-    const prompt = new PromptTemplate({
-      template: TranslateMarkdownPrompt,
-      inputVariables: ['inputLanguage', 'outputLanguage', 'inputCode'],
+    const promptTemplate = new PromptTemplate({
+      template: enableOptimize
+        ? OptimizeMarkdownPrompt
+        : TranslateMarkdownPrompt,
+      inputVariables: enableOptimize
+        ? ['inputCode']
+        : ['inputLanguage', 'outputLanguage', 'inputCode'],
     });
-    const chain = new LLMChain({ llm: model, prompt: prompt });
+    const chain = new LLMChain({ llm: model, prompt: promptTemplate });
 
     const callChain = async ({
       pageContent,
     }: (typeof splitChunks)[0]): Promise<ChainValues> => {
+      // // debugger
+      // // use to debugger promptTemplate
+      // const prompt = await promptTemplate.formatPromptValue({
+      //   inputCode,
+      //   inputLanguage,
+      //   outputLanguage,
+      // });
+      // const promptString = prompt.toString();
+      // console.log({ promptString });
       return new Promise((resolve, reject) => {
         chain
           .call({ inputLanguage, outputLanguage, inputCode: pageContent })
@@ -73,7 +94,14 @@ const handler = async (req: Request): Promise<Response> => {
         }
       }
     };
+
     translateData();
+    const jwtToken = await getToken({ req });
+    if (!jwtToken)
+      return new Response('Error', {
+        status: 401,
+      });
+    updateTokenUsage(jwtToken, inputCode);
     return new NextResponse(stream.readable, {
       headers: {
         'Content-Type': 'text/event-stream',

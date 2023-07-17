@@ -9,7 +9,7 @@ const baseStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '20px',
+  padding: '16px',
   borderWidth: 1,
   borderStyle: 'dashed',
   backgroundColor: '#fafafa',
@@ -59,8 +59,8 @@ export const Upload: React.FC<Props> = ({ onSuccess, className = '' }) => {
   ));
 
   return (
-    <div className={'container' + className}>
-      <div {...getRootProps({ style })} className="rounded-lg">
+    <div className={'container flex flex-col items-center' + className}>
+      <div {...getRootProps({ style })} className="w-80 rounded-lg">
         <input {...getInputProps()} />
         <p> Import(.properties, .json, .yaml) </p>
       </div>

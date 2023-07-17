@@ -1,10 +1,9 @@
-
 // const inputCode =
 //   '{\n    "menu": {\n      "home": "Home"\n    \n    },\n \n    "pages": {\n      "home": {\n        "title": "Home",\n        "count": "count is: {value}",\n        "virtual": "msg from virtual module: {msg}",\n        "inter": "\'shixin\' is testing {xxx}"\n      }\n    \n    }\n  }';
 
 // const inputCodeProps = ConvertUtils.code2Props(
 //   inputCode,
-//   ConvertUtils.SupportedFileType.JSON,
+//   ConvertUtils.SupportedFileSuffix.JSON,
 // );
 // // const value = ConvertUtils.getPropsValue(inputCodeProps);
 
@@ -15,9 +14,9 @@
 //   outputCode,
 // );
 // console.log(outputWithRealKey);
-// const output = ConvertUtils.Props2Code(
+// const output = ConvertUtils.props2Code(
 //   ConvertUtils.json2Props(outputWithRealKey),
-//   ConvertUtils.SupportedFileType.JSON,
+//   ConvertUtils.SupportedFileSuffix.JSON,
 // );
 // console.log(output);
 
