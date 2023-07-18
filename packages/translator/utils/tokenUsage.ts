@@ -6,7 +6,7 @@ import { Tiktoken, init } from 'tiktoken/lite/init';
 
 import { JWT } from 'next-auth/jwt';
 
-import { prisma } from '@/lib/prisma';
+import { db } from '@/lib/db';
 
 export default async function updateTokenUsage(
   jwtToken: JWT,
@@ -23,7 +23,7 @@ export default async function updateTokenUsage(
 
   const tokensOfOpenAI = encoding.encode(JSON.stringify(inputCode));
   encoding.free();
-  await prisma.user.update({
+  await db.user.update({
     where: { id: jwtToken?.sub },
     data: { usage: { increment: tokensOfOpenAI.length } },
   });

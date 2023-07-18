@@ -7,7 +7,7 @@ import GoogleProvider from 'next-auth/providers/google';
 // import nodemailer from "nodemailer";
 // import Handlebars from "handlebars";
 
-import { prisma } from '@/lib/prisma';
+import { db } from '@/lib/db';
 
 // import { readFileSync } from "fs";
 // import path from "path";
@@ -105,6 +105,6 @@ export default NextAuth({
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(db),
   // events: { createUser: sendWelcomeEmail },
 });
