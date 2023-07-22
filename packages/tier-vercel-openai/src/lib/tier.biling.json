@@ -1,0 +1,73 @@
+{
+    "plans": {
+      "plan:business@0": {
+        "title": "Business",
+        "features": {
+          "feature:aicopy": {
+            "tiers": [
+              {
+                "upto": 10
+              }
+            ],
+            "title": "AI Generated Copy"
+          },
+          "feature:base": {
+            "base": 4000,
+            "title": "Base"
+          },
+          "feature:extraaicopy": {
+            "tiers": [
+              {
+                "price": 400
+              }
+            ],
+            "title": "AI Generated Copy - Extra"
+          }
+        }
+      },
+      "plan:free@0": {
+        "title": "Free",
+        "features": {
+          "feature:aicopy": {
+            "tiers": [
+              {
+                "upto": 1
+              }
+            ],
+            "title": "AI Generated Copy"
+          },
+          "feature:base": {
+            "base": 0,
+            "title": "Base"
+          }
+        }
+      },
+      "plan:startup@0": {
+        "title": "Startup",
+        "features": {
+          "feature:aicopy": {
+            "mode": "volume",
+            "tiers": [
+              {
+                "upto": 4
+              }
+            ],
+            "title": "AI Generated Copy"
+          },
+          "feature:base": {
+            "base": 2000,
+            "title": "Base"
+          },
+          "feature:extraaicopy": {
+            "title": "AI Generated Extra - Copy",
+            "mode": "volume",
+            "tiers": [
+              {
+                "price": 500
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
