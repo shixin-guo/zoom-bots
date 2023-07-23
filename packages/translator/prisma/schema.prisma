@@ -1,32 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model Account {
-  id                       String  @id @default(cuid())
+  id                       String   @id @default(cuid())
   userId                   String
   type                     String
   provider                 String
   providerAccountId        String
-  refresh_token            String?
-  access_token             String?
-  token_type               String?
-  scope                    String?
-  id_token                 String?
-  session_state            String?
-  oauth_token_secret       String?
-  oauth_token              String?
+  refresh_token            String?  @db.Text
+  access_token             String?  @db.Text
   expires_at               Int?
   refresh_token_expires_in Int?
-  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token_type               String?
+  scope                    String?
+  id_token                 String?  @db.Text
+  session_state            String?
+  createdAt                DateTime @default(now()) @map(name: "created_at")
+  updatedAt                DateTime @default(now()) @map(name: "updated_at")
+
+
+  oauth_token_secret       String?
+  oauth_token              String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map(name: "accounts")
 }
 
 model Session {
@@ -35,6 +44,9 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "sessions")
 }
 
 model User {
@@ -44,9 +56,14 @@ model User {
   emailVerified DateTime?
   image         String?
   usage         Int       @default(0)
-  accounts      Account[]
-  listedHomes   Home[]
-  sessions      Session[]
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+
+  accounts Account[]
+  sessions Session[]
+  contents Content[]
+
+  @@map(name: "users")
 }
 
 model VerificationToken {
@@ -55,19 +72,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map(name: "verification_tokens")
 }
 
-model Home {
-  id          String   @id @default(cuid())
-  image       String?
-  title       String
-  description String
-  price       Float
-  guests      Int
-  beds        Int
-  baths       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  ownerId     String
-  owner       User     @relation(fields: [ownerId], references: [id])
+model Content {
+  id               String   @id @default(cuid())
+  prompt           String
+  generatedContent String?  @db.Text
+  generatedAt      DateTime @default(now()) @map(name: "generated_at")
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "posts")
 }

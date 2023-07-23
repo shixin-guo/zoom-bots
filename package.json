@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --cache packages --ext .ts,.js,.tsx",
+    "lint": "eslint --fix --cache packages --ext .ts,.js,.tsx ",
     "format": "prettier --write **.tsx"
   },
   "keywords": [],

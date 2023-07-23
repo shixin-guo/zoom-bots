@@ -60,13 +60,13 @@
       "prettier"
     ],
     "rules": {
-  
+      "eslint-comments/disable-enable-pair": ["error", {"allowWholeFile": true}],
       "prettier/prettier": "warn",
       "import/no-unresolved": "off",
       "prefer-const": "error",
       "no-trailing-spaces": "error",
       "no-var": "error",
-      "no-console": "warn",
+      "no-console": "off",
       "quote-props": ["error", "as-needed"],
       "no-multiple-empty-lines" : ["error", { "max": 1, "maxEOF": 1 }],
       "max-len": [
@@ -207,7 +207,7 @@
         }
       ],
       "@typescript-eslint/no-explicit-any": [
-        "warn",
+        "off",
         {
           "ignoreRestArgs": true
         }
