@@ -15,11 +15,7 @@ import {
 import updateTokenUsage from '@/utils/tokenUsage';
 
 import { TranslateMarkdownBody } from '@/types/types';
-
-export const config = {
-  runtime: 'edge',
-};
-
+export const runtime = 'edge';
 export async function POST(req: NextRequest): Promise<Response> {
   try {
     const { inputLanguage, outputLanguage, inputCode, enableOptimize } =
@@ -94,12 +90,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     };
 
     translateData();
-    const jwtToken = await getToken({ req });
-    if (!jwtToken)
-      return new Response('Error', {
-        status: 401,
-      });
-    updateTokenUsage(jwtToken, inputCode);
+    // const jwtToken = await getToken({ req });
+    // if (!jwtToken)
+    //   return new Response('Error', {
+    //     status: 401,
+    //   });
+    // updateTokenUsage(jwtToken, inputCode);
     return new NextResponse(stream.readable, {
       headers: {
         'Content-Type': 'text/event-stream',

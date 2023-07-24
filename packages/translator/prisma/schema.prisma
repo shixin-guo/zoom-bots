@@ -1,14 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model Account {
@@ -17,25 +14,23 @@ model Account {
   type                     String
   provider                 String
   providerAccountId        String
-  refresh_token            String?  @db.Text
-  access_token             String?  @db.Text
+  refresh_token            String?
+  access_token             String?
   expires_at               Int?
   refresh_token_expires_in Int?
   token_type               String?
   scope                    String?
-  id_token                 String?  @db.Text
+  id_token                 String?
   session_state            String?
-  createdAt                DateTime @default(now()) @map(name: "created_at")
-  updatedAt                DateTime @default(now()) @map(name: "updated_at")
-
-
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @default(now()) @map("updated_at")
   oauth_token_secret       String?
   oauth_token              String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
-  @@map(name: "accounts")
+  @@map("accounts")
 }
 
 model Session {
@@ -46,7 +41,7 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@map(name: "sessions")
+  @@map("sessions")
 }
 
 model User {
@@ -56,14 +51,13 @@ model User {
   emailVerified DateTime?
   image         String?
   usage         Int       @default(0)
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @map("updated_at")
+  accounts      Account[]
+  contents      Content[]
+  sessions      Session[]
 
-  accounts Account[]
-  sessions Session[]
-  contents Content[]
-
-  @@map(name: "users")
+  @@map("users")
 }
 
 model VerificationToken {
@@ -72,17 +66,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map(name: "verification_tokens")
+  @@map("verification_tokens")
 }
 
 model Content {
   id               String   @id @default(cuid())
   prompt           String
-  generatedContent String?  @db.Text
-  generatedAt      DateTime @default(now()) @map(name: "generated_at")
+  generatedContent String?
+  generatedAt      DateTime @default(now()) @map("generated_at")
   userId           String
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@map(name: "posts")
+  @@map("posts")
 }

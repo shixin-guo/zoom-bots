@@ -1,3 +1,4 @@
+import { User } from '@/components/User';
 import { Header } from '@/components/app/Header';
 import { Footer } from '@/components/Footer';
 
@@ -6,10 +7,11 @@ interface AuthLayoutProps {
 }
 
 export default function AppLayout({ children }: AuthLayoutProps) {
+  const userComponent = <User />;
   return (
     <>
-      <Header />
-      <main className="mx-auto max-w-7xl px-12">
+      <Header userComponent={userComponent} />
+      <main className="mx-auto px-12">
         <div className="px-6 lg:px-8">{children}</div>
       </main>
 

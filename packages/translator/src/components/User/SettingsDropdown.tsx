@@ -1,3 +1,4 @@
+'use client';
 import {
   Cloud,
   CreditCard,

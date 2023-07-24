@@ -1,10 +1,12 @@
 import { JWT } from 'next-auth/jwt';
-import TiktokenModel from 'tiktoken/encoders/cl100k_base.json';
-import { Tiktoken, init } from 'tiktoken/lite/init';
-import wasm from 'tiktoken/lite/tiktoken_bg.wasm?module';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import wasm from '@dqbd/tiktoken/lite/tiktoken_bg.wasm?module';
+import model from '@dqbd/tiktoken/encoders/cl100k_base.json';
+import { Tiktoken, init } from '@dqbd/tiktoken/lite/init';
 
 import { db } from '@/lib/db';
-
+export const runtime = 'edge';
 export default async function updateTokenUsage(
   jwtToken: JWT,
   inputCode: unknown,
@@ -13,15 +15,15 @@ export default async function updateTokenUsage(
   await init((imports) => WebAssembly.instantiate(wasm, imports));
 
   const encoding = new Tiktoken(
-    TiktokenModel.bpe_ranks,
-    TiktokenModel.special_tokens,
-    TiktokenModel.pat_str,
+    model.bpe_ranks,
+    model.special_tokens,
+    model.pat_str,
   );
 
   const tokensOfOpenAI = encoding.encode(JSON.stringify(inputCode));
   encoding.free();
   await db.user.update({
-    where: { id: jwtToken?.sub },
+    where: { id: jwtToken?.id },
     data: { usage: { increment: tokensOfOpenAI.length } },
   });
 }

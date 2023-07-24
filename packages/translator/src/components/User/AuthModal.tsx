@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 
@@ -48,11 +48,6 @@ export const AuthModal: FC<Props> = async ({
       onClose();
     }
   };
-  useEffect(() => {
-    if (session) {
-      // setShowModal(false);
-    }
-  }, [session]);
   return (
     <Dialog>
       <DialogTrigger asChild>

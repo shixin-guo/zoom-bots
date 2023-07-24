@@ -9,7 +9,7 @@ const nextConfig = {
   experimental: {
     typedRoutes: true,
     serverActions: true,
-    serverComponentsExternalPackages: ['@prisma/client/edge'],
+    serverComponentsExternalPackages: ['@prisma/client'],
   },
   typescript: {
     ignoreBuildErrors: true,

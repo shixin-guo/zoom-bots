@@ -8,8 +8,14 @@ import { env } from '@/env.mjs';
 import { tierConstants } from '@/config/tierConstants';
 import { db } from '@/lib/db';
 import { tier } from '@/lib/tier';
-
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: '/',
+    signOut: '/',
+    error: '/',
+    verifyRequest: '/',
+  },
   adapter: PrismaAdapter(db as any),
   session: {
     strategy: 'jwt',

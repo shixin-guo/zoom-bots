@@ -13,9 +13,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
         "
       >
         <div className="">LangBridge</div>
-        <div className="flex items-center">
-          <User />
-        </div>
+        <div className="flex items-center">{/* <User /> */}</div>
       </nav>
       {children}
     </div>

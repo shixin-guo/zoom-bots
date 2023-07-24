@@ -1,3 +1,4 @@
+'use server';
 import { FC } from 'react';
 import { getServerSession } from 'next-auth/next';
 
