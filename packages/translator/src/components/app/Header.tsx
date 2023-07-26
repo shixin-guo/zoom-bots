@@ -7,7 +7,6 @@ import { BlipLogo } from '@/res/logos/BlipLogo';
 
 const navigation = [
   { name: 'Translator', href: '/translator' },
-  { name: 'Generate copy', href: '/generate' },
   { name: 'History', href: '/history' },
   { name: 'Billing', href: '/billing' },
 ];
@@ -22,7 +21,7 @@ export function Header({ userComponent }: any) {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link href="/generate" className="-m-1.5 p-1.5">
+          <Link href="/translator" className="-m-1.5 p-1.5">
             <span className="sr-only">LangBridge</span>
             <div className="flex gap-2">
               <BlipLogo />

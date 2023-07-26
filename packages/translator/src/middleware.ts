@@ -10,7 +10,7 @@ export default withAuth(
 
     if (isHomePage) {
       if (isAuth) {
-        return NextResponse.redirect(new URL('/generate', req.url));
+        return NextResponse.redirect(new URL('/translator', req.url));
       }
 
       return null;
@@ -40,12 +40,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: [
-    '/',
-    '/translator',
-    '/generate',
-    '/history',
-    '/billing',
-    '/api/generate',
-  ],
+  matcher: ['/', '/translator', '/history', '/billing'],
 };

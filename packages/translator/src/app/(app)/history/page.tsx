@@ -61,6 +61,7 @@ export default async function HistoryPage() {
                 You have not generated any copies, go ahead and generate one.
               </p>
             </div>
+            {/* // todo */}
             <Button variant="secondary" href="/generate">
               Generate Copy
             </Button>

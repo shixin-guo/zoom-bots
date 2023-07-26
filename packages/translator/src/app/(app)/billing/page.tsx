@@ -23,7 +23,14 @@ export const metadata: Metadata = {
 };
 
 const pricing = await getPricingPageData();
-
+type planType = {
+  planId: PlanName;
+  currency: string;
+  interval: string;
+  name: string;
+  base: number;
+  extraUsageRate: number | undefined | null;
+};
 export default async function BillingPage() {
   const user = await getCurrentUser();
   // console.log(user);
@@ -34,7 +41,7 @@ export default async function BillingPage() {
   const phase = await tier.lookupPhase(`org:${user?.id}`);
   // console.log(phase);
 
-  let currentPlan = {
+  let currentPlan: planType = {
     planId: 'plan:sample@1',
     currency: 'eur',
     interval: 'yearly',
@@ -42,14 +49,10 @@ export default async function BillingPage() {
     base: 20000,
   };
   if (phase.plans !== undefined) {
-    currentPlan = (await getPlan(phase.plans[0] as PlanName)) as {
-      planId: PlanName;
-      currency: string;
-      interval: string;
-      name: string;
-      base: number;
-      extraUsageRate: number | null;
-    };
+    const currentPlan1 = await getPlan(phase.plans[0] as PlanName);
+    if (currentPlan1) {
+      currentPlan = currentPlan1;
+    }
   }
 
   const org = await tier.lookupOrg(`org:${user?.id}`);

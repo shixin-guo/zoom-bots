@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 export function SignInButton({ className }) {
   async function handleGithub() {
-    signIn('github', { callbackUrl: '/generate' });
+    signIn('github', { callbackUrl: '/translator' });
   }
 
   return (
