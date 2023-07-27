@@ -9,7 +9,7 @@ import { tier } from '@/lib/tier';
 import { Button } from '@/components/ui/button';
 import { CheckBoxIcon } from '@/res/icons/CheckBoxIcon';
 import { CreditCardIcon } from '@/res/icons/CreditCardIcon';
-import { CheckoutButton } from '@/app/(1-Main)/billing/_components/CheckoutButton';
+import { CheckoutButton } from '@/app/(1_Main)/billing/_components/CheckoutButton';
 
 // import { checkout } from "./action";
 
