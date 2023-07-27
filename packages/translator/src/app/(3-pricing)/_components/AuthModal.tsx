@@ -1,8 +1,7 @@
+'use client';
 import { FC } from 'react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
-
-import { getServerSession } from 'next-auth/next';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -14,18 +13,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { authOptions } from '@/lib/auth';
-
 interface Props {
   show?: boolean;
   onClose?: () => void;
 }
-export const AuthModal: FC<Props> = async ({
+export const AuthModal: FC<Props> = ({
   show = false,
   onClose = () => null,
 }) => {
-  const session = await getServerSession(authOptions);
-
   const signInWithGoogle = (): void => {
     // toast.loading('Redirecting...');
     // setDisabled(true);
@@ -43,11 +38,7 @@ export const AuthModal: FC<Props> = async ({
       callbackUrl: window.location.href,
     });
   };
-  const closeModal = (): void => {
-    if (typeof onClose === 'function') {
-      onClose();
-    }
-  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -76,7 +67,7 @@ export const AuthModal: FC<Props> = async ({
           </button>
         </div>
         <DialogFooter>
-          {/* <Button type="submit">Login</Button> */}
+          <Button type="submit">Login</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -21,12 +21,16 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Layout from '@/components/ui/Layout';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Upload } from './_components/Upload';
-import { CodeBlock } from './_components/CodeBlock';
-import { LanguageShortKey, languages } from './_components/LanguageSelect';
 
-import { DownloadButton } from './_components/DownloadButton';
-import { StartButton } from './_components/StartButton';
+import { Upload } from '@/app/(1-Main)/translator/_components/Upload';
+import { CodeBlock } from '@/app/(1-Main)/translator/_components/CodeBlock';
+import {
+  LanguageShortKey,
+  languages,
+} from '@/app/(1-Main)/translator/_components/LanguageSelect';
+
+import { DownloadButton } from '@/app/(1-Main)/translator/_components/DownloadButton';
+import { StartButton } from '@/app/(1-Main)/translator/_components/StartButton';
 
 export default function Home(): JSX.Element {
   const [inputLanguage] = useState<LanguageShortKey>('en-US');

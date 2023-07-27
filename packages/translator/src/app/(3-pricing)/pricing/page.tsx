@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { clsx } from 'clsx';
 
 import { getPricingPageData } from '@/lib/subscription';
-import { SignUpButton } from '@/components/marketing/pricing/LandingSignUp';
+import { SignUpButton } from '@/app/(3-Pricing)/_components/SignUpButton';
 import { CheckBoxIcon } from '@/res/icons/CheckBoxIcon';
 
 export const metadata: Metadata = {

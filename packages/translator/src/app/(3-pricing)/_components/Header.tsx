@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
-import { SignInButton } from '@/components/marketing/LandingSignIn';
 import { BlipLogo } from '@/res/logos/BlipLogo';
+import { AuthModal } from './AuthModal';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -44,7 +44,7 @@ export function Header() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:gap-5">
-          <SignInButton className="block" />
+          <AuthModal />
         </div>
       </nav>
     </header>
