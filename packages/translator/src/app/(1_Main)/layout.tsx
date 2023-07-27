@@ -1,8 +1,8 @@
 import { getServerSession } from 'next-auth';
 
-import { Header } from '@/app/(1_Main)/_components/Header';
+import { Header } from '@/app/(1_main)/_components/Header';
 import { Footer } from '@/components/Footer';
-import { SettingsMenu } from '@/app/(1_Main)/_components/SettingsDropdown';
+import { SettingsMenu } from '@/app/(1_main)/_components/SettingsDropdown';
 import { authOptions } from '@/lib/auth';
 
 interface AuthLayoutProps {
