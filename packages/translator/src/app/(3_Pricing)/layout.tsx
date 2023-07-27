@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Footer } from '@/components/Footer';
-import { Header } from '@/app/(3_pricing)/_components/Header';
+import { Header } from '@/app/(3_pricing)/_components';
 
 interface MarketingLayoutProps {
   children: React.ReactNode;

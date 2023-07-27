@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { SignUpButton } from '@/app/(3_pricing)/_components/SignUpButton';
+import { SignUpButton } from '@/app/(3_pricing)/_components';
 
 export default async function IndexPage() {
   const res = await fetch(

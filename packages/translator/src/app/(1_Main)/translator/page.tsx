@@ -22,15 +22,14 @@ import Layout from '@/components/ui/Layout';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { Upload } from '@/app/(1_main)/translator/_components/Upload';
-import { CodeBlock } from '@/app/(1_main)/translator/_components/CodeBlock';
 import {
+  CodeBlock,
+  DownloadButton,
   LanguageShortKey,
+  StartButton,
+  Upload,
   languages,
-} from '@/app/(1_main)/translator/_components/LanguageSelect';
-
-import { DownloadButton } from '@/app/(1_main)/translator/_components/DownloadButton';
-import { StartButton } from '@/app/(1_main)/translator/_components/StartButton';
+} from '@/app/(1_main)/_components';
 
 export default function Home(): JSX.Element {
   const [inputLanguage] = useState<LanguageShortKey>('en-US');
