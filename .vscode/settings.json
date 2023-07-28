@@ -13,6 +13,7 @@
         "GPTAPI",
         "langchain",
         "llms",
+        "Lucide",
         "NEXTAUTH",
         "notionhq",
         "OPENAI",

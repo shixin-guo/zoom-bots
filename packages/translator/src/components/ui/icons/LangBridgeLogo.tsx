@@ -1,4 +1,4 @@
-const Logo = ({ ...props }): JSX.Element => {
+export const LangBridgeLogo = ({ ...props }): JSX.Element => {
   return (
     <svg
       width="24"
@@ -33,5 +33,3 @@ const Logo = ({ ...props }): JSX.Element => {
     </svg>
   );
 };
-
-export default Logo;

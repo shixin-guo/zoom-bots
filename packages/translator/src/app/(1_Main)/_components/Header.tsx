@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
-import { BlipLogo } from '@/res/logos/BlipLogo';
+import { Icons } from '@/components/ui/icons';
 
 const navigation = [
   { name: 'Translator', href: '/translator' },
@@ -24,7 +24,7 @@ export function Header({ userComponent }: any) {
           <Link href="/translator" className="-m-1.5 p-1.5">
             <span className="sr-only">LangBridge</span>
             <div className="flex gap-2">
-              <BlipLogo />
+              <Icons.myLogo />
               <span className="body-semibold">LangBridge</span>
             </div>
           </Link>
