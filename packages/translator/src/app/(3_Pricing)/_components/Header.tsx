@@ -5,6 +5,7 @@ import clsx from 'clsx';
 
 import { Icons } from '@/components/ui/icons';
 import { AuthModal } from './AuthModal';
+import { siteConfig } from '@/config/site';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -22,10 +23,10 @@ export function Header() {
       >
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">LangBridge</span>
+            <span className="sr-only">{siteConfig.name}</span>
             <div className="flex gap-2">
               <Icons.myLogo />
-              <span className="body-semibold">LangBridge</span>
+              <span className="body-semibold">{siteConfig.name}</span>
             </div>
           </Link>
         </div>

@@ -29,7 +29,7 @@ import {
   StartButton,
   Upload,
   languages,
-} from '@/app/(1_main)/_components';
+} from '@/app/(1_Main)/_components';
 
 export default function Home(): JSX.Element {
   const [inputLanguage] = useState<LanguageShortKey>('en-US');
@@ -293,7 +293,7 @@ export default function Home(): JSX.Element {
   };
   return (
     <>
-      <div className="flex h-full min-h-screen flex-col items-center border-t border-gray-200 px-4 pb-20 font-sans sm:px-10">
+      <div className="flex h-full min-h-screen flex-col items-center px-4 pb-10 font-sans sm:px-10">
         <div className="mb-4 flex w-full flex-col justify-between sm:flex-row sm:space-x-4">
           <div className="flex h-full flex-col justify-center space-y-2 sm:w-2/4">
             <div className="mt-4 flex h-8 items-center text-base font-bold leading-7">

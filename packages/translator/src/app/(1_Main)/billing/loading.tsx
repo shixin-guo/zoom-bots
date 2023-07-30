@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { CreditCardIcon } from '@/res/icons/CreditCardIcon';
+import { CreditCardIcon } from '@/components/ui/icons/CreditCardIcon';
 
 export default async function BillingLoading() {
   return (

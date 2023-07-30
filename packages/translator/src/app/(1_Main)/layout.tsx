@@ -1,8 +1,8 @@
 import { getServerSession } from 'next-auth';
 
-import { Header } from '@/app/(1_main)/_components/Header';
+import { Header } from '@/app/(1_Main)/_components/Header';
 import { Footer } from '@/components/Footer';
-import { SettingsMenu } from '@/app/(1_main)/_components/SettingsDropdown';
+import { SettingsMenu } from '@/app/(1_Main)/_components/SettingsDropdown';
 import { authOptions } from '@/lib/auth';
 
 interface AuthLayoutProps {
@@ -17,10 +17,9 @@ export default async function AppLayout({ children }: AuthLayoutProps) {
   return (
     <>
       <Header userComponent={userComponent} />
-      <main className="mx-auto px-12">
-        <div className="px-6 lg:px-8">{children}</div>
+      <main>
+        <div>{children}</div>
       </main>
-
       <Footer />
     </>
   );

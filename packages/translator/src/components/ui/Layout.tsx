@@ -1,4 +1,4 @@
-import { User } from '@/components/User';
+import { siteConfig } from '@/config/site';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
         px-4 pb-3 text-base  font-medium leading-7 text-slate-900 sm:px-6 lg:px-8
         "
       >
-        <div className="">LangBridge</div>
+        <div className="">{siteConfig.name}</div>
         <div className="flex items-center">{/* <User /> */}</div>
       </nav>
       {children}

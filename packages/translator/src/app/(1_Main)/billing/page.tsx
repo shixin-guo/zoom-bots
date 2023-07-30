@@ -7,9 +7,9 @@ import { getCurrentUser } from '@/lib/session';
 import { getPricingPageData } from '@/lib/subscription';
 import { tier } from '@/lib/tier';
 import { Button } from '@/components/ui/button';
-import { CheckBoxIcon } from '@/res/icons/CheckBoxIcon';
-import { CreditCardIcon } from '@/res/icons/CreditCardIcon';
-import { CheckoutButton } from '@/app/(1_main)/_components/CheckoutButton';
+import { CheckBoxIcon } from '@/components/ui/icons/CheckBoxIcon';
+import { CreditCardIcon } from '@/components/ui/icons/CreditCardIcon';
+import { CheckoutButton } from '@/app/(1_Main)/_components/CheckoutButton';
 
 // import { checkout } from "./action";
 

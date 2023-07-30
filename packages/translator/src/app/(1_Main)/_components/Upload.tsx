@@ -63,7 +63,7 @@ export const Upload: React.FC<Props> = ({ onSuccess, className = '' }) => {
     <div className={'container flex flex-col items-center' + className}>
       <div {...getRootProps({ style })} className="w-80 rounded-lg">
         <input {...getInputProps()} />
-        <p> Import(.properties, .json, .yaml) </p>
+        <p> Import(.properties, .json, .yaml, .md) </p>
       </div>
       <p className="gray text-muted-foreground mt-1 text-center">
         * or drop file here
