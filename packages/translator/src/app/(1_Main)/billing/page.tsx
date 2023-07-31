@@ -62,7 +62,7 @@ export default async function BillingPage() {
   // console.log(paymentMethod.card);
 
   return (
-    <>
+    <div className="mx-auto max-w-6xl">
       {/* Greetings */}
       <div className="mt-16 flex items-center justify-between">
         <h1 className="h4">
@@ -267,6 +267,6 @@ export default async function BillingPage() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

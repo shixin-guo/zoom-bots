@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 
+import Link from 'next/link';
+
 import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/session';
 import { Button } from '@/components/ui/button';
@@ -30,7 +32,7 @@ export default async function HistoryPage() {
   }
 
   return (
-    <>
+    <div className="mx-auto max-w-6xl">
       <div className="mt-16 flex items-center justify-between">
         <h1 className="h4">Generated marketing copy</h1>
       </div>
@@ -62,12 +64,12 @@ export default async function HistoryPage() {
               </p>
             </div>
             {/* // todo */}
-            <Button variant="secondary" href="/generate">
-              Generate Copy
+            <Button asChild>
+              <Link href="/translator">Generate Copy</Link>
             </Button>
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
