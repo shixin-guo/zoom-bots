@@ -5,12 +5,10 @@ import { LLMChain } from 'langchain/chains';
 import { ChainValues } from 'langchain/dist/schema';
 import { OpenAI } from 'langchain/llms/openai';
 import { PromptTemplate } from 'langchain/prompts';
-// import { getToken } from 'next-auth/jwt';
+import { getToken } from 'next-auth/jwt';
 
-// import updateTokenUsage from '@/utils/tokenUsage';
-import { getServerSession } from 'next-auth/next';
+import updateTokenUsage from '@/utils/tokenUsage';
 
-import { authOptions } from '@/lib/auth';
 import { OnlyTranslateContentPrompt } from '@/utils/prompt';
 import { splitJSON } from '@/utils/split';
 
@@ -87,16 +85,12 @@ export async function POST(req: NextRequest): Promise<Response> {
       }
     };
     translateData();
-    const session = await getServerSession(authOptions);
-    console.log(session);
-    // const jwtToken = await getToken({ req });
-    // console.log(jwtToken);
-    // debugger;
-    // if (!jwtToken)
-    //   return new Response('Error', {
-    //     status: 401,
-    //   });
-    // updateTokenUsage(jwtToken, inputCode);
+    const jwtToken = await getToken({ req });
+    if (!jwtToken)
+      return new Response('Error', {
+        status: 401,
+      });
+    updateTokenUsage(jwtToken, inputCode);
     return new NextResponse(stream.readable, {
       headers: {
         'Content-Type': 'text/event-stream',
