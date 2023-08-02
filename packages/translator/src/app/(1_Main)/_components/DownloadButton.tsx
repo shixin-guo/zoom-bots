@@ -12,7 +12,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { LanguageShortKey } from '@/components/LanguageSelect';
+
+import { LanguageShortKey } from './LanguageSelect';
 
 export const DownloadButton: React.FC<{
   disabled?: boolean;

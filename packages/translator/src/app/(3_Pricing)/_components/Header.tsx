@@ -4,8 +4,10 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 import { Icons } from '@/components/ui/icons';
-import { AuthModal } from './AuthModal';
+
 import { siteConfig } from '@/config/site';
+
+import { AuthModal } from './AuthModal';
 
 const navigation = [
   { name: 'Home', href: '/' },

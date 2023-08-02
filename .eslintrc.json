@@ -1,7 +1,9 @@
 {
   "extends": [
     "eslint:recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "next"
+    
   ],
   "env": {
     "node": true,
@@ -29,12 +31,12 @@
       "@typescript-eslint/parser": [".ts", ".tsx", ".d.ts"]
     },
   
-    // "import/resolver": {
-    //   "typescript": {
-    //     "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-    //     "project": "packages/*/tsconfig.json"
-    //   }
-    // },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        "project": "packages/*/tsconfig.json"
+      }
+    },
     "react": {
       "version": "detect"
     }
@@ -50,7 +52,6 @@
       "plugin:@typescript-eslint/recommended",
       "plugin:import/recommended",
       "plugin:import/typescript",
-      "plugin:react-hooks/recommended",
       "plugin:import/errors",
       "plugin:import/warnings",
       "plugin:import/typescript"
