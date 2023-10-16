@@ -16,10 +16,12 @@ import {
 interface Props {
   show?: boolean;
   onClose?: () => void;
+  slot?: React.ReactNode;
 }
 export const AuthModal: FC<Props> = ({
   show = false,
   onClose = () => null,
+  slot = <Button variant="outline">Log in</Button>,
 }) => {
   const signInWithGoogle = (): void => {
     // toast.loading('Redirecting...');
@@ -41,9 +43,8 @@ export const AuthModal: FC<Props> = ({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Log in</Button>
-      </DialogTrigger>
+      {/* <Button variant="outline">Log in</Button> */}
+      <DialogTrigger asChild>{slot}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Welcome</DialogTitle>

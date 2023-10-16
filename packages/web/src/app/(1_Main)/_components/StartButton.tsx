@@ -6,7 +6,12 @@ export const StartButton: React.FC<{
   loading?: boolean;
 }> = ({ onClick, disabled, loading }) => {
   return (
-    <Button onClick={onClick} disabled={disabled} className="my-2">
+    <Button
+      onClick={onClick}
+      disabled={disabled}
+      className="my-2"
+      variant="secondary"
+    >
       {loading ? 'Translating...' : 'Start'}
     </Button>
   );

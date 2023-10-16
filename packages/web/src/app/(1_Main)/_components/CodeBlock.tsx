@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+
 import { FC, useEffect, useState } from 'react';
 import { StreamLanguage } from '@codemirror/language';
 import { go } from '@codemirror/legacy-modes/mode/go';
@@ -45,9 +47,9 @@ export const CodeBlock: FC<Props> = ({
         editable={editable}
         value={code}
         minHeight="500px"
-        className="rounded-md border"
+        className="rounded-md"
         extensions={[StreamLanguage.define(go)]}
-        theme={'light'}
+        theme={vscodeDark}
         onChange={(value) => onChange(value)}
       />
     </div>

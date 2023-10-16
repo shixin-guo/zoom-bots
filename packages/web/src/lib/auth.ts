@@ -5,7 +5,8 @@ import GoogleProvider from 'next-auth/providers/google';
 import { OrgInfo } from 'tier';
 
 import { env } from '@/env.mjs';
-import { tierConstants } from '@/config/tierConstants';
+
+import { TIER_FREE_PLAN_ID } from '@/config/tierConstants';
 import { db } from '@/lib/db';
 import { tier } from '@/lib/tier';
 export const authOptions: NextAuthOptions = {
@@ -38,41 +39,19 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
 
-        // Check if there are any plans, else subscribe to the free plan
+        // Check if org/user already exists in Stripe, else create and subscribe to free tier
         try {
-          const limits = await tier.lookupLimit(
-            `org:${session?.user?.id}`,
-            tierConstants.TIER_AICOPY_FEATURE_ID,
-          );
-          // console.log(limits);
-          session.user.limit = limits;
+          await tier.lookupOrg(`org:${session?.user?.id}`);
         } catch (error) {
-          await tier.subscribe(
-            `org:${session?.user?.id}`,
-            tierConstants.TIER_FREE_PLAN_ID,
-            {
-              info: {
-                name: session?.user?.name as string,
-                email: session?.user?.email as string,
-              } as OrgInfo,
-            },
-          );
-          try {
-            const limits = await tier.lookupLimit(
-              `org:${session?.user?.id}`,
-              tierConstants.TIER_AICOPY_FEATURE_ID,
-            );
-            session.user.limit = limits;
-          } catch (error) {
-            session.user.limit = {
-              feature: tierConstants.TIER_AICOPY_FEATURE_ID,
-              used: 0,
-              limit: 1,
-            };
-            console.log('No Limits found for the first time user subscription');
-          }
+          // Auto subscribe user to the free plan if they do not have any subscription already.
+          // Add OrgInfo to create/update the customer profile while subscribing
+          await tier.subscribe(`org:${session?.user?.id}`, TIER_FREE_PLAN_ID, {
+            info: {
+              name: session?.user?.name as string,
+              email: session?.user?.email as string,
+            } as OrgInfo,
+          });
         } finally {
-          // eslint-disable-next-line no-unsafe-finally
           return session;
         }
       }

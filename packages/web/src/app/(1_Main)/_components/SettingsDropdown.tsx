@@ -1,19 +1,20 @@
 'use client';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
+  // CreditCard,
+  // Github,
+  // Keyboard,
+  // LifeBuoy,
+  // User,
   LogOut,
   Settings,
-  User,
 } from 'lucide-react';
 import { Session } from 'next-auth';
-import { getSession, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,17 +31,22 @@ interface Props {
 }
 export function SettingsMenu({ session }: Props) {
   const user = session?.user;
-  const avator = user?.image;
+  const avatar = user?.image;
   const name = user?.name;
-  const email = user?.email;
-
+  // const email = user?.email;
+  const pathname = usePathname();
+  const router = useRouter();
   const handleSignOut = () => {
     signOut();
   };
-  const handleOpenGithubReop = () => {
-    window.open('https:github.com/shixin-guo/my-bot', '_blank');
+  const goBillingPage = () => {
+    router.push('/billing');
   };
+  // const handleOpenGithubReop = () => {
+  //   window.open('https:github.com/shixin-guo/my-bot', '_blank');
+  // };
   const handleOpenChange = (open: boolean) => {
+    // eslint-disable-next-line no-console
     console.log('open', open);
   };
   return (
@@ -48,7 +54,7 @@ export function SettingsMenu({ session }: Props) {
       <DropdownMenu onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger asChild>
           <Avatar>
-            {avator && name && <AvatarImage src={avator} alt={name} />}
+            {avatar && name && <AvatarImage src={avatar} alt={name} />}
             <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
@@ -86,10 +92,14 @@ export function SettingsMenu({ session }: Props) {
             <LifeBuoy className="mr-2 h-4 w-4" />
             <span>Support</span>
           </DropdownMenuItem> */}
-          {/* <DropdownMenuItem disabled>
+          <DropdownMenuItem
+            disabled={pathname === '/billing'}
+            onSelect={goBillingPage}
+          >
+            {/* { name: 'Billing', href: '/billing' }, */}
             <Cloud className="mr-2 h-4 w-4" />
-            <span>API</span>
-          </DropdownMenuItem> */}
+            Billing / Usage
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" />

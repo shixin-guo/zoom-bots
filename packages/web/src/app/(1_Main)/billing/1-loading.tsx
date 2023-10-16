@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { CreditCardIcon } from '@/components/ui/icons/CreditCardIcon';
-
+// todo
 export default async function BillingLoading() {
   return (
     <>
@@ -15,7 +15,7 @@ export default async function BillingLoading() {
         <div className="flex items-start gap-12">
           {/* Your subscription */}
           <div className="border-slate-6 flex flex-col gap-4 border-r pr-12">
-            <p className="body text-slate-11">Your subscription</p>
+            <p className="body">Your subscription</p>
             <div className="flex flex-col gap-2">
               <Skeleton className="h-5 w-full" />
               <Skeleton className="h-8 w-full" />
@@ -28,7 +28,7 @@ export default async function BillingLoading() {
               'border-slate-6 border-r pr-12',
             )}
           >
-            <p className="text-slate-11">Copies generated</p>
+            <p className=" ">Copies generated</p>
             <div className="flex flex-col gap-2">
               <div className="flex flex-row-reverse items-end justify-between">
                 <Skeleton className="h-5 w-1/3" />
@@ -41,7 +41,7 @@ export default async function BillingLoading() {
           </div>
           {/* Overages */}
           <div className="flex flex-col gap-5">
-            <p className="text-slate-11">Overages</p>
+            <p className=" ">Overages</p>
             <div className="flex items-center gap-3">
               <Skeleton className="h-8 w-full" />
             </div>
@@ -52,7 +52,7 @@ export default async function BillingLoading() {
       {/* Manage subscription */}
       {/* Pricing */}
       <div className="border-slate-6 mt-16 flex flex-col gap-12 border-b pb-24 ">
-        <p className="text-slate-11">Manage subscription</p>
+        <p className=" ">Manage subscription</p>
         <div className="mx-auto flex w-full flex-col items-start gap-6 md:flex-row">
           <Skeleton className="h-64 w-full" />
         </div>
@@ -67,7 +67,7 @@ export default async function BillingLoading() {
               'border-slate-6 border-r pr-16',
             )}
           >
-            <p className="text-slate-11">Billing information</p>
+            <p className=" ">Billing information</p>
             <div className="flex flex-col gap-8">
               <div className="flex w-full flex-col gap-2">
                 <Skeleton className="h-5 w-[200px]" />
@@ -77,7 +77,7 @@ export default async function BillingLoading() {
           </div>
           {/* Payment method */}
           <div className="flex items-start gap-16">
-            <p className="text-slate-11">Payment method</p>
+            <p className=" ">Payment method</p>
             <div className="flex gap-4">
               <CreditCardIcon />
               <div className="flex w-full flex-col gap-2">

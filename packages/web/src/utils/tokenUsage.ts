@@ -21,6 +21,7 @@ export default async function updateTokenUsage(
   );
 
   const tokensOfOpenAI = encoding.encode(JSON.stringify(inputCode));
+  console.log('tokensOfOpenAI', tokensOfOpenAI.length);
   encoding.free();
   await db.user.update({
     where: { id: jwtToken?.id },

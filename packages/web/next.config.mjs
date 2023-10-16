@@ -16,7 +16,6 @@ const nextConfig = {
   webpack: (config) => {
     config.experiments = {
       ...config.experiments,
-      topLevelAwait: true,
       asyncWebAssembly: true,
       layers: true,
     };

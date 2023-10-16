@@ -1,4 +1,4 @@
-import type { FeatureName, PlanName } from 'tier';
+import type { PlanName } from 'tier';
 
 export type SiteConfig = {
   name: string;
@@ -11,24 +11,30 @@ export type SiteConfig = {
   };
 };
 
-export type TierConstants = {
-  TIER_FREE_PLAN_ID: PlanName;
-  TIER_STARTUP_PLAN_ID: PlanName;
-  TIER_BUSINESS_PLAN_ID: PlanName;
-  TIER_BASE_FEATURE_ID: FeatureName;
-  TIER_AICOPY_FEATURE_ID: FeatureName;
-  TIER_EXTRACOPY_FEATURE_ID: FeatureName;
-};
-
-export type SubscriptionPlan = {
-  planId: string;
+export type TierPlanConstant = {
+  planId: PlanName;
   promoted: boolean;
-  currency: string;
-  interval: string;
 };
 
-export type TierPlan = SubscriptionPlan & {
+export type PricingTableData = {
+  planId: string;
+  currency: string; // usd
+  interval: string; // monthly
+  promoted: boolean;
   name: string;
   base: number;
   features: string[];
+  extraUsageRate?: number | undefined;
+  baseQuantity: string;
+  extraQuantity: string;
+  extraPrice: string;
+};
+
+export type CurrentPlan = {
+  planId: PlanName;
+  currency: string; // usd
+  interval: string; // monthly
+  name: string;
+  base: number;
+  extraUsageRate?: number | undefined;
 };

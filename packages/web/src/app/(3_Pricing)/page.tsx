@@ -10,7 +10,7 @@ export default async function IndexPage() {
         <p className="body">
           Get your <span className="font-semibold">free account today</span>
         </p>
-        <p className="caption text-slate-11">No credit card required</p>
+        <p className="caption  ">No credit card required</p>
       </div>
     </>
   );

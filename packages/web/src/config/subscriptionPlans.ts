@@ -5,10 +5,11 @@ import { tierConstants } from '@/config/tierConstants';
 import { tier } from '@/lib/tier';
 
 const data: Model = await tier.pull();
-
+// console.log('data:  await tier.pull()', data);
 const freePlanTier = data.plans[tierConstants.TIER_FREE_PLAN_ID];
-const startupPlanTier = data.plans[tierConstants.TIER_STARTUP_PLAN_ID];
-const businessPlanTier = data.plans[tierConstants.TIER_BUSINESS_PLAN_ID];
+const startupPlanTier = data.plans[tierConstants.TIER_STANDARD_PLAN_ID];
+const businessPlanTier = data.plans[tierConstants.TIER_PRO_PLAN_ID];
+console.log('freePlanTier', freePlanTier);
 const getBase = (plan: Plan): number => {
   let result = 0;
   if (plan?.features !== undefined) {
@@ -63,15 +64,18 @@ export function getExtraUsageRate(plan: Plan): number | null {
 
 export function getPlan(planId: PlanName) {
   if (planId === tierConstants.TIER_FREE_PLAN_ID) {
+    console.log('----');
+    console.log(freePlanTier);
+    console.log('------');
     return {
       planId,
       currency: (freePlanTier?.currency as string) || 'usd',
       interval: (freePlanTier?.interval as string) || 'monthly',
-      name: (freePlanTier.title as string) || 'Free',
+      name: (freePlanTier?.title as string) || 'Free',
       base: getBase(freePlanTier),
       extraUsageRate: getExtraUsageRate(freePlanTier),
     };
-  } else if (planId === tierConstants.TIER_STARTUP_PLAN_ID) {
+  } else if (planId === tierConstants.TIER_STANDARD_PLAN_ID) {
     return {
       planId,
       currency: (startupPlanTier?.currency as string) || 'usd',
@@ -80,7 +84,7 @@ export function getPlan(planId: PlanName) {
       base: getBase(startupPlanTier),
       extraUsageRate: getExtraUsageRate(startupPlanTier),
     };
-  } else if (planId === tierConstants.TIER_BUSINESS_PLAN_ID) {
+  } else if (planId === tierConstants.TIER_PRO_PLAN_ID) {
     return {
       planId,
       currency: businessPlanTier?.currency || 'usd',
@@ -94,16 +98,16 @@ export function getPlan(planId: PlanName) {
 
 export const freePlan: TierPlan = {
   planId: tierConstants.TIER_FREE_PLAN_ID,
-  currency: (freePlanTier.currency as string) || 'usd',
-  interval: (freePlanTier.interval as string) || 'monthly',
+  currency: (freePlanTier?.currency as string) || 'usd',
+  interval: (freePlanTier?.interval as string) || 'monthly',
   promoted: false,
-  name: (freePlanTier.title as string) || 'Free',
+  name: (freePlanTier?.title as string) || 'Free',
   base: getBase(freePlanTier),
   features: getFeatures(freePlanTier),
 };
 
 export const startupPlan: TierPlan = {
-  planId: tierConstants.TIER_STARTUP_PLAN_ID,
+  planId: tierConstants.TIER_STANDARD_PLAN_ID,
   currency: startupPlanTier?.currency || 'usd',
   interval: startupPlanTier?.interval || 'monthly',
   promoted: true,
@@ -113,7 +117,7 @@ export const startupPlan: TierPlan = {
 };
 
 export const businessPlan: TierPlan = {
-  planId: tierConstants.TIER_BUSINESS_PLAN_ID,
+  planId: tierConstants.TIER_PRO_PLAN_ID,
   currency: (businessPlanTier?.currency as string) || 'usd',
   interval: (businessPlanTier?.interval as string) || 'monthly',
   promoted: false,

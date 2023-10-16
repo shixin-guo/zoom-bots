@@ -1,11 +1,20 @@
 import '@/styles/globals.css';
-
 import { Metadata } from 'next';
+
+import { getServerSession } from 'next-auth/next';
+
+import { ThemeProvider } from '@/components/theme-provider';
 
 import { siteConfig } from '@/config/site';
 import { dm_sans, inter } from '@/lib/fonts';
 import { Toaster } from '@/components/ui/toaster';
 
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { SettingsMenu } from '@/app/(1_Main)/_components/SettingsDropdown';
+import { authOptions } from '@/lib/auth';
+import { AuthModal } from '@/components/AuthModal';
+// todo
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -51,11 +60,19 @@ export const metadata: Metadata = {
   manifest: `${siteConfig.url}/favicons/site.webmanifest`,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+
+  const userComponent = user ? (
+    <SettingsMenu session={session} />
+  ) : (
+    <AuthModal />
+  );
   return (
     <html
       lang="en"
@@ -63,10 +80,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head />
-      {/* Body */}
-      <body className="bg-slate-1 text-slate-12 font-sans">
-        {children}
-        <Toaster />
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <Header userComponent={userComponent} />
+          {children}
+          {/* todo */}
+          <Footer />
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

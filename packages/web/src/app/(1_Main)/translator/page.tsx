@@ -4,6 +4,12 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Cross1Icon } from '@radix-ui/react-icons';
 
+import CodeMirrorMerge from 'react-codemirror-merge';
+
+// import { EditorView } from 'codemirror';
+
+// import { EditorState } from '@codemirror/state';
+
 import {
   SupportedFileSuffix,
   code2Props,
@@ -30,6 +36,9 @@ import {
   Upload,
   languages,
 } from '@/app/(1_Main)/_components';
+
+// const Original = CodeMirrorMerge.Original;
+// const Modified = CodeMirrorMerge.Modified;
 
 export default function Home(): JSX.Element {
   const [inputLanguage] = useState<LanguageShortKey>('en-US');
@@ -293,7 +302,7 @@ export default function Home(): JSX.Element {
   };
   return (
     <>
-      <div className="flex h-full min-h-screen flex-col items-center px-4 pb-10 font-sans sm:px-10">
+      <div className="flex h-full flex-col items-center px-4 pb-10 font-sans sm:px-10">
         <div className="mb-4 flex w-full flex-col justify-between sm:flex-row sm:space-x-4">
           <div className="flex h-full flex-col justify-center space-y-2 sm:w-2/4">
             <div className="mt-4 flex h-8 items-center text-base font-bold leading-7">
@@ -301,10 +310,10 @@ export default function Home(): JSX.Element {
             </div>
             <Tabs defaultValue="code">
               <div className="flex items-center justify-between">
-                <TabsList className="w-full justify-start rounded-none bg-transparent p-0">
+                <TabsList className="w-full justify-start bg-transparent p-0">
                   <TabsTrigger
                     value="code"
-                    className="text-muted-foreground data-[state=active]:text-foreground relative rounded-none   bg-transparent p-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                    className="text-muted-foreground data-[state=active]:text-foreground relative bg-transparent p-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
                   >
                     Code
                   </TabsTrigger>
@@ -314,7 +323,7 @@ export default function Home(): JSX.Element {
                 <div className="relative">
                   {isMaskVisible && (
                     <>
-                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-200/50">
+                      <div className="absolute inset-0 z-10 flex items-center justify-center">
                         {/* <Button
                           onClick={() => {
                             setInputCode('');
@@ -374,12 +383,12 @@ export default function Home(): JSX.Element {
                   .map((language) => {
                     return (
                       <TabsList
-                        className="w-full justify-start rounded-none bg-transparent p-0"
+                        className="w-full justify-start bg-transparent p-0"
                         key={language.shortKey}
                       >
                         <TabsTrigger
                           value={language.shortKey}
-                          className="text-muted-foreground  data-[state=active]:text-foreground relative w-full justify-start rounded-none   bg-transparent p-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                          className="text-muted-foreground data-[state=active]:text-foreground relative w-full max-w-[6rem] justify-start bg-transparent p-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
                         >
                           {language.name}
                           <Cross1Icon className="ml-2" />
@@ -400,7 +409,7 @@ export default function Home(): JSX.Element {
                     >
                       <div className="relative">
                         {isMaskVisible2 && (
-                          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-200/50">
+                          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center ">
                             <>
                               <>
                                 <div className="mb-5 flex flex-wrap items-center justify-center">
@@ -414,7 +423,7 @@ export default function Home(): JSX.Element {
                                       >
                                         <Checkbox
                                           key={language.shortKey}
-                                          id="c1"
+                                          className="border-white"
                                           checked={language.checked}
                                           disabled={language.disabled}
                                           onCheckedChange={(checked) => {
@@ -503,6 +512,17 @@ export default function Home(): JSX.Element {
           </div>
         </div>
       </div>
+
+      {/* <CodeMirrorMerge>
+        <Original value={inputCode} />
+        <Modified
+          value={translatedContentRef.current?.['zh-CN']}
+          extensions={[
+            EditorView.editable.of(false),
+            EditorState.readOnly.of(true),
+          ]}
+        />
+      </CodeMirrorMerge> */}
     </>
   );
 }

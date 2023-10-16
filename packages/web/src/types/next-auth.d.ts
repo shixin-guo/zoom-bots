@@ -1,5 +1,4 @@
 import { User } from 'next-auth';
-import type { Usage } from 'tier';
 
 declare module 'next-auth/jwt' {
   interface JWT {
@@ -12,7 +11,6 @@ declare module 'next-auth' {
     user: User & {
       id: string;
       address: string;
-      limit: Usage;
     };
   }
 }

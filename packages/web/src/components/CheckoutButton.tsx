@@ -11,7 +11,7 @@ export function CheckoutButton({ plan, currentPlan }) {
   const subscribe = async (planId) => {
     try {
       setChangePlan(true);
-      const response = await fetch(`/api/subscribe?plan=${planId}`, {
+      const response = await fetch(`/api/change-plan?plan=${planId}`, {
         method: 'GET',
       });
       if (!response?.ok) {
@@ -33,15 +33,14 @@ export function CheckoutButton({ plan, currentPlan }) {
   return (
     <>
       <Button
-        variant="outline"
-        className="w-[256px]"
+        className="w-[256px] ring-1 ring-slate-900/10 hover:ring-slate-900/20"
         type="submit"
         name="planId"
         value={plan.planId}
         onClick={() => subscribe(plan.planId)}
       >
         {changePlan && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-        {plan.base < currentPlan.base ? 'Downgrade' : 'Upgrade'}
+        {plan.base < currentPlan?.base ? 'Downgrade' : 'Upgrade'}
       </Button>
     </>
   );

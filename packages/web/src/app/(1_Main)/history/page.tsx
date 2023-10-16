@@ -42,13 +42,13 @@ export default async function HistoryPage() {
           res.map((copy, copyIndex) => (
             <div
               key={copyIndex}
-              className="border-slate-6 bg-slate-2 flex flex-col gap-6 rounded-[4px] border p-10"
+              className="border-slate-6  flex flex-col gap-6 rounded-[4px] border p-10"
             >
               <div className="flex flex-col gap-8">
                 <h2 className="body-l-semibold">{copy.prompt}</h2>
-                <p className="body text-slate-11">{copy.generatedContent}</p>
+                <p className="body  ">{copy.generatedContent}</p>
               </div>
-              <p className="caption text-slate-11">{`Generated on ${new Date(
+              <p className="caption  ">{`Generated on ${new Date(
                 copy.generatedAt,
               ).toLocaleDateString()} - ${new Date(
                 copy.generatedAt,
@@ -56,10 +56,10 @@ export default async function HistoryPage() {
             </div>
           ))
         ) : (
-          <div className="border-slate-6 bg-slate-2 flex flex-col gap-6 rounded-[4px] border p-10">
+          <div className="border-slate-6  flex flex-col gap-6 rounded-[4px] border p-10">
             <div className="flex flex-col gap-8">
               <h2 className="body-l-semibold">Oops</h2>
-              <p className="body text-slate-11">
+              <p className="body  ">
                 You have not generated any copies, go ahead and generate one.
               </p>
             </div>
