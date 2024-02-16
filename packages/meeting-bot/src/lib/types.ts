@@ -1,0 +1,15 @@
+export type Zoom_Meeting_SDK_Language =
+  | 'de-DE'
+  | 'es-ES'
+  | 'en-US'
+  | 'fr-FR'
+  | 'jp-JP'
+  | 'pt-PT'
+  | 'ru-RU'
+  | 'zh-CN'
+  | 'zh-TW'
+  | 'ko-KO'
+  | 'vi-VN'
+  | 'it-IT'
+  | 'id-ID'
+  | 'nl-NL';

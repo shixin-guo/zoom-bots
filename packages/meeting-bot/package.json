@@ -9,16 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-switch": "^1.0.3",
+    "@zoom/meetingsdk": "git://github.com:shixin-guo/meetingsdk-web.git",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "lodash": "^4.17.21",
     "next": "14.1.0",
+    "next-themes": "^0.2.1",
+    "query-string": "^8.2.0",
     "react": "^18",
     "react-dom": "^18",
+    "sonner": "^1.4.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
