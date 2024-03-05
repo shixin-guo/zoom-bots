@@ -74,3 +74,9 @@
     @apply bg-background text-foreground;
   }
 }
+#zmmtg-root {
+  display: none;
+}
+#wc-loading {
+  display: none;
+}

@@ -1,8 +1,6 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import Metadata from 'next';
 import './globals.css';
 import Script from 'next/script';
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,7 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Script src="https://source.zoom.us/3.1.4/lib/vendor/lodash.min.js"></Script>
-      <body className={inter.className}>{children}</body>
+      <body>
+        <div id="ZoomEmbeddedApp">ZoomEmbeddedApp</div>
+        {children}
+      </body>
     </html>
   );
 }
