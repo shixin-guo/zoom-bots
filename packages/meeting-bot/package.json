@@ -17,7 +17,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@zoom/appssdk": "^0.16.17",
-    "@zoom/meetingsdk": "latest",
+    "@zoom/meetingsdk": "3.1.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "jsrsasign": "^11.1.0",
